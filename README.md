@@ -1,1 +1,4 @@
 # minishell
+
+TODO:
+* Add parsing
