@@ -5,13 +5,19 @@ int main(int argc, char *argv[], char *env[])
 	(void)argc;
 	(void)argv;
 	(void)env;
-	// char *line;
+
+	char *line;
 	// t_data data;
 
-	// while ((line = readline("minishell$ ")))
-	// {
+	while ((line = readline("minishell$ ")))
+	{
+		// data = ft_parsing(argv, env);
 
-	// 	free(line);
-	// }
+
+
+
+
+		free(line);
+	}
 	return (0);
 }
