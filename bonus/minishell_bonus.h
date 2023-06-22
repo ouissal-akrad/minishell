@@ -6,13 +6,14 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 00:16:06 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/06/22 13:26:23 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/06/22 13:57:59 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_BONUS_H
 # define MINISHELL_BONUS_H
 
+# include "../libft/libft.h"
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
