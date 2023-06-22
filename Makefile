@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    Makefile_test                                      :+:      :+:    :+:    #
+#    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/23 03:03:58 by bel-idri          #+#    #+#              #
-#    Updated: 2023/06/22 13:56:43 by bel-idri         ###   ########.fr        #
+#    Updated: 2023/06/22 16:38:09 by bel-idri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,9 +14,13 @@ NAME = minishell
 
 NAME_BONUS = minishell_bonus
 
-SRCS = parsing.c \
+SRCS = mandatory/parsing/parsing.c \
+	# mandatory/executing/tttttt.c \
+	# mandatory/parsing/ttttt.c \
 
-SRCS_BONUS = main_bonus.c \
+SRCS_BONUS = bonus/main_bonus.c \
+	# bonus/executing/tttttt.c \
+	# bonus/parsing/ttttt.c \
 
 SRCS_LIBFT = libft/ft_atoi.c \
 	libft/ft_bzero.c \
