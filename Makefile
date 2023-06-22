@@ -6,7 +6,7 @@
 #    By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/23 03:03:58 by bel-idri          #+#    #+#              #
-#    Updated: 2023/05/28 11:54:02 by bel-idri         ###   ########.fr        #
+#    Updated: 2023/05/29 15:02:43 by bel-idri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = minishell
 
 NAME_BONUS = minishell_bonus
 
-SRCS = main.c \
+SRCS = parsing.c \
 
 SRCS_BONUS = main_bonus.c \
 
@@ -74,7 +74,7 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -I/readline/include
 
 # RLFLAGES = -lreadline -lhistory -L/goinfre/bel-idri/.brew/opt/readline/lib		#---On Bilal Mac---#
-RLFLAGES = -lreadline -L/readline/lib
+RLFLAGES = -lreadline
 
 RM = rm -f
 
