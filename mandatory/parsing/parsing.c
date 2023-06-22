@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/06/22 18:01:14 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/06/22 18:03:52 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,18 +118,18 @@ char **split_tokens(char *str)
 	return(tokens);
 }
 
-void free_tokens(t_tokens **tokens)
-{
-	t_tokens	*tmp;
+// void free_tokens(t_tokens **tokens)
+// {
+// 	t_tokens	*tmp;
 
-	while (*tokens)
-	{
-		tmp = *tokens;
-		*tokens = (*tokens)->next;
-		free(tmp->str);
-		free(tmp);
-	}
-}
+// 	while (*tokens)
+// 	{
+// 		tmp = *tokens;
+// 		*tokens = (*tokens)->next;
+// 		free(tmp->str);
+// 		free(tmp);
+// 	}
+// }
 
 void free_str(char **str)
 {
