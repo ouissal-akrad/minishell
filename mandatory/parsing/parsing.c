@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/06/23 03:08:16 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/06/23 05:21:04 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,20 +194,49 @@ void	syntax_error_halper(t_tokens *tmp)
 		return (syntax_error_msg("<<"));
 }
 
+int	syntax_error_quote(t_tokens *tokens)
+{
+	t_tokens	*tmp;
+	int			quote;
+	int			i;
+
+	tmp = tokens;
+	quote = OQ;
+	while (tmp)
+	{
+		i = -1;
+		if (tmp->type == WORD)
+		{
+			while (tmp->str[++i])
+				is_quote(tmp->str, i, &quote);
+			if (quote == SQ)
+				return (syntax_error_msg("\'"), 1);
+			else if (quote == DQ)
+				return (syntax_error_msg("\""), 1);
+		}
+		tmp = tmp->next;
+	}
+	return (0);
+}
+
 void	syntax_error(t_tokens *tokens)
 {
 	t_tokens	*tmp;
+	t_tokens	*tmp2;
+	int			i;
 
 	tmp = tokens;
+	tmp2 = tokens;
+	i = 0;
+	if (syntax_error_quote(tmp2))
+		return ;
 	while (tmp)
 	{
-		if (tmp->type == PIPE && (!tmp->next || tmp->next->type == PIPE))
-		{
-			if (!tmp->next)
-				return (syntax_error_msg("newline"));
-			else if (tmp->next->type == PIPE)
-				return (syntax_error_msg("|"));
-		}
+		i++;
+		if (tmp->type == PIPE && !tmp->next)
+			return (syntax_error_msg("newline"));
+		else if (tmp->type == PIPE && (tmp->next->type == PIPE || i == 1))
+			return (syntax_error_msg("|"));
 		else if ((tmp->type == IN || tmp->type == OUT || \
 			tmp->type == HDOC || tmp->type == APP) && \
 			(!tmp->next || tmp->next->type == PIPE || \
