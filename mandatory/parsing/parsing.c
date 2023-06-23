@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/06/23 02:40:43 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/06/23 02:42:55 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,7 +176,7 @@ void syntax_error_msg(char *str)
 	ft_putstr_fd("'\n", 2);
 }
 
-void syntax(t_tokens *tokens)
+void syntax_error(t_tokens *tokens)
 {
 	t_tokens	*tmp;
 
@@ -277,7 +277,7 @@ int main(int argc, char *argv[], char *env[])
 	while ((line = readline("minishell$ ")))
 	{
 		lexar(line, &tokens);
-		syntax(tokens);
+		syntax_error(tokens);
 
 		// while (tokens)
 		// {
