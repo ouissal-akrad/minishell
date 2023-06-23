@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/06/23 05:21:04 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/06/23 06:09:15 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,14 +171,15 @@ void	lexar(char *str, t_tokens **tokens)
 	free_str(str_t);
 }
 
-void	syntax_error_msg(char *str)
+int	syntax_error_msg(char *str)
 {
 	ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
 	ft_putstr_fd(str, 2);
 	ft_putstr_fd("'\n", 2);
+	return (1);
 }
 
-void	syntax_error_halper(t_tokens *tmp)
+int	syntax_error_halper(t_tokens *tmp)
 {
 	if (!tmp->next)
 		return (syntax_error_msg("newline"));
@@ -192,6 +193,7 @@ void	syntax_error_halper(t_tokens *tmp)
 		return (syntax_error_msg(">>"));
 	else if (tmp->next->type == HDOC)
 		return (syntax_error_msg("<<"));
+	return (0);
 }
 
 int	syntax_error_quote(t_tokens *tokens)
@@ -210,16 +212,16 @@ int	syntax_error_quote(t_tokens *tokens)
 			while (tmp->str[++i])
 				is_quote(tmp->str, i, &quote);
 			if (quote == SQ)
-				return (syntax_error_msg("\'"), 1);
+				return (syntax_error_msg("\'"));
 			else if (quote == DQ)
-				return (syntax_error_msg("\""), 1);
+				return (syntax_error_msg("\""));
 		}
 		tmp = tmp->next;
 	}
 	return (0);
 }
 
-void	syntax_error(t_tokens *tokens)
+int	syntax_error(t_tokens *tokens)
 {
 	t_tokens	*tmp;
 	t_tokens	*tmp2;
@@ -229,7 +231,7 @@ void	syntax_error(t_tokens *tokens)
 	tmp2 = tokens;
 	i = 0;
 	if (syntax_error_quote(tmp2))
-		return ;
+		return (1);
 	while (tmp)
 	{
 		i++;
@@ -241,11 +243,79 @@ void	syntax_error(t_tokens *tokens)
 			tmp->type == HDOC || tmp->type == APP) && \
 			(!tmp->next || tmp->next->type == PIPE || \
 			tmp->next->type == IN || tmp->next->type == OUT \
-			|| tmp->next->type == APP))
-			return (syntax_error_halper(tmp));
+			|| tmp->next->type == HDOC || tmp->next->type == APP))
+			return (syntax_error_halper(tmp), 1);
+		tmp = tmp->next;
+	}
+	return (0);
+}
+
+void remove_quotes_halper(t_tokens *tmp, int quote, int i, int *j)
+{
+	if (tmp->str[i] == '\'')
+	{
+		if (quote == SQ || quote == OQ)
+			return;
+	}
+	if (tmp->str[i] == '\"')
+	{
+		if (quote == DQ || quote == OQ)
+			return;
+	}
+	else
+		tmp->str[(*j)++] = tmp->str[i];
+}
+
+void	remove_quotes(t_tokens **tokens)
+{
+	t_tokens	*tmp;
+	int			quote;
+	int			i;
+	int			j;
+
+	tmp = *tokens;
+	quote = OQ;
+	while (tmp)
+	{
+		i = -1;
+		j = 0;
+		if (tmp->type == WORD)
+		{
+			while (tmp->str[++i])
+			{
+				is_quote(tmp->str, i, &quote);
+				remove_quotes_halper(tmp, quote, i, &j);
+			}
+			tmp->str[j] = '\0';
+			printf("str : %s, j : %d\n", tmp->str, j);
+		}
 		tmp = tmp->next;
 	}
 }
+
+// void	expand(t_tokens **tokens)
+// {
+// 	t_tokens	*tmp;
+// 	int			i;
+
+// 	remove_quotes(tokens);
+// 	tmp = *tokens;
+// 	while (tmp)
+// 	{
+// 		i = -1;
+// 		if (tmp->type == WORD)
+// 		{
+// 			while (tmp->str[++i])
+// 			{
+// 				if (tmp->str[i] == '$')
+// 					expand_env(&tmp->str, i);
+// 				else if (tmp->str[i] == '~')
+// 					expand_tilde(&tmp->str, i);
+// 			}
+// 		}
+// 		tmp = tmp->next;
+// 	}
+// }
 
 int	main(int argc, char *argv[], char *env[])
 {
@@ -260,7 +330,14 @@ int	main(int argc, char *argv[], char *env[])
 	while (line)
 	{
 		lexar(line, &tokens);
-		syntax_error(tokens);
+		if (syntax_error(tokens))
+		{
+			free_tokens(&tokens);
+			line = readline("minishell$ ");
+			continue ;
+		}
+		// expand(&tokens);
+		remove_quotes(&tokens);
 		free_tokens(&tokens);
 		line = readline("minishell$ ");
 	}
