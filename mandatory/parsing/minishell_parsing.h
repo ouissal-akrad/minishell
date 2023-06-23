@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 13:35:14 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/06/22 16:18:55 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/06/23 00:27:11 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ typedef enum e_token
 	PIPE, // |
 	IN, // <
 	OUT, // >
-	APP // >>
+	APP, // >>
+	HDOC // <<
 } 				t_token;
 
 typedef struct s_tokens

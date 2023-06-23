@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/06/22 18:03:52 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/06/23 02:40:43 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ int	count_tokens(char *str)
 	while (str[++i])
 	{
 		is_quote(str, i, &quote);
-		if ((str[i] == '|' || str[i] == '<' || str[i] == '>' ) && !quote)
+		if ((str[i] == '|' || str[i] == '<' || str[i] == '>') && !quote)
 		{
-			if (str[i] == '>' && str[i + 1] == '>')
+			if ((str[i] == '>' && str[i + 1] == '>') || (str[i] == '<' && str[i + 1] == '<'))
 				i++;
 			count++;
 		}
@@ -64,7 +64,7 @@ char	*add_spaces(char *str)
 		{
 			new[j++] = ' ';
 			new[j++] = str[i];
-			if (str[i] == '>' && str[i + 1] == '>')
+			if ((str[i] == '>' && str[i + 1] == '>' && !quote) || (str[i] == '<' && str[i + 1] == '<' && !quote))
 				new[j++] = str[++i];
 			new[j++] = ' ';
 		}
@@ -118,18 +118,18 @@ char **split_tokens(char *str)
 	return(tokens);
 }
 
-// void free_tokens(t_tokens **tokens)
-// {
-// 	t_tokens	*tmp;
+void free_tokens(t_tokens **tokens)
+{
+	t_tokens	*tmp;
 
-// 	while (*tokens)
-// 	{
-// 		tmp = *tokens;
-// 		*tokens = (*tokens)->next;
-// 		free(tmp->str);
-// 		free(tmp);
-// 	}
-// }
+	while (*tokens)
+	{
+		tmp = *tokens;
+		*tokens = (*tokens)->next;
+		free(tmp->str);
+		free(tmp);
+	}
+}
 
 void free_str(char **str)
 {
@@ -161,11 +161,107 @@ void lexar(char *str, t_tokens **tokens)
 			add_token(tokens, ft_strdup(">"), OUT);
 		else if (!ft_strncmp(str_t[i], ">>", 2) && !quote)
 			add_token(tokens, ft_strdup(">>"), APP);
+		else if (!ft_strncmp(str_t[i], "<<", 2) && !quote)
+			add_token(tokens, ft_strdup("<<"), HDOC);
 		else
 			add_token(tokens, ft_strdup(str_t[i]), WORD);
 	}
 	free_str(str_t);
 }
+
+void syntax_error_msg(char *str)
+{
+	ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
+	ft_putstr_fd(str, 2);
+	ft_putstr_fd("'\n", 2);
+}
+
+void syntax(t_tokens *tokens)
+{
+	t_tokens	*tmp;
+
+	tmp = tokens;
+	while (tmp)
+	{
+		if (tmp->type == PIPE && (!tmp->next || tmp->next->type == PIPE))
+		{
+			if (!tmp->next)
+				return (syntax_error_msg("newline"));
+			else if (tmp->next->type == PIPE)
+			{
+				printf("HERE\n");
+				return (syntax_error_msg("|"));
+			}
+		}
+		else if (tmp->type == IN && (!tmp->next || tmp->next->type == PIPE || tmp->next->type == IN || tmp->next->type == OUT || tmp->next->type == APP))
+		{
+			if (!tmp->next)
+				return (syntax_error_msg("newline"));
+			else if (tmp->next->type == PIPE)
+				return (syntax_error_msg("|"));
+			else if (tmp->next->type == IN)
+				return (syntax_error_msg("<"));
+			else if (tmp->next->type == OUT)
+				return (syntax_error_msg(">"));
+			else if (tmp->next->type == APP)
+				return (syntax_error_msg(">>"));
+			else if (tmp->next->type == HDOC)
+				return (syntax_error_msg("<<"));
+		}
+		else if (tmp->type == OUT && (!tmp->next || tmp->next->type == PIPE || tmp->next->type == IN || tmp->next->type == OUT || tmp->next->type == APP))
+		{
+			if (!tmp->next)
+				return (syntax_error_msg("newline"));
+			else if (tmp->next->type == PIPE)
+				return (syntax_error_msg("|"));
+			else if (tmp->next->type == IN)
+				return (syntax_error_msg("<"));
+			else if (tmp->next->type == OUT)
+				return (syntax_error_msg(">"));
+			else if (tmp->next->type == APP)
+				return (syntax_error_msg(">>"));
+			else if (tmp->next->type == HDOC)
+				return (syntax_error_msg("<<"));
+		}
+		else if (tmp->type == HDOC && (!tmp->next || tmp->next->type == PIPE || tmp->next->type == IN || tmp->next->type == OUT || tmp->next->type == APP))
+		{
+			if (!tmp->next)
+				return (syntax_error_msg("newline"));
+			else if (tmp->next->type == PIPE)
+				return (syntax_error_msg("|"));
+			else if (tmp->next->type == IN)
+				return (syntax_error_msg("<"));
+			else if (tmp->next->type == OUT)
+				return (syntax_error_msg(">"));
+			else if (tmp->next->type == APP)
+				return (syntax_error_msg(">>"));
+			else if (tmp->next->type == HDOC)
+				return (syntax_error_msg("<<"));
+		}
+		else if (tmp->type == APP && (!tmp->next || tmp->next->type == PIPE || tmp->next->type == IN || tmp->next->type == OUT || tmp->next->type == APP))
+		{
+			if (!tmp->next)
+				return (syntax_error_msg("newline"));
+			else if (tmp->next->type == PIPE)
+				return (syntax_error_msg("|"));
+			else if (tmp->next->type == IN)
+				return (syntax_error_msg("<"));
+			else if (tmp->next->type == OUT)
+				return (syntax_error_msg(">"));
+			else if (tmp->next->type == APP)
+				return (syntax_error_msg(">>"));
+			else if (tmp->next->type == HDOC)
+				return (syntax_error_msg("<<"));
+		}
+		tmp = tmp->next;
+	}
+}
+
+// cat > file
+// ls > file
+// >>>
+// <>
+// $?
 
 int main(int argc, char *argv[], char *env[])
 {
@@ -181,17 +277,18 @@ int main(int argc, char *argv[], char *env[])
 	while ((line = readline("minishell$ ")))
 	{
 		lexar(line, &tokens);
+		syntax(tokens);
 
-		while (tokens)
-		{
-			printf("%s -> %d\n", tokens->str, tokens->type);
-			tokens = tokens->next;
-		}
+		// while (tokens)
+		// {
+		// 	printf("%s -> %d\n", tokens->str, tokens->type);
+		// 	tokens = tokens->next;
+		// }
 
 
 
 
-		// free_tokens(&tokens);
+		free_tokens(&tokens);
 	}
 	return (0);
 }
