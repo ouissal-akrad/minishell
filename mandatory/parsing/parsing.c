@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/06/23 06:09:15 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/06/23 08:30:49 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -266,78 +266,128 @@ void remove_quotes_halper(t_tokens *tmp, int quote, int i, int *j)
 		tmp->str[(*j)++] = tmp->str[i];
 }
 
-void	remove_quotes(t_tokens **tokens)
+void	remove_quotes(char *str)
 {
-	t_tokens	*tmp;
 	int			quote;
 	int			i;
 	int			j;
 
-	tmp = *tokens;
+	i = -1;
+	j = 0;
 	quote = OQ;
-	while (tmp)
+	while (str[++i])
 	{
-		i = -1;
-		j = 0;
-		if (tmp->type == WORD)
+		is_quote(str, i, &quote);
+		if (str[i] == '\'')
 		{
-			while (tmp->str[++i])
-			{
-				is_quote(tmp->str, i, &quote);
-				remove_quotes_halper(tmp, quote, i, &j);
-			}
-			tmp->str[j] = '\0';
-			printf("str : %s, j : %d\n", tmp->str, j);
+			if (quote == SQ || quote == OQ)
+				continue;
 		}
-		tmp = tmp->next;
+		else if (str[i] == '\"')
+		{
+			if (quote == DQ || quote == OQ)
+				continue;
+		}
+		else
+			str[j++] = str[i];
 	}
+	str[j] = '\0';
 }
 
-// void	expand(t_tokens **tokens)
-// {
-// 	t_tokens	*tmp;
-// 	int			i;
 
-// 	remove_quotes(tokens);
-// 	tmp = *tokens;
-// 	while (tmp)
-// 	{
-// 		i = -1;
-// 		if (tmp->type == WORD)
-// 		{
-// 			while (tmp->str[++i])
-// 			{
-// 				if (tmp->str[i] == '$')
-// 					expand_env(&tmp->str, i);
-// 				else if (tmp->str[i] == '~')
-// 					expand_tilde(&tmp->str, i);
-// 			}
-// 		}
-// 		tmp = tmp->next;
-// 	}
-// }
+
+
+
+
+int	get_vars_count(char *str)
+{
+	int	i;
+	int	count;
+
+	i = -1;
+	count = 0;
+	while (str[++i])
+	{
+		if (str[i] == '$')
+			count++;
+	}
+	return (count);
+}
+
+char *expand_env(char *str, t_env *env, int queote)
+{
+	// char	*new;
+}
+
+int	first_quote(char *str)
+{
+	int	i;
+
+	i = -1;
+	while (str[++i])
+	{
+		if (str[i] == '\'')
+			return (SQ);
+		else if (str[i] == '\"')
+			return (DQ);
+	}
+	return (OQ);
+}
+
+void	expand(t_tokens **tokens, t_env *env)
+{
+	t_tokens	*tmp;
+	int			quote;
+
+	tmp = *tokens;
+	while (tmp)
+	{
+		if (tmp->type == WORD)
+		{
+			quote = first_quote(tmp->str);
+			remove_quotes(tmp->str);
+			tmp->str = expand_env(tmp->str, env, quote);
+		}
+	}
+	tmp = tmp->next;
+}
+
 
 int	main(int argc, char *argv[], char *env[])
 {
 	char		*line;
 	t_tokens	*tokens;
+	t_env		*env_list;
 
 	(void)argc;
 	(void)argv;
 	(void)env;
+
+	env_list->val = "abc";
+	env_list->var = "a";
+	env_list->next->val = "def";
+	env_list->next->var = "b";
+	env_list->next->next->val = "ghi";
+	env_list->next->next->var = "c";
+	env_list->next->next->next = NULL;
+	// env_list = init_env(env); // free env_list
+
 	tokens = NULL;
+
 	line = readline("minishell$ ");
 	while (line)
 	{
 		lexar(line, &tokens);
+
 		if (syntax_error(tokens))
 		{
 			free_tokens(&tokens);
 			line = readline("minishell$ ");
 			continue ;
 		}
-		// expand(&tokens);
-		remove_quotes(&tokens);
+
+		expand(&tokens, env_list);
+
 		free_tokens(&tokens);
 		line = readline("minishell$ ");
 	}
