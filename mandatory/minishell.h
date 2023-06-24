@@ -1,18 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishel_bonus.h                                   :+:      :+:    :+:   */
+/*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 00:16:06 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/05/23 03:57:12 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/06/22 13:57:42 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_BONUS_H
-# define MINISHELL_BONUS_H
+#ifndef MINISHELL_H
+# define MINISHELL_H
 
+# include "../libft/libft.h"
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -28,21 +29,27 @@
 # include <curses.h>
 # include <term.h>
 
+typedef struct s_env
+{
+	char	*var;
+	char	*val;
+	struct s_env	*next;
+}			t_env;
+
 typedef struct s_file
 {
-	int	infile;
-	int	outfile;
-	int	append;
+	int	inf;
+	int	out;
+	int	app; // 0 False  or 1 True
 }			t_file;
 
 typedef struct s_data
 {
-	char	*cmd;
-	char	**args;
+	char	*cmd; // only cmd
+	char	**args; // args[0] = cmd
+	t_env	env;
 	t_file	file;
 	struct s_data	*next;
 }			t_data;
-
-
 
 # endif

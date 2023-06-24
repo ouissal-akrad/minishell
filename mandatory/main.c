@@ -1,4 +1,4 @@
-#include "minishell_bonus.h"
+#include "minishell.h"
 
 int main(int argc, char *argv[], char *env[])
 {
@@ -7,17 +7,13 @@ int main(int argc, char *argv[], char *env[])
 	(void)env;
 
 	char *line;
-	// t_data data;
+	line = readline("minishell$ ");
 
-	while ((line = readline("minishell$ ")))
+	while (line)
 	{
-		// data = ft_parsing(argv, env);
-
-
-
-
-
+		// code
 		free(line);
+		line = readline("minishell$ ");
 	}
 	return (0);
 }

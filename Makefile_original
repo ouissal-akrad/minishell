@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
+#    Makefile_origin                                    :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/23 03:03:58 by bel-idri          #+#    #+#              #
-#    Updated: 2023/06/22 16:38:09 by bel-idri         ###   ########.fr        #
+#    Updated: 2023/06/22 13:55:59 by bel-idri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = minishell
 
 NAME_BONUS = minishell_bonus
 
-SRCS = mandatory/parsing/parsing.c \
+SRCS = mandatory/main.c \
 	# mandatory/executing/tttttt.c \
 	# mandatory/parsing/ttttt.c \
 
