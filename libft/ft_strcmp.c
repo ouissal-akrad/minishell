@@ -1,22 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_executing.h                              :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/22 13:35:12 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/08 19:21:52 by ouakrad          ###   ########.fr       */
+/*   Created: 2023/07/08 16:29:56 by ouakrad           #+#    #+#             */
+/*   Updated: 2023/07/08 16:30:15 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_EXECUTING_H
-# define MINISHELL_EXECUTING_H
+#include "libft.h"
 
-# include "../minishell.h"
-void	my_pwd(void);
-void	my_env(t_env **env);
-t_env	*create_list(char *str[]);
-void	print_env(t_env **env);
-void	my_unset(t_env **env_list, char *var);
-#endif
+int	ft_strcmp(char *s1, char *s2)
+{
+	int	i;
+
+	i = 0;
+	while ((s1[i] != '\0' || s2[i] != '\0') && s1[i] == s2[i])
+		i++;
+	return (s1[i] - s2[i]);
+}
