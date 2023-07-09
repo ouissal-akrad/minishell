@@ -6,11 +6,11 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:21:57 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/08 19:21:56 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/09 13:45:36 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include"minishell_executing.h"
+#include "minishell_executing.h"
 
 t_env	*ft_lstneww(char *env_name, char *env_content)
 {
@@ -40,13 +40,13 @@ void	ft_lstadd_backk(t_env **lst, t_env *new)
 	tmp->next = new;
 }
 
-void print_env(t_env **env)
+void	print_env(t_env **env)
 {
-    while (*env != NULL)
-    {
-        printf("%s=%s\n", (*env)->var, (*env)->val);
-        (*env) = (*env)->next;
-    }
+	while (*env != NULL)
+	{
+		printf("%s=%s\n", (*env)->var, (*env)->val);
+		(*env) = (*env)->next;
+	}
 }
 
 t_env	*create_list(char *str[])
@@ -57,32 +57,34 @@ t_env	*create_list(char *str[])
 
 	i = 0;
 	env = NULL;
-		while (str[i])
-		{
-			str1 = ft_split(str[i], '=');
-			ft_lstadd_backk(&env, ft_lstneww(str1[0], str1[1]));
-			i++;
-		}
+	while (str[i])
+	{
+		str1 = ft_split(str[i], '=');
+		ft_lstadd_backk(&env, ft_lstneww(str1[0], str1[1]));
+		i++;
+	}
 	// print_env(env);
 	return (env);
 }
 
-int main(int ac,char **av,char *env[])
+int	main(int ac, char **av, char *env[])
 {
-    (void)ac;
 	t_env *new_env = create_list(env);
-	if (ft_strcmp(av[1], "env") == 0)
-		my_env(&new_env);
-	else if (ft_strcmp(av[1], "pwd") == 0)
-		my_pwd();
-	else if (ft_strcmp(av[1], "unset") == 0)
-		my_unset(&new_env,av[2]);
-	// else if (ft_strcmp(av[1], "echo") == 0)
-	// 	my_echo();
-	// else if (ft_strcmp(av[1], "cd") == 0)
-	// 	my_cd();
-	// else if (ft_strcmp(av[1], "export") == 0)
-	// 	my_export();
-	// else if (ft_strcmp(av[1], "exit") == 0)
-	// 	ft_exit();
+	if (ac > 1)
+	{
+		if (ft_strcmp(av[1], "env") == 0)
+			my_env(&new_env);
+		else if (ft_strcmp(av[1], "pwd") == 0)
+			my_pwd();
+		else if (ft_strcmp(av[1], "unset") == 0)
+			my_unset(&new_env, av);
+		// else if (ft_strcmp(av[1], "echo") == 0)
+		// 	my_echo();
+		// else if (ft_strcmp(av[1], "cd") == 0)
+		// 	my_cd();
+		// else if (ft_strcmp(av[1], "export") == 0)
+		// 	my_export();
+		// else if (ft_strcmp(av[1], "exit") == 0)
+		// 	ft_exit();
+	}
 }
