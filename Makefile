@@ -6,7 +6,7 @@
 #    By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/23 03:03:58 by bel-idri          #+#    #+#              #
-#    Updated: 2023/06/24 18:29:06 by ouakrad          ###   ########.fr        #
+#    Updated: 2023/07/08 16:31:42 by ouakrad          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,8 @@ NAME = minishell
 
 NAME_BONUS = minishell_bonus
 
-SRCS = mandatory/executing/test.c \
+SRCS = mandatory/executing/env.c \
+	mandatory/executing/builtins.c \
 	# mandatory/executing/tttttt.c \
 	# mandatory/parsing/ttttt.c \
 
@@ -50,6 +51,7 @@ SRCS_LIBFT = libft/ft_atoi.c \
 	libft/ft_strlen.c \
 	libft/ft_strmapi.c \
 	libft/ft_strncmp.c \
+	libft/ft_strcmp.c \
 	libft/ft_strnstr.c \
 	libft/ft_strrchr.c \
 	libft/ft_strtrim.c \
