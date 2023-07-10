@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:21:52 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/09 13:41:28 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/09 15:07:02 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ void	my_unset(t_env **env, char **args)
 	{
 		cur = *env;
 		prev = NULL;
-
 		while (cur != NULL)
 		{
 			if (ft_strcmp(cur->var, args[i]) == 0)
