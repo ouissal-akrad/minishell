@@ -9,7 +9,7 @@ int	main(int argc, char *argv[], char *env[])
 	t_tokens	*tmp;
 
 	t_data *data;
-	// t_data *tmp2;
+	t_data *tmp2;
 
 	(void)argc;
 	(void)argv;
