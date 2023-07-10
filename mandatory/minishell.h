@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 00:16:06 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/06/22 13:57:42 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/10 21:31:14 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,11 @@ typedef struct s_env
 
 typedef struct s_file
 {
-	int	inf;
-	int	out;
-	int	app; // 0 False  or 1 True
+	// int	type;
+	int out; 
+	int in;
+	int app;
+	// char *file_name;
 }			t_file;
 
 typedef struct s_data

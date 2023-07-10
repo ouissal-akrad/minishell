@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_parsing.h                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 13:35:14 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/09 15:46:48 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/09 17:24:49 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,9 @@ typedef struct s_tokens
 	t_token	type;
 	struct s_tokens	*next;
 }					t_tokens;
+
+
+// (str, type) -> (str, type) -> NULL
 
 
 #endif
