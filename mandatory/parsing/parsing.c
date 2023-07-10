@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/06/23 08:30:49 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/09 15:55:26 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,13 +224,11 @@ int	syntax_error_quote(t_tokens *tokens)
 int	syntax_error(t_tokens *tokens)
 {
 	t_tokens	*tmp;
-	t_tokens	*tmp2;
 	int			i;
 
 	tmp = tokens;
-	tmp2 = tokens;
 	i = 0;
-	if (syntax_error_quote(tmp2))
+	if (syntax_error_quote(tokens))
 		return (1);
 	while (tmp)
 	{
@@ -250,127 +248,153 @@ int	syntax_error(t_tokens *tokens)
 	return (0);
 }
 
-void remove_quotes_halper(t_tokens *tmp, int quote, int i, int *j)
-{
-	if (tmp->str[i] == '\'')
-	{
-		if (quote == SQ || quote == OQ)
-			return;
-	}
-	if (tmp->str[i] == '\"')
-	{
-		if (quote == DQ || quote == OQ)
-			return;
-	}
-	else
-		tmp->str[(*j)++] = tmp->str[i];
-}
 
-void	remove_quotes(char *str)
+// ---------------------- remove  ---------------------------------------------
+void	remove_quotes(t_tokens *tokens)
 {
+	t_tokens	*tmp;
 	int			quote;
 	int			i;
 	int			j;
 
-	i = -1;
-	j = 0;
 	quote = OQ;
-	while (str[++i])
-	{
-		is_quote(str, i, &quote);
-		if (str[i] == '\'')
-		{
-			if (quote == SQ || quote == OQ)
-				continue;
-		}
-		else if (str[i] == '\"')
-		{
-			if (quote == DQ || quote == OQ)
-				continue;
-		}
-		else
-			str[j++] = str[i];
-	}
-	str[j] = '\0';
-}
-
-
-
-
-
-
-int	get_vars_count(char *str)
-{
-	int	i;
-	int	count;
-
-	i = -1;
-	count = 0;
-	while (str[++i])
-	{
-		if (str[i] == '$')
-			count++;
-	}
-	return (count);
-}
-
-char *expand_env(char *str, t_env *env, int queote)
-{
-	// char	*new;
-}
-
-int	first_quote(char *str)
-{
-	int	i;
-
-	i = -1;
-	while (str[++i])
-	{
-		if (str[i] == '\'')
-			return (SQ);
-		else if (str[i] == '\"')
-			return (DQ);
-	}
-	return (OQ);
-}
-
-void	expand(t_tokens **tokens, t_env *env)
-{
-	t_tokens	*tmp;
-	int			quote;
-
-	tmp = *tokens;
+	tmp = tokens;
 	while (tmp)
 	{
 		if (tmp->type == WORD)
+		i = -1;
+		j = 0;
+		while (tmp->str[++i])
 		{
-			quote = first_quote(tmp->str);
-			remove_quotes(tmp->str);
-			tmp->str = expand_env(tmp->str, env, quote);
+			is_quote(tmp->str, i, &quote);
+			if (tmp->str[i] == '\'' && (quote == SQ || quote == OQ))
+				continue;
+			else if (tmp->str[i] == '\"' && (quote == DQ || quote == OQ))
+				continue;
+			else
+				tmp->str[j++] = tmp->str[i];
 		}
+		tmp->str[j] = '\0';
+		tmp = tmp->next;
 	}
-	tmp = tmp->next;
 }
+
+t_env	*ft_lstneww(char *env_name, char *env_content) // remove after work in general main
+{
+	t_env	*new;
+
+	new = malloc(sizeof(t_env));
+	if (!new)
+		return (NULL);
+	new->var = env_name;
+	new->val = env_content;
+	new->next = NULL;
+	return (new);
+}
+
+void	ft_lstadd_backk(t_env **lst, t_env *new) // remove after work in general main
+{
+	t_env	*tmp;
+
+	tmp = *lst;
+	if (!(*lst))
+	{
+		(*lst) = new;
+		return ;
+	}
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = new;
+}
+
+t_env	*create_list(char *str[]) // remove after work in general main
+{
+	t_env	*env;
+	char	**str1;
+	int		i;
+
+	i = 0;
+	env = NULL;
+		while (str[i])
+		{
+			str1 = ft_split(str[i], '=');
+			ft_lstadd_backk(&env, ft_lstneww(str1[0], str1[1]));
+			i++;
+		}
+	// print_env(env);
+	return (env);
+}
+// ---------------------- remove  ---------------------------------------------
+
+
+// void expand_env(t_tokens **tokens, t_env *env_list)
+// {
+// 	t_tokens	*tmp;
+// 	int			i;
+// 	int			j;
+// 	int			k;
+// 	char		*tmp_str;
+
+// 	tmp = *tokens;
+// 	while (tmp)
+// 	{
+// 		if (tmp->type == WORD)
+// 		{
+// 			i = -1;
+// 			j = 0;
+// 			while (tmp->str[++i])
+// 			{
+// 				if (tmp->str[i] == '$')
+// 				{
+// 					k = 0;
+// 					while (tmp->str[++i] && tmp->str[i] != '$' && tmp->str[i] != ' ' && tmp->str[i] != '\'' && tmp->str[i] != '\"')
+// 						k++;
+// 					tmp_str = ft_substr(tmp->str, i - k, k);
+// 					while (env_list)
+// 					{
+// 						if (!ft_strcmp(env_list->var, tmp_str))
+// 						{
+// 							free(tmp_str);
+// 							tmp_str = ft_strdup(env_list->val);
+// 							break ;
+// 						}
+// 						env_list = env_list->next;
+// 					}
+// 					// ft_strcpy(&tmp->str[j], tmp_str); strlcpy
+// 					ft_strlcpy(&tmp->str[j], tmp_str, ft_strlen(tmp_str) + 1);
+// 					j += ft_strlen(tmp_str);
+// 					free(tmp_str);
+// 				}
+// 				else
+// 					tmp->str[j++] = tmp->str[i];
+// 			}
+// 			tmp->str[j] = '\0';
+// 		}
+// 		tmp = tmp->next;
+// 	}
+
+// }
+
+
+
+
 
 
 int	main(int argc, char *argv[], char *env[])
 {
 	char		*line;
 	t_tokens	*tokens;
+
 	t_env		*env_list;
+	t_tokens	*tmp;
+
 
 	(void)argc;
 	(void)argv;
-	(void)env;
 
-	env_list->val = "abc";
-	env_list->var = "a";
-	env_list->next->val = "def";
-	env_list->next->var = "b";
-	env_list->next->next->val = "ghi";
-	env_list->next->next->var = "c";
-	env_list->next->next->next = NULL;
-	// env_list = init_env(env); // free env_list
+	env_list = create_list(env); // free env_list
+	char *type[] = {"Word", "Pipe", "In", "Out", "App", "Hdoc"};
+
 
 	tokens = NULL;
 
@@ -386,13 +410,24 @@ int	main(int argc, char *argv[], char *env[])
 			continue ;
 		}
 
-		expand(&tokens, env_list);
+
+		// expand_env(&tokens, env_list);
+		remove_quotes(tokens);
+
+		tmp = tokens;
+		while (tmp)
+		{
+			printf("str: %s\n", tmp->str);
+			printf("type: %s\n\n", type[tmp->type]);
+			tmp = tmp->next;
+		}
 
 		free_tokens(&tokens);
 		line = readline("minishell$ ");
 	}
 	return (0);
 }
+
 // cat > file
 // ls > file
 // >>>

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:21:57 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/09 14:14:31 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/09 14:23:03 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell_executing.h"
 
-t_env	*ft_lstneww(char *env_name, char *env_content)
+t_env	*ft_lstneww(char *env_name, char *env_content) // remove after work in general main
 {
 	t_env	*new;
 
@@ -25,7 +25,7 @@ t_env	*ft_lstneww(char *env_name, char *env_content)
 	return (new);
 }
 
-void	ft_lstadd_backk(t_env **lst, t_env *new)
+void	ft_lstadd_backk(t_env **lst, t_env *new) // remove after work in general main
 {
 	t_env	*tmp;
 
@@ -49,7 +49,7 @@ void	print_env(t_env **env)
 	}
 }
 
-t_env	*create_list(char *str[])
+t_env	*create_list(char *str[]) // remove after work in general main
 {
 	t_env	*env;
 	char	**str1;
@@ -88,3 +88,4 @@ int	main(int ac, char **av, char *env[])
 		// 	ft_exit();
 	}
 }
+
