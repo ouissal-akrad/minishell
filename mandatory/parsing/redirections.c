@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/09 15:13:05 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/10 21:37:24 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/10 21:49:23 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell_executing.h"
+#include "minishell_parsing.h"
 
 /*
 ls > a.out | echo -n ls << u

@@ -6,7 +6,7 @@
 #    By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/23 03:03:58 by bel-idri          #+#    #+#              #
-#    Updated: 2023/07/09 13:18:45 by bel-idri         ###   ########.fr        #
+#    Updated: 2023/07/10 22:30:08 by bel-idri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,6 +15,10 @@ NAME = minishell
 NAME_BONUS = minishell_bonus
 
 SRCS = mandatory/parsing/parsing.c \
+	mandatory/parsing/redirections.c \
+	mandatory/executing/builtins.c \
+	mandatory/executing/env.c \
+	mandatory/main.c \
 	# mandatory/executing/builtins.c \
 	# mandatory/executing/tttttt.c \
 	# mandatory/parsing/ttttt.c \
