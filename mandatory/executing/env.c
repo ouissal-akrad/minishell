@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:21:57 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/09 14:23:03 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/11 18:19:35 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,8 @@ int	main(int ac, char **av, char *env[])
 			my_pwd();
 		else if (ft_strcmp(av[1], "unset") == 0)
 			my_unset(&new_env, av);
-		// else if (ft_strcmp(av[1], "echo") == 0)
-		// 	my_echo();
+		else if (ft_strcmp(av[1], "echo") == 0)
+			my_echo(av);
 		// else if (ft_strcmp(av[1], "cd") == 0)
 		// 	my_cd();
 		// else if (ft_strcmp(av[1], "export") == 0)
