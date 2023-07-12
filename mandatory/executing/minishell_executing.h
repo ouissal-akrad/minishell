@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 13:35:12 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/11 18:19:06 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/12 02:14:15 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 void	my_pwd(void);
 void	my_env(t_env **env);
 void	my_echo(char **str);
+int	newline_checker(char *str);
 t_env	*create_list(char *str[]);
 void	print_env(t_env **env);
 void	my_unset(t_env **env, char **args);
