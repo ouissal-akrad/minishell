@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/09 15:55:26 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/10 22:21:38 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,8 +248,6 @@ int	syntax_error(t_tokens *tokens)
 	return (0);
 }
 
-
-// ---------------------- remove  ---------------------------------------------
 void	remove_quotes(t_tokens *tokens)
 {
 	t_tokens	*tmp;
@@ -279,51 +277,53 @@ void	remove_quotes(t_tokens *tokens)
 	}
 }
 
-t_env	*ft_lstneww(char *env_name, char *env_content) // remove after work in general main
-{
-	t_env	*new;
+// ---------------------- remove  ---------------------------------------------
 
-	new = malloc(sizeof(t_env));
-	if (!new)
-		return (NULL);
-	new->var = env_name;
-	new->val = env_content;
-	new->next = NULL;
-	return (new);
-}
+// t_env	*ft_lstneww(char *env_name, char *env_content) // remove after work in general main
+// {
+// 	t_env	*new;
 
-void	ft_lstadd_backk(t_env **lst, t_env *new) // remove after work in general main
-{
-	t_env	*tmp;
+// 	new = malloc(sizeof(t_env));
+// 	if (!new)
+// 		return (NULL);
+// 	new->var = env_name;
+// 	new->val = env_content;
+// 	new->next = NULL;
+// 	return (new);
+// }
 
-	tmp = *lst;
-	if (!(*lst))
-	{
-		(*lst) = new;
-		return ;
-	}
-	while (tmp->next)
-		tmp = tmp->next;
-	tmp->next = new;
-}
+// void	ft_lstadd_backk(t_env **lst, t_env *new) // remove after work in general main
+// {
+// 	t_env	*tmp;
 
-t_env	*create_list(char *str[]) // remove after work in general main
-{
-	t_env	*env;
-	char	**str1;
-	int		i;
+// 	tmp = *lst;
+// 	if (!(*lst))
+// 	{
+// 		(*lst) = new;
+// 		return ;
+// 	}
+// 	while (tmp->next)
+// 		tmp = tmp->next;
+// 	tmp->next = new;
+// }
 
-	i = 0;
-	env = NULL;
-		while (str[i])
-		{
-			str1 = ft_split(str[i], '=');
-			ft_lstadd_backk(&env, ft_lstneww(str1[0], str1[1]));
-			i++;
-		}
-	// print_env(env);
-	return (env);
-}
+// t_env	*create_list(char *str[]) // remove after work in general main
+// {
+// 	t_env	*env;
+// 	char	**str1;
+// 	int		i;
+
+// 	i = 0;
+// 	env = NULL;
+// 		while (str[i])
+// 		{
+// 			str1 = ft_split(str[i], '=');
+// 			ft_lstadd_backk(&env, ft_lstneww(str1[0], str1[1]));
+// 			i++;
+// 		}
+// 	// print_env(env);
+// 	return (env);
+// }
 // ---------------------- remove  ---------------------------------------------
 
 
@@ -380,53 +380,51 @@ t_env	*create_list(char *str[]) // remove after work in general main
 
 
 
-int	main(int argc, char *argv[], char *env[])
-{
-	char		*line;
-	t_tokens	*tokens;
+// int	main(int argc, char *argv[], char *env[])
+// {
+// 	char		*line;
+// 	t_tokens	*tokens;
 
-	t_env		*env_list;
-	t_tokens	*tmp;
-
-
-	(void)argc;
-	(void)argv;
-
-	env_list = create_list(env); // free env_list
-	char *type[] = {"Word", "Pipe", "In", "Out", "App", "Hdoc"};
+// 	t_env		*env_list;
+// 	t_tokens	*tmp;
 
 
-	tokens = NULL;
+// 	(void)argc;
+// 	(void)argv;
 
-	line = readline("minishell$ ");
-	while (line)
-	{
-		lexar(line, &tokens);
-
-		if (syntax_error(tokens))
-		{
-			free_tokens(&tokens);
-			line = readline("minishell$ ");
-			continue ;
-		}
+// 	env_list = create_list(env); // free env_list
+// 	// char *type[] = {"Word", "Pipe", "In", "Out", "App", "Hdoc"};
 
 
-		// expand_env(&tokens, env_list);
-		remove_quotes(tokens);
+// 	tokens = NULL;
 
-		tmp = tokens;
-		while (tmp)
-		{
-			printf("str: %s\n", tmp->str);
-			printf("type: %s\n\n", type[tmp->type]);
-			tmp = tmp->next;
-		}
+// 	line = readline("minishell$ ");
+// 	while (line)
+// 	{
+// 		lexar(line, &tokens);
 
-		free_tokens(&tokens);
-		line = readline("minishell$ ");
-	}
-	return (0);
-}
+// 		if (syntax_error(tokens))
+// 		{
+// 			free_tokens(&tokens);
+// 			line = readline("minishell$ ");
+// 			continue ;
+// 		}
+
+
+// 		// expand_env(&tokens, env_list);
+// 		// remove_quotes(tokens);
+
+
+
+
+
+
+
+// 		free_tokens(&tokens);
+// 		line = readline("minishell$ ");
+// 	}
+// 	return (0);
+// }
 
 // cat > file
 // ls > file

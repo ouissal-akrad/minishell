@@ -15,34 +15,11 @@
 
 # include "../minishell.h"
 
-typedef enum	e_quote
-{
-	OQ, // outside quote
-	SQ, // single quote
-	DQ // double quote
-} 				t_quote;
-
-typedef enum e_token
-{
-	WORD, // any string
-	PIPE, // |
-	IN, // <
-	OUT, // >
-	APP, // >>
-	HDOC // <<
-} 				t_token;
-
-typedef struct s_tokens
-{
-	char			*str;
-	t_token			type;
-	struct s_tokens	*next;
-}					t_tokens;
-
 void	my_pwd(void);
 void	my_env(t_env **env);
 void	my_echo(char **str);
 t_env	*create_list(char *str[]);
 void	print_env(t_env **env);
 void	my_unset(t_env **env, char **args);
+
 #endif

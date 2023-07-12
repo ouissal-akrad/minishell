@@ -1,6 +1,10 @@
 {
 	"files.associations": {
 		"minishell_parsing.h": "c",
-		"minishell_executing.h": "c"
+		"minishell_executing.h": "c",
+		"minishell.h": "c",
+		"libft.h": "c",
+		"minishell_structs.h": "c",
+		"readline.h": "c"
 	}
 }

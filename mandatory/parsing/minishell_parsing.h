@@ -3,45 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_parsing.h                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 13:35:14 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/09 17:24:49 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/10 22:37:03 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_PARSING_H
 # define MINISHELL_PARSING_H
 
-
 # include "../minishell.h"
 
-typedef enum	e_quote
-{
-	OQ, // outside quote
-	SQ, // single quote
-	DQ // double quote
-} 				t_quote;
-
-typedef enum e_token
-{
-	WORD, // any string
-	PIPE, // |
-	IN, // <
-	OUT, // >
-	APP, // >>
-	HDOC // <<
-} 				t_token;
-
-typedef struct s_tokens
-{
-	char			*str;
-	t_token	type;
-	struct s_tokens	*next;
-}					t_tokens;
-
-
-// (str, type) -> (str, type) -> NULL
-
-
+void	is_quote(char *str, int i, int *quote);
+int	count_tokens(char *str);
+char	*add_spaces(char *str);
+void	add_token(t_tokens **tokens, char *str, t_token type);
+char	**split_tokens(char *str);
+void	free_tokens(t_tokens **tokens);
+void	free_str(char **str);
+void	lexar(char *str, t_tokens **tokens);
+int	syntax_error_msg(char *str);
+int	syntax_error_halper(t_tokens *tmp);
+int	syntax_error_quote(t_tokens *tokens);
+int	syntax_error(t_tokens *tokens);
+void	remove_quotes(t_tokens *tokens);
+int	redirections(t_tokens *red);
 #endif
