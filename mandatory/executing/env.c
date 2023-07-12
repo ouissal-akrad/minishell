@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:21:57 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/10 22:09:26 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/11 18:19:35 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,25 +67,25 @@ t_env	*create_list(char *str[]) // remove after work in general main
 	return (env);
 }
 
-// int	main(int ac, char **av, char *env[])
-// {
-// 	t_env *new_env = create_list(env);
-// 	if (ac > 1)
-// 	{
-// 		if (ft_strcmp(av[1], "env") == 0)
-// 			my_env(&new_env);
-// 		else if (ft_strcmp(av[1], "pwd") == 0)
-// 			my_pwd();
-// 		else if (ft_strcmp(av[1], "unset") == 0)
-// 			my_unset(&new_env, av);
-// 		// else if (ft_strcmp(av[1], "echo") == 0)
-// 		// 	my_echo();
-// 		// else if (ft_strcmp(av[1], "cd") == 0)
-// 		// 	my_cd();
-// 		// else if (ft_strcmp(av[1], "export") == 0)
-// 		// 	my_export();
-// 		// else if (ft_strcmp(av[1], "exit") == 0)
-// 		// 	ft_exit();
-// 	}
-// }
+int	main(int ac, char **av, char *env[])
+{
+	t_env *new_env = create_list(env);
+	if (ac > 1)
+	{
+		if (ft_strcmp(av[1], "env") == 0)
+			my_env(&new_env);
+		else if (ft_strcmp(av[1], "pwd") == 0)
+			my_pwd();
+		else if (ft_strcmp(av[1], "unset") == 0)
+			my_unset(&new_env, av);
+		else if (ft_strcmp(av[1], "echo") == 0)
+			my_echo(av);
+		// else if (ft_strcmp(av[1], "cd") == 0)
+		// 	my_cd();
+		// else if (ft_strcmp(av[1], "export") == 0)
+		// 	my_export();
+		// else if (ft_strcmp(av[1], "exit") == 0)
+		// 	ft_exit();
+	}
+}
 
