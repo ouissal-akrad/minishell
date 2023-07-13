@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:21:52 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/12 04:47:03 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/13 01:28:58 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	my_unset(t_env **env, char **args)
 
 	prev = NULL;
 	cur = *env;
-	i = 2;
+	i = 1;
 	while (args[i] != NULL)
 	{
 		cur = *env;
@@ -58,7 +58,7 @@ void	my_unset(t_env **env, char **args)
 		}
 		i++;
 	}
-	print_env(env);
+	// print_env(env);
 }
 
 /*
@@ -80,16 +80,18 @@ args = -n
 file = fd;
 */
 
-int newline_checker(char *str)
+int	newline_checker(char *str)
 {
-    int i = 0;
-    if (str[i] == '-')
-        i++;
-    while (str[i] == 'n')
-        i++;
-    if (str[i] == '\0')
-        return 1;
-    return 0;
+	int	i;
+
+	i = 0;
+	if (str[i] == '-')
+		i++;
+	while (str[i] == 'n')
+		i++;
+	if (str[i] == '\0')
+		return (1);
+	return (0);
 }
 
 void	my_echo(char **args)
@@ -109,10 +111,44 @@ void	my_echo(char **args)
 			new_line = 0;
 		}
 		flag = 1;
-		printf("%s",args[i]);
+		printf("%s", args[i]);
 		if (args[++i])
 			printf(" ");
 	}
 	if (new_line)
 		printf("\n");
+}
+
+char	*find_path(t_env **env, char *to_find)
+{
+	while (*env)
+	{
+		if (ft_strcmp((*env)->var, to_find) == 0)
+			return ((*env)->val);
+		(*env) = (*env)->next;
+	}
+	return (NULL);
+}
+
+void	my_cd(t_env **env, char **args)
+{
+	char *path = NULL;
+	if (args[1] == NULL)
+	{
+		path = find_path(env, "HOME");
+		if (path == NULL)
+		{
+			printf("cd: HOME not set\n");
+			return ;
+		}
+	}
+	else
+		path = args[1];
+	if (chdir(path) == -1)
+	{
+		printf("cd: no such file or directory: %s\n", path);
+		return ;
+	}
+	//cd . retriving create 3 folders
+	// unset pwd unset OLDPWD
 }

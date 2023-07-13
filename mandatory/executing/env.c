@@ -6,15 +6,16 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:21:57 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/11 18:19:35 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/13 01:28:56 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell_executing.h"
 
-t_env	*ft_lstneww(char *env_name, char *env_content) // remove after work in general main
+t_env	*ft_lstneww(char *env_name, char *env_content)
+	// remove after work in general main
 {
-	t_env	*new;
+	t_env *new;
 
 	new = malloc(sizeof(t_env));
 	if (!new)
@@ -25,9 +26,10 @@ t_env	*ft_lstneww(char *env_name, char *env_content) // remove after work in gen
 	return (new);
 }
 
-void	ft_lstadd_backk(t_env **lst, t_env *new) // remove after work in general main
+void	ft_lstadd_backk(t_env **lst, t_env *new)
+	// remove after work in general main
 {
-	t_env	*tmp;
+	t_env *tmp;
 
 	tmp = *lst;
 	if (!(*lst))
@@ -51,9 +53,9 @@ void	print_env(t_env **env)
 
 t_env	*create_list(char *str[]) // remove after work in general main
 {
-	t_env	*env;
-	char	**str1;
-	int		i;
+	t_env *env;
+	char **str1;
+	int i;
 
 	i = 0;
 	env = NULL;
@@ -69,23 +71,33 @@ t_env	*create_list(char *str[]) // remove after work in general main
 
 int	main(int ac, char **av, char *env[])
 {
-	t_env *new_env = create_list(env);
-	if (ac > 1)
+	char	*line;
+	char	**l;
+	t_env	*new_env;
+
+	(void)ac;
+	(void)av;
+	line = readline("minishell$ ");
+	while (line)
 	{
-		if (ft_strcmp(av[1], "env") == 0)
+		new_env = create_list(env);
+		add_history(line);
+		l = ft_split(line, ' ');
+		if (ft_strcmp(l[0], "env") == 0)
 			my_env(&new_env);
-		else if (ft_strcmp(av[1], "pwd") == 0)
+		else if (ft_strcmp(l[0], "pwd") == 0)
 			my_pwd();
-		else if (ft_strcmp(av[1], "unset") == 0)
-			my_unset(&new_env, av);
-		else if (ft_strcmp(av[1], "echo") == 0)
-			my_echo(av);
-		// else if (ft_strcmp(av[1], "cd") == 0)
-		// 	my_cd();
+		else if (ft_strcmp(l[0], "unset") == 0)
+			my_unset(&new_env, l);
+		else if (ft_strcmp(l[0], "echo") == 0)
+			my_echo(l);
+		else if (ft_strcmp(l[0], "cd") == 0)
+			my_cd(&new_env, l);
 		// else if (ft_strcmp(av[1], "export") == 0)
 		// 	my_export();
 		// else if (ft_strcmp(av[1], "exit") == 0)
 		// 	ft_exit();
+		free(line);
+		line = readline("minishell$ ");
 	}
 }
-
