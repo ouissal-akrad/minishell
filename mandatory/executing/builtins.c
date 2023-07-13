@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:21:52 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/13 01:28:58 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/13 20:23:00 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	my_pwd(void)
 		printf("%s\n", cwd);
 }
 
-void	my_env(t_env **env)
+void	my_env(t_env *env)
 {
 	print_env(env);
 }
@@ -48,9 +48,7 @@ void	my_unset(t_env **env, char **args)
 					*env = cur->next;
 				else
 					prev->next = cur->next;
-				free(cur->var);
-				free(cur->val);
-				free(cur);
+				delete_node(*env,cur->var);
 				break ;
 			}
 			prev = cur;
@@ -58,7 +56,7 @@ void	my_unset(t_env **env, char **args)
 		}
 		i++;
 	}
-	// print_env(env);
+	// print_env(*env);
 }
 
 /*
@@ -100,7 +98,7 @@ void	my_echo(char **args)
 	int	new_line;
 	int	flag;
 
-	i = 2;
+	i = 1;
 	flag = 0;
 	new_line = 1;
 	while (args[i])
@@ -133,6 +131,10 @@ char	*find_path(t_env **env, char *to_find)
 void	my_cd(t_env **env, char **args)
 {
 	char *path = NULL;
+	// char *pwd;
+	char *oldpwd = NULL;
+	// char *here;
+	oldpwd = getcwd(oldpwd,sizeof(oldpwd));
 	if (args[1] == NULL)
 	{
 		path = find_path(env, "HOME");
