@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:55:55 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/14 10:43:37 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/14 14:16:42 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,16 +50,18 @@ void	my_cd(t_env **env, char **args)
 	if (getcwd(oldpwd, PATH_MAX) == NULL)
 	{
 		perror("getcwd");
-		return ;
+		g_exit = 1;
+		exit(1);
 	}
 	path = NULL;
 	if (args[1] == NULL)
 	{
-		path = getenv("HOME");
+		path = find(env,"HOME");
 		if (path == NULL)
 		{
 			printf("cd: HOME not set\n");
-			return ;
+			g_exit = 1;
+			exit(1);
 		}
 	}
 	else
@@ -67,12 +69,14 @@ void	my_cd(t_env **env, char **args)
 	if (chdir(path) == -1)
 	{
 		printf("cd: no such file or directory: %s\n", path);
-		return ;
+		g_exit = 1;
+		exit(1);
 	}
 	if (getcwd(pwd, PATH_MAX) == NULL)
 	{
 		perror("getcwd");
-		return ;
+		g_exit = 1;
+		exit(1);
 	}
 	update_env(*env, oldpwd, pwd);
 }
