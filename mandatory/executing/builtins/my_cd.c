@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:55:55 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/14 14:16:42 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/14 16:40:31 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	my_cd(t_env **env, char **args)
 		{
 			printf("cd: HOME not set\n");
 			g_exit = 1;
-			exit(1);
+			return ;
 		}
 	}
 	else
@@ -70,13 +70,13 @@ void	my_cd(t_env **env, char **args)
 	{
 		printf("cd: no such file or directory: %s\n", path);
 		g_exit = 1;
-		exit(1);
+		return ;
 	}
 	if (getcwd(pwd, PATH_MAX) == NULL)
 	{
 		perror("getcwd");
 		g_exit = 1;
-		exit(1);
+		return ;
 	}
 	update_env(*env, oldpwd, pwd);
 }
