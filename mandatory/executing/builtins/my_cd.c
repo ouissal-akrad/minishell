@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:55:55 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/14 16:40:31 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/14 18:55:17 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,13 @@ void	my_cd(t_env **env, char **args)
 	char	oldpwd[PATH_MAX];
 	char	pwd[PATH_MAX];
 	char	*path;
-
+	// "-"
 	if (getcwd(oldpwd, PATH_MAX) == NULL)
 	{
 		perror("getcwd");
 		g_exit = 1;
-		exit(1);
+		return ;
+		// exit(1);
 	}
 	path = NULL;
 	if (args[1] == NULL)

@@ -1,45 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   my_unset.c                                         :+:      :+:    :+:   */
+/*   my_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/14 09:54:33 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/14 18:27:05 by ouakrad          ###   ########.fr       */
+/*   Created: 2023/07/14 16:46:00 by ouakrad           #+#    #+#             */
+/*   Updated: 2023/07/14 16:49:53 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell_executing.h"
 
-void	my_unset(t_env **env, char **args)
+void my_export(t_env *env)
 {
-	t_env	*prev;
-	t_env	*cur;
-	int		i;
+	t_env	*tmp;
 
-	prev = NULL;
-	cur = *env;
-	i = 1;
-	while (args[i] != NULL)
+	tmp = env;
+	while (tmp != NULL)
 	{
-		cur = *env;
-		prev = NULL;
-		while (cur != NULL)
-		{
-			if (ft_strcmp(cur->var, args[i]) == 0)
-			{
-				if (prev == NULL)
-					*env = cur->next;
-				else
-					prev->next = cur->next;
-				delete_node(*env, cur->var);
-				break ;
-			}
-			prev = cur;
-			cur = cur->next;
-		}
-		i++;
+		if (tmp->var != NULL && tmp->val != NULL)
+			printf("declare -x %s=%s\n", tmp->var, tmp->val);
+		tmp = tmp->next;
 	}
-	// print_env(*env);
 }

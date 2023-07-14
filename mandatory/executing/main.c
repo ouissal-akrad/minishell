@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:21:57 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/14 11:48:22 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/14 16:51:03 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ int	main(int ac, char **av, char *env[])
 			my_env(new_env);
 		else if (ft_strcmp(l[0], "exit") == 0)
 			my_exit(l);
-		// else if (ft_strcmp(av[1], "export") == 0)
-		// 	my_export();
+		else if (ft_strcmp(l[0], "export") == 0)
+			my_export(new_env);
 		free(line);
 		line = readline("minishell$ ");
 	}

@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 13:35:12 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/14 16:18:36 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/14 16:49:46 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,6 @@ void	my_unset(t_env **env, char **args);
 /*----------------exit---------------------*/
 void	my_exit(char **str);
 int		all_digit(char *str);
+/*----------------export---------------------*/
+void my_export(t_env *env);
 #endif

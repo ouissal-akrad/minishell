@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:20:28 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/14 13:58:28 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/14 18:35:10 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	my_exit(char **cmd)
 	else if (cmd[2])
     {
         g_exit = 1;
-		printf("exit: too many arguments\n");
+		return(printf("exit: too many arguments\n"),free(NULL));
     }
 	g_exit = ft_atoi(cmd[i]);
 	exit(ft_atoi(cmd[i]) % 256);
