@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:55:55 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/14 10:10:51 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/14 10:43:37 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*find(t_env **env, char *to_find)
 	return (NULL);
 }
 
-void	update_env(t_env *env, const char *oldpwd, const char *pwd)
+void	update_env(t_env *env, char *oldpwd, char *pwd)
 {
 	while (env)
 	{
@@ -43,17 +43,19 @@ void	update_env(t_env *env, const char *oldpwd, const char *pwd)
 
 void	my_cd(t_env **env, char **args)
 {
-	char *path = NULL;
-	char pwd[PATH_MAX];
-	char oldpwd[PATH_MAX];
+	char	oldpwd[PATH_MAX];
+	char	pwd[PATH_MAX];
+	char	*path;
+
 	if (getcwd(oldpwd, PATH_MAX) == NULL)
 	{
 		perror("getcwd");
 		return ;
 	}
+	path = NULL;
 	if (args[1] == NULL)
 	{
-		path = find(env, "HOME");
+		path = getenv("HOME");
 		if (path == NULL)
 		{
 			printf("cd: HOME not set\n");
@@ -67,28 +69,10 @@ void	my_cd(t_env **env, char **args)
 		printf("cd: no such file or directory: %s\n", path);
 		return ;
 	}
-	//update env
-    update_env(*env,oldpwd,pwd);
-	// t_env *tmp = *env;
-	// while (tmp)
-	// {
-	// 	if (ft_strcmp(tmp->var, "OLDPWD") == 0)
-	// 	{
-	// 		free(tmp->val);
-	// 		tmp->val = ft_strdup(oldpwd);
-	// 	}
-	// 	if (ft_strcmp(tmp->var, "PWD") == 0)
-	// 	{
-	// 		if (getcwd(pwd, PATH_MAX) == NULL)
-	// 		{
-	// 			perror("getcwd");
-	// 			return ;
-	// 		}
-	// 		free(tmp->val);
-	// 		tmp->val = ft_strdup(pwd);
-	// 	}
-	// 	tmp = tmp->next;
-	// }
-	//cd . retriving create 3 folders
-	// unset pwd unset OLDPWD
+	if (getcwd(pwd, PATH_MAX) == NULL)
+	{
+		perror("getcwd");
+		return ;
+	}
+	update_env(*env, oldpwd, pwd);
 }

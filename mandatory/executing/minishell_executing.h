@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 13:35:12 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/14 10:07:45 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/14 10:43:21 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 /*-------------------------builtins-------------------------------*/
 void	my_cd(t_env **env, char **args);
-void	update_env(t_env *env, const char *oldpwd, const char *pwd);
+void update_env(t_env *env, char *oldpwd,char *pwd);
 char	*find(t_env **env, char *to_find);
 
 void	my_echo(char **str);
