@@ -6,7 +6,7 @@
 #    By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/23 03:03:58 by bel-idri          #+#    #+#              #
-#    Updated: 2023/07/11 18:18:30 by ouakrad          ###   ########.fr        #
+#    Updated: 2023/07/14 10:10:04 by ouakrad          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,8 +14,12 @@ NAME = minishell
 
 NAME_BONUS = minishell_bonus
 
-SRCS = mandatory/executing/env.c \
-	mandatory/executing/builtins.c \
+SRCS = mandatory/executing/main.c \
+		mandatory/executing/builtins/my_cd.c \
+		mandatory/executing/builtins/my_echo.c \
+		mandatory/executing/builtins/my_env.c \
+		mandatory/executing/builtins/my_pwd.c \
+		mandatory/executing/builtins/my_unset.c \
 	# mandatory/executing/tttttt.c \
 	# mandatory/parsing/ttttt.c \
 
@@ -77,7 +81,7 @@ OBJS_LIBFT = $(SRCS_LIBFT:.c=.o)
 CC = cc
 
 # CFLAGS = -Wall -Wextra -Werror -I/goinfre/bel-idri/.brew/opt/readline/include		#---On Bilal Mac---#
-CFLAGS = -Wall -Wextra -Werror -I/readline/include
+CFLAGS = -Wall -Wextra -Werror -I/readline/include #-fsanitize=address -g
 
 # RLFLAGES = -lreadline -lhistory -L/goinfre/bel-idri/.brew/opt/readline/lib		#---On Bilal Mac---#
 RLFLAGES = -lreadline
