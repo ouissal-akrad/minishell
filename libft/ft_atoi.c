@@ -3,58 +3,49 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/22 09:55:46 by bel-idri          #+#    #+#             */
-/*   Updated: 2022/10/30 19:24:33 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/14 13:36:41 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	ft_isspace(const char *str, size_t i)
+static int	ft_check(const char *str)
 {
-	return (str[i] == ' ' || str[i] == '\t' || str[i] == '\n' || \
-			str[i] == '\v' || str[i] == '\f' || str[i] == '\r');
-}
-
-int	my_atio(const char *str, int i, int sign)
-{
-	size_t	res;
-	size_t	temp;
-
-	res = 0;
-	while (ft_isdigit(str[i]))
-	{
-		temp = res;
-		res = (res * 10) + (str[i] - 48);
-		if (temp != res / 10 && sign == 1)
-			return (-1);
-		if (temp != res / 10 && sign == -1)
-			return (0);
-		i++;
-	}
-	if (res >= 9223372036854775807ull && sign == 1)
+	if ((ft_strlen(str) >= 19)
+		&& (ft_strncmp(str, "9223372036854775807", 19) >= 0))
 		return (-1);
-	if (res > 9223372036854775807ull && sign == -1)
+	if (ft_strlen(str) >= 20
+		&& ft_strncmp(str, "-9223372036854775808", 20) >= 0)
 		return (0);
-	return ((int)res * sign);
-}
+	return (1);
+}	
 
 int	ft_atoi(const char *str)
 {
-	int		sign;
-	int		i;
+	int			i;
+	int			sign;
+	long long	value;
+	int			check;
 
-	sign = 1;
 	i = 0;
-	while (ft_isspace(str, i))
-		i++;
-	if (str[i] == '+' || str[i] == '-')
+	sign = 1;
+	value = 0;
+	while ((str[i] >= 9 && str[i] <= 13) || str[i] == 32)
+			i++;
+	check = ft_check(str);
+	if (check != 1)
+		return (check);
+	if (str[i] == '-')
 	{
-		if (str[i] == '-')
-			sign = -1;
+		sign = -1;
 		i++;
 	}
-	return (my_atio(str, i, sign));
+	else if (str[i] == '+')
+		i++;
+	while (str[i] && str[i] >= '0' && str[i] <= '9')
+		value = value * 10 + str[i++] - '0';
+	return (value * sign);
 }

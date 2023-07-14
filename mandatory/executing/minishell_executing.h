@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 13:35:12 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/14 10:43:21 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/14 13:12:14 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,11 @@
 # include <errno.h>
 # include <limits.h>
 
+int		g_exit;
+
 /*-------------------------builtins-------------------------------*/
 void	my_cd(t_env **env, char **args);
-void update_env(t_env *env, char *oldpwd,char *pwd);
+void	update_env(t_env *env, char *oldpwd, char *pwd);
 char	*find(t_env **env, char *to_find);
 
 void	my_echo(char **str);
@@ -35,4 +37,7 @@ t_env	*create_list(char *str[]);
 void	my_pwd(void);
 
 void	my_unset(t_env **env, char **args);
+
+void     my_exit(char **str);
+int		all_digit(char *str);
 #endif

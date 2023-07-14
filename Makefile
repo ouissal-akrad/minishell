@@ -6,7 +6,7 @@
 #    By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/23 03:03:58 by bel-idri          #+#    #+#              #
-#    Updated: 2023/07/14 10:10:04 by ouakrad          ###   ########.fr        #
+#    Updated: 2023/07/14 11:26:47 by ouakrad          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,7 @@ SRCS = mandatory/executing/main.c \
 		mandatory/executing/builtins/my_env.c \
 		mandatory/executing/builtins/my_pwd.c \
 		mandatory/executing/builtins/my_unset.c \
+		mandatory/executing/builtins/my_exit.c \
 	# mandatory/executing/tttttt.c \
 	# mandatory/parsing/ttttt.c \
 
