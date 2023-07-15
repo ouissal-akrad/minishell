@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:46:00 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/15 17:17:08 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/15 18:21:33 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ t_env	*ft_csp(t_env *env, char *s, int c)
 	char	*prev;
 	char	*rest;
 	char	*tmp;
-	char	*to_find;
+	// char	*to_find;
 	i = 0;
 	prev = NULL;
 	rest = NULL;
@@ -97,21 +97,20 @@ t_env	*ft_csp(t_env *env, char *s, int c)
 		return (env);
 	if (tmp[0] != '=')
 	{
-
 		//no args
 		if (ft_strchr(tmp,'=') == NULL)
 		{
-			if(ft_isalpha(tmp[0]))
+			if(ft_isalpha(tmp[0]) || tmp[0] == '_')
 				ft_lstadd_backk(&env, ft_lstneww(s, NULL));
 			else 
 			{
-				printf("minishell: export: %s: not a valid identifier\n", s);
+				printf("minishell: export: `%s`: not a valid identifier\n", s);
 				free(tmp);
 				return (env);
 			}
 		}
 		//with args
-		else if(ft_strchr(tmp,'=') != NULL)
+		else
 		{
 			while (tmp[i])
 			{
