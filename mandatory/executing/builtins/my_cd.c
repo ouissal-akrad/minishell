@@ -6,23 +6,22 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:55:55 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/14 18:55:17 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/15 07:17:15 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell_executing.h"
 
-char	*find(t_env **env, char *to_find)
+char	*find(t_env *env, char *to_find)
 {
-	while (*env)
+	while (env)
 	{
-		if (ft_strcmp((*env)->var, to_find) == 0)
-			return ((*env)->val);
-		(*env) = (*env)->next;
+		if (ft_strcmp(env->var, to_find) == 0)
+			return (env->val);
+		env = env->next;
 	}
 	return (NULL);
 }
-
 void	update_env(t_env *env, char *oldpwd, char *pwd)
 {
 	while (env)
@@ -43,21 +42,23 @@ void	update_env(t_env *env, char *oldpwd, char *pwd)
 
 void	my_cd(t_env **env, char **args)
 {
-	char	oldpwd[PATH_MAX];
-	char	pwd[PATH_MAX];
-	char	*path;
-	// "-"
-	if (getcwd(oldpwd, PATH_MAX) == NULL)
+	char oldpwd[PATH_MAX];
+	char pwd[PATH_MAX];
+	char *path;
+
+	if (args[1] != NULL && ft_strcmp(args[1], "-") == 0)
 	{
-		perror("getcwd");
-		g_exit = 1;
-		return ;
-		// exit(1);
+		path = find(*env, "OLDPWD");
+		if (path == NULL)
+		{
+			printf("cd: OLDPWD not set\n");
+			g_exit = 1;
+			return ;
+		}
 	}
-	path = NULL;
-	if (args[1] == NULL)
+	else if (args[1] == NULL)
 	{
-		path = find(env,"HOME");
+		path = find(*env, "HOME");
 		if (path == NULL)
 		{
 			printf("cd: HOME not set\n");
@@ -67,6 +68,12 @@ void	my_cd(t_env **env, char **args)
 	}
 	else
 		path = args[1];
+	if (getcwd(oldpwd, PATH_MAX) == NULL)
+	{
+		perror("getcwd");
+		g_exit = 1;
+		return ;
+	}
 	if (chdir(path) == -1)
 	{
 		printf("cd: no such file or directory: %s\n", path);

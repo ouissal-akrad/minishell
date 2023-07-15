@@ -6,7 +6,7 @@
 #    By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/23 03:03:58 by bel-idri          #+#    #+#              #
-#    Updated: 2023/07/14 16:49:13 by ouakrad          ###   ########.fr        #
+#    Updated: 2023/07/15 13:55:49 by ouakrad          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -83,7 +83,7 @@ OBJS_LIBFT = $(SRCS_LIBFT:.c=.o)
 CC = cc
 
 # CFLAGS = -Wall -Wextra -Werror -I/goinfre/bel-idri/.brew/opt/readline/include		#---On Bilal Mac---#
-CFLAGS = -Wall -Wextra -Werror -I/readline/include #-fsanitize=address -g
+CFLAGS = -Wall -Wextra -Werror -I/readline/include  #-g -fsanitize=address 
 
 # RLFLAGES = -lreadline -lhistory -L/goinfre/bel-idri/.brew/opt/readline/lib		#---On Bilal Mac---#
 RLFLAGES = -lreadline

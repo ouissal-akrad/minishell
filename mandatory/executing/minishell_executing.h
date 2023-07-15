@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 13:35:12 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/14 16:49:46 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/15 10:39:02 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,12 @@
 # include <errno.h>
 # include <limits.h>
 
-
-/*-------------------------builtins-------------------------------*/
 int		g_exit;
-
+/*-------------------------builtins-------------------------------*/
 /*----------------cd---------------------*/
 void	my_cd(t_env **env, char **args);
 void	update_env(t_env *env, char *oldpwd, char *pwd);
-char	*find(t_env **env, char *to_find);
+char	*find(t_env *env, char *to_find);
 /*----------------echo---------------------*/
 void	my_echo(char **str);
 int		newline_checker(char *str);
@@ -43,5 +41,9 @@ void	my_unset(t_env **env, char **args);
 void	my_exit(char **str);
 int		all_digit(char *str);
 /*----------------export---------------------*/
-void my_export(t_env *env);
+void	my_export(t_env **env, char **cmd);
+void	swap_env(t_env *a, t_env *b);
+void	print_env_ex(t_env *env);
+int		all_str(char *str);
+t_env	*ft_csp(t_env *env,char *s, int c);
 #endif
