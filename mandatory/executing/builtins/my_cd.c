@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:55:55 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/15 07:17:15 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/16 07:55:57 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,21 +42,12 @@ void	update_env(t_env *env, char *oldpwd, char *pwd)
 
 void	my_cd(t_env **env, char **args)
 {
+	// printf("===========>%s\n",args[1]);
 	char oldpwd[PATH_MAX];
 	char pwd[PATH_MAX];
 	char *path;
-
-	if (args[1] != NULL && ft_strcmp(args[1], "-") == 0)
-	{
-		path = find(*env, "OLDPWD");
-		if (path == NULL)
-		{
-			printf("cd: OLDPWD not set\n");
-			g_exit = 1;
-			return ;
-		}
-	}
-	else if (args[1] == NULL)
+	// cd without args
+	if (args[1] == NULL)
 	{
 		path = find(*env, "HOME");
 		if (path == NULL)
@@ -66,25 +57,46 @@ void	my_cd(t_env **env, char **args)
 			return ;
 		}
 	}
+	// cd -
+	else if (args[1] != NULL && ft_strcmp(args[1], "-") == 0)
+	{
+		path = find(*env, "OLDPWD");
+		if (path == NULL)
+		{
+			printf("cd: OLDPWD not set\n");
+			g_exit = 1;
+			return ;
+		}
+	}
+	// cd with args
 	else
 		path = args[1];
+	// cd ~
+	if(ft_strcmp(path,"~") == 0)
+		path = find(*env, "HOME");
+	// get OLDPWD
 	if (getcwd(oldpwd, PATH_MAX) == NULL)
 	{
 		perror("getcwd");
 		g_exit = 1;
 		return ;
 	}
+	// execute cmd
 	if (chdir(path) == -1)
 	{
 		printf("cd: no such file or directory: %s\n", path);
 		g_exit = 1;
 		return ;
 	}
+	// get PWD
 	if (getcwd(pwd, PATH_MAX) == NULL)
 	{
 		perror("getcwd");
 		g_exit = 1;
 		return ;
 	}
+	if(args[1] != NULL && ft_strcmp(args[1],"-") == 0)
+		printf("%s\n",pwd);
+	// update env
 	update_env(*env, oldpwd, pwd);
 }
