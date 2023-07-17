@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:46:00 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/16 12:52:52 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/17 11:26:19 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,16 +87,46 @@ void sort_env(t_env **env)
 		}
 		tmp = *env;
 	}
-	print_env_ex(*env);
 }
 
 void	my_export(t_env **env, char **cmd)
 {
 	if (!cmd[1])
+    {
         sort_env(env);
+	    print_env_ex(*env);
+    }
 	else
 		ft_csp(*env, cmd, '=');
 }
+
+void update_env_with_plus_equals(t_env **env, char *var_name, char *new_val)
+{
+    t_env *existing_var = find_env(*env, var_name);
+    char *concat_val;
+
+    if (existing_var != NULL)
+    {
+        // Concatenate the new value with the old value of the variable
+        concat_val = ft_strjoin(existing_var->val, new_val);
+        if (concat_val == NULL)
+            return;
+        free(existing_var->val);
+        existing_var->val = concat_val;
+    }
+    else
+    {
+        // Create a new environment variable
+        t_env *new_var = ft_lstneww(var_name, new_val);
+        if (new_var == NULL)
+        {
+            return;
+        }
+        // Add the new variable to the list
+        ft_lstadd_backk(env, new_var);
+    }
+}
+
 t_env *ft_csp(t_env *env, char **s, int c)
 {
     size_t i;
@@ -106,7 +136,7 @@ t_env *ft_csp(t_env *env, char **s, int c)
     char *tmp;
     t_env *new_var;
     t_env *existing_var;
-
+    
 
     while (s[cmd])
     {
@@ -120,7 +150,7 @@ t_env *ft_csp(t_env *env, char **s, int c)
         if (tmp[0] == '=')
         {
             printf("minishell: export: `%s`: not a valid identifier\n", s[cmd]);
-            free(tmp);
+            // free(tmp);
             return (env);
         }
         if (tmp[0] != '=')
@@ -133,7 +163,7 @@ t_env *ft_csp(t_env *env, char **s, int c)
                     new_var = ft_lstneww(s[cmd], NULL);
                     if (new_var == NULL)
                     {
-                        free(tmp);
+                        // free(tmp);
                         return (env);
                     }
                     // Add the new variable to the list
@@ -142,7 +172,7 @@ t_env *ft_csp(t_env *env, char **s, int c)
                 else
                 {
                     printf("minishell: export: `%s`: not a valid identifier\n", s[cmd]);
-                    free(tmp);
+                    // free(tmp);
                     return (env);
                 }
             }
@@ -171,7 +201,7 @@ t_env *ft_csp(t_env *env, char **s, int c)
                             if (!ft_isalnum(prev[i]) && prev[i] != '_')
                             {
                                 printf("minishell: export:%s: not a valid identifier\n", s[cmd]);
-                                free(tmp);
+                                // free(tmp);
                                 break;
                             }
                             i++;
@@ -180,7 +210,7 @@ t_env *ft_csp(t_env *env, char **s, int c)
                     else
                     {
                         printf("minishell: export: %s: not a valid identifier\n", s[cmd]);
-                        free(tmp);
+                        // free(tmp);
                         return (env);
                     }
                     // Check if the variable already exists

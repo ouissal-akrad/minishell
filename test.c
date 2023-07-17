@@ -3,35 +3,23 @@
 #include <string.h>
 #include <unistd.h>
 
-char	*strchrt(char *s, int c)
-{
-	size_t	i;
-	char	*prev;
-	char	*rest;
-
-	i = 0;
-	while (s[i])
-	{
-		if (s[i] == c)
-		{
-			prev = strdup(s);
-			prev[i] = '\0';
-			rest = strdup(s + i + 1);
-			return ((char *)&s[i + 1]);
-		}
-		i++;
-	}
-	if (s[i] == c)
-	{
-		prev = strdup(s);
-		prev[i] = '\0';
-		rest = strdup(s + i + 1);
-		return ((char *)&s[i + 1]);
-	}
-	return (NULL);
-}
-
-int	main(void)
-{
-	printf("%s\n", strchrt("ouissalakd=1337", '='));
-}
+ // char *plus = ft_strchr(tmp, '+');
+                    // if(ft_strchr(tmp, '=') != NULL && plus != NULL && plus < ft_strchr(tmp, '='))
+                    // {
+                    //     puts("here");
+                    //     prev = ft_substr(tmp, 0, plus - tmp);
+                    //     rest = ft_strdup((plus + 1) + 1);
+                    // }
+                        // if(plus!= NULL)
+                        // {
+                        //     puts("here");
+                        //     // Concatenate the new value with the old value of the variable
+                        //     char *new_val = ft_strjoin(existing_var->val, rest);
+                        //     if (new_val == NULL)
+                        //     {
+                        //         free(tmp);
+                        //         return (env);
+                        //     }
+                        //     free(existing_var->val);
+                        //     existing_var->val = new_val;
+                        // }
