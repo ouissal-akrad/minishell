@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:21:57 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/17 08:00:13 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/18 11:26:08 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ int	main(int ac, char **av, char *env[])
 
 	(void)ac;
 	(void)av;
-	line = readline("minishell$ ");
 	new_env = create_list(env);
+	line = readline("minishell$ ");
 	while (line)
 	{
 		add_history(line);

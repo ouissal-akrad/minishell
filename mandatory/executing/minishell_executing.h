@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 13:35:12 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/16 12:33:57 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/18 08:49:35 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,5 @@ void	print_env_ex(t_env *env);
 int		all_str(char *str);
 t_env	*ft_csp(t_env *env, char **s, int c);
 t_env	*find_env(t_env *env, char *name);
+int    is_valid(char *str);
 #endif

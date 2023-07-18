@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:55:55 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/16 07:55:57 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/18 08:44:56 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,9 @@ void	my_cd(t_env **env, char **args)
 	// cd with args
 	else
 		path = args[1];
-	// cd ~
-	if(ft_strcmp(path,"~") == 0)
-		path = find(*env, "HOME");
+	// // cd ~
+	// if(ft_strcmp(path,"~") == 0)
+	// 	path = find(*env, "HOME");
 	// get OLDPWD
 	if (getcwd(oldpwd, PATH_MAX) == NULL)
 	{
@@ -99,4 +99,5 @@ void	my_cd(t_env **env, char **args)
 		printf("%s\n",pwd);
 	// update env
 	update_env(*env, oldpwd, pwd);
+	//unset pwd 
 }

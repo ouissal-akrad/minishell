@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:54:09 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/15 13:22:10 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/18 15:59:16 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,16 @@
 void	delete_node(t_env *head, char *var)
 {
 	t_env	*curr;
-	t_env	*prev;
 
 	curr = head;
-	prev = NULL;
 	while (curr != NULL && ft_strcmp(curr->var, var) != 0)
-	{
-		prev = curr;
 		curr = curr->next;
-	}
 	if (curr != NULL)
 	{
-		if (prev == NULL)
-			head = curr->next;
-		else
-			prev->next = curr->next;
+		if (curr->prev != NULL)
+			curr->prev->next = curr->next;
+		if (curr->next != NULL)
+			curr->next->prev = curr->prev;
 		free(curr->var);
 		free(curr->val);
 		free(curr);
@@ -37,16 +32,19 @@ void	delete_node(t_env *head, char *var)
 }
 
 t_env	*ft_lstneww(char *env_name, char *env_content)
-// remove 
+// remove
 {
 	t_env *new;
 
 	new = malloc(sizeof(t_env));
 	if (!new)
 		return (NULL);
-	new->var = env_name;
-	new->val = env_content;
+	new->var = ft_strdup(env_name);
+	new->val = NULL;
+	if (env_content != NULL)
+		new->val = ft_strdup(env_content);
 	new->next = NULL;
+	new->prev = NULL;
 	return (new);
 }
 
@@ -63,6 +61,7 @@ void	ft_lstadd_backk(t_env **lst, t_env *new)
 	}
 	while (tmp->next)
 		tmp = tmp->next;
+	new->prev = tmp;
 	tmp->next = new;
 }
 
@@ -79,24 +78,60 @@ void	print_env(t_env *env)
 	}
 }
 
-t_env	*create_list(char *str[]) // remove after work in general main
-{
-	t_env *env;
-	char **str1;
-	int i;
+// t_env	*create_list(char *str[]) // remove after work in general main
+// {
+// 	t_env *env;
+// 	char *variable;
+// 	char *var;
+// 	char *val;
+// 	int i;
+// 	int j = 0;
+// 	i = 0;
+// 	env = NULL;
+// 	puts("here");
+// 	while (str[i])
+// 	{
+// 		// variable = ft_split(str[i], '=');
+// 		variable = str[i];
+// 		while(variable[j])
+// 		{
+// 			if (variable[j] == '=')
+// 			{
+// 				var = variable;
+// 				var[j] = '\0';
+// 				val = variable + j + 1;
+// 			}
+// 			j++;
+// 		}
+// 		ft_lstadd_backk(&env, ft_lstneww(var, val));
+// 		i++;
+// 	}
+// 	// print_env(env);
+// 	return (env);
+// }
 
-	i = 0;
+t_env	*create_list(char *str[])
+{
+	t_env	*env;
+	int		i;
+	char	*variable;
+	char	*equal_sign;
+
 	env = NULL;
+	i = 0;
 	while (str[i])
 	{
-		str1 = ft_split(str[i], '=');
-		ft_lstadd_backk(&env, ft_lstneww(str1[0], str1[1]));
+		variable = str[i];
+		equal_sign = ft_strchr(variable, '=');
+		if (equal_sign != NULL)
+		{
+			*equal_sign = '\0';
+			ft_lstadd_backk(&env, ft_lstneww(variable, equal_sign + 1));
+		}
 		i++;
 	}
-	// print_env(env);
 	return (env);
 }
-
 void	my_env(t_env *env)
 {
 	print_env(env);

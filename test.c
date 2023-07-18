@@ -23,3 +23,18 @@
                         //     free(existing_var->val);
                         //     existing_var->val = new_val;
                         // }
+
+                        void is_valid(char *str)
+{
+	int i = 1;
+	while(str[i])
+	{
+        if(str[i] == '=')
+            break;
+		if((ft_isalpha(str[0]) || str[0] == '_') && ft_isalnum(str[i]) || str[i] == '_')
+			i++;
+		else 
+			return(0);
+	}
+	return(1);
+}
