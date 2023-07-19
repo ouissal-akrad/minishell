@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:46:00 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/19 10:28:19 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/19 11:12:28 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -298,7 +298,8 @@ t_env *ft_csp(t_env *env, char **s, int c)
         if (tmp[0] != '_' && !ft_isalpha(tmp[0]))
         {
             printf("minishell: export: `%s`: not a valid identifier//////////////////////\n", tmp);
-            return (env);
+			cmd ++;
+			continue ;
         }
         while (tmp[i] && tmp[i] != c)
             i++;
@@ -312,7 +313,9 @@ t_env *ft_csp(t_env *env, char **s, int c)
 				else if(count_plus(tmp) == 0)
 				{
 					printf("minishell: export: `%s`: not a valid identifier=======================\n", tmp);
-					return (env);
+					// return (env);
+					cmd ++;
+					continue ;
 				}
 				prev = tmp;
 				prev[i - plus] = '\0';
@@ -332,7 +335,8 @@ t_env *ft_csp(t_env *env, char **s, int c)
 		if (!check(prev))
 		{
 			printf("minishell: export: %s: not a valid identifier******\n", s[cmd]);
-			return (env);
+			cmd ++;
+			continue ;
 		}
         existing_var = find_env(env, prev);
         if (existing_var != NULL)
@@ -360,7 +364,10 @@ t_env *ft_csp(t_env *env, char **s, int c)
 			// Create a new env variable
             new_var = ft_lstneww(prev, rest);
             if (new_var == NULL)
-                return (env);
+            {
+				cmd ++;
+				continue ;
+			}
             ft_lstadd_backk(&env, new_var);
         }
         cmd++;
@@ -368,7 +375,7 @@ t_env *ft_csp(t_env *env, char **s, int c)
 	//resort env
     sort_env(&env);
 	puts("-------------------");
-	print_env_ex(env);
+	// print_env_ex(env);
 	puts("-------------------");
     return (env);
 }
