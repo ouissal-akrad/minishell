@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/19 09:23:53 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/19 12:42:58 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -304,7 +304,7 @@ char *get_env_val(char *var, t_env *env)
 	return (ft_strdup(""));
 }
 
-char *expand_env(char *str, t_env *env)
+char *expand_env(char *str, t_env *env)  // $_  $g      j
 {
 	int i;
 	int j;
@@ -317,44 +317,49 @@ char *expand_env(char *str, t_env *env)
 
 
 	final = ft_strdup("");
-	i = 0;
+	i = -1;
 	quote = OQ;
 	backup = ft_calloc(ft_strlen(str) + 1, 1);
 	k = 0;
 
-	while (str[i])
+	while (str[++i])
 	{
 		backup[k++] = str[i];
 		is_quote(str, i, &quote);
-		if (str[i] == '$' && quote != SQ)
+		if ((str[i] == '$' && quote != SQ))
 		{
 			backup[k - 1] = '\0';
 			final = ft_strjoin(final, backup); // free final
-			// free(backup);
+			if (str[i + 1] == '?' || ft_isdigit(str[i + 1]) || ((str[i + 1] == '\'' || str[i + 1] == '\"') && str[i + 2]))
+			{
+				if (str[i + 1] == '?')
+					final = ft_strjoin(final, ft_itoa(9999));
+				if (str[i + 1] == '?' || ft_isdigit(str[i + 1]))
+					i++;
+				k = 0;
+				continue;
+			}
 			j = 1;
 			while (str[i + j] && (ft_isalnum(str[i + j]) || str[i + j] == '_'))
 				j++;
-			printf("j: %d\n", j);
-			printf("i: %d\n", i);
-			if (i + 1 == j)
+			if (j == 1)
 			{
 				final = ft_strjoin(final, "$"); //
-				i++;
+				k = 0;
 				continue;
 			}
 			var = ft_substr(str, i + 1, j - 1);
 			val = get_env_val(var, env);
-			// free(var);
+			free(var);
 			k = 0;
 			final = ft_strjoin(final, val); //
-			// free(val);
+			free(val);
 			i = i + j - 1;
 		}
-		i++;
 	}
 	backup[k] = '\0';
 	final = ft_strjoin(final, backup);
-	// free(backup);
+	free(backup);
 	return (final);
 
 }
