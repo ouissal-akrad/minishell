@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:54:09 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/19 10:27:57 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/19 12:11:01 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,38 +78,6 @@ void	print_env(t_env *env)
 		
 	}
 }
-
-// t_env	*create_list(char *str[]) // remove after work in general main
-// {
-// 	t_env *env;
-// 	char *variable;
-// 	char *var;
-// 	char *val;
-// 	int i;
-// 	int j = 0;
-// 	i = 0;
-// 	env = NULL;
-// 	puts("here");
-// 	while (str[i])
-// 	{
-// 		// variable = ft_split(str[i], '=');
-// 		variable = str[i];
-// 		while(variable[j])
-// 		{
-// 			if (variable[j] == '=')
-// 			{
-// 				var = variable;
-// 				var[j] = '\0';
-// 				val = variable + j + 1;
-// 			}
-// 			j++;
-// 		}
-// 		ft_lstadd_backk(&env, ft_lstneww(var, val));
-// 		i++;
-// 	}
-// 	// print_env(env);
-// 	return (env);
-// }
 
 t_env	*create_list(char *str[])
 {
