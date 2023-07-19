@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/10 22:21:38 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/19 08:40:23 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,9 +151,9 @@ void	lexar(char *str, t_tokens **tokens)
 
 	str_t = split_tokens(str);
 	i = -1;
-	quote = OQ;
 	while (str_t[++i])
 	{
+		quote = OQ;
 		is_quote(str_t[i], i, &quote);
 		if (!ft_strncmp(str_t[i], "|", ft_strlen(str_t[i])) && !quote)
 			add_token(tokens, ft_strdup("|"), PIPE);
@@ -277,157 +277,117 @@ void	remove_quotes(t_tokens *tokens)
 	}
 }
 
-// ---------------------- remove  ---------------------------------------------
+int	check_dollar(char *str)
+{
+	int i;
 
-// t_env	*ft_lstneww(char *env_name, char *env_content) // remove after work in general main
-// {
-// 	t_env	*new;
+	i = -1;
+	while (str[++i])
+	{
+		if (str[i] == '$')
+			return (1);
+	}
+	return (0);
+}
 
-// 	new = malloc(sizeof(t_env));
-// 	if (!new)
-// 		return (NULL);
-// 	new->var = env_name;
-// 	new->val = env_content;
-// 	new->next = NULL;
-// 	return (new);
-// }
+char *get_env_val(char *var, t_env *env)
+{
+	t_env *tmp;
 
-// void	ft_lstadd_backk(t_env **lst, t_env *new) // remove after work in general main
-// {
-// 	t_env	*tmp;
+	tmp = env;
+	while (tmp)
+	{
+		if (!ft_strcmp(tmp->var, var))
+			return (ft_strdup(tmp->val));
+		tmp = tmp->next;
+	}
+	return (ft_strdup(""));
+}
 
-// 	tmp = *lst;
-// 	if (!(*lst))
-// 	{
-// 		(*lst) = new;
-// 		return ;
-// 	}
-// 	while (tmp->next)
-// 		tmp = tmp->next;
-// 	tmp->next = new;
-// }
-
-// t_env	*create_list(char *str[]) // remove after work in general main
-// {
-// 	t_env	*env;
-// 	char	**str1;
-// 	int		i;
-
-// 	i = 0;
-// 	env = NULL;
-// 		while (str[i])
-// 		{
-// 			str1 = ft_split(str[i], '=');
-// 			ft_lstadd_backk(&env, ft_lstneww(str1[0], str1[1]));
-// 			i++;
-// 		}
-// 	// print_env(env);
-// 	return (env);
-// }
-// ---------------------- remove  ---------------------------------------------
+char *expand_env(char *str, t_env *env)
+{
+	int i;
+	int j;
+	int k;
+	int quote;
+	char *var;
+	char *val;
+	char *final;
+	char *backup;
 
 
-// void expand_env(t_tokens **tokens, t_env *env_list)
-// {
-// 	t_tokens	*tmp;
-// 	int			i;
-// 	int			j;
-// 	int			k;
-// 	char		*tmp_str;
+	final = ft_strdup("");
+	i = 0;
+	quote = OQ;
+	backup = ft_calloc(ft_strlen(str) + 1, 1);
+	k = 0;
 
-// 	tmp = *tokens;
-// 	while (tmp)
-// 	{
-// 		if (tmp->type == WORD)
-// 		{
-// 			i = -1;
-// 			j = 0;
-// 			while (tmp->str[++i])
-// 			{
-// 				if (tmp->str[i] == '$')
-// 				{
-// 					k = 0;
-// 					while (tmp->str[++i] && tmp->str[i] != '$' && tmp->str[i] != ' ' && tmp->str[i] != '\'' && tmp->str[i] != '\"')
-// 						k++;
-// 					tmp_str = ft_substr(tmp->str, i - k, k);
-// 					while (env_list)
-// 					{
-// 						if (!ft_strcmp(env_list->var, tmp_str))
-// 						{
-// 							free(tmp_str);
-// 							tmp_str = ft_strdup(env_list->val);
-// 							break ;
-// 						}
-// 						env_list = env_list->next;
-// 					}
-// 					// ft_strcpy(&tmp->str[j], tmp_str); strlcpy
-// 					ft_strlcpy(&tmp->str[j], tmp_str, ft_strlen(tmp_str) + 1);
-// 					j += ft_strlen(tmp_str);
-// 					free(tmp_str);
-// 				}
-// 				else
-// 					tmp->str[j++] = tmp->str[i];
-// 			}
-// 			tmp->str[j] = '\0';
-// 		}
-// 		tmp = tmp->next;
-// 	}
+	while (str[i])
+	{
+		backup[k++] = str[i];
+		is_quote(str, i, &quote);
+		if (str[i] == '$' && quote != SQ)
+		{
+			backup[k - 1] = '\0';
+			final = ft_strjoin(final, backup); // free final
+			// free(backup);
+			j = i;
+			while (str[i + j] && (ft_isalnum(str[i + j]) || str[i + j] == '_'))
+				j++;
+			if (i == j)
+			{
+				final = ft_strjoin(final, "$"); //
+				i++;
+				continue;
+			}
+			var = ft_substr(str, i + 1, j - 1);
+			val = get_env_val(var, env);
+			// free(var);
+			k = 0;
+			final = ft_strjoin(final, val); //
+			// free(val);
+			i = i + j - 1;
+		}
+		i++;
+	}
+	backup[k] = '\0';
+	final = ft_strjoin(final, backup);
+	// free(backup);
+	return (final);
 
-// }
+}
 
+void expanding(t_tokens **token, t_env *env)
+{
+	t_tokens *tmp;
+	t_tokens *prv;
+	char *str;
 
-
-
-
-
-// int	main(int argc, char *argv[], char *env[])
-// {
-// 	char		*line;
-// 	t_tokens	*tokens;
-
-// 	t_env		*env_list;
-// 	t_tokens	*tmp;
-
-
-// 	(void)argc;
-// 	(void)argv;
-
-// 	env_list = create_list(env); // free env_list
-// 	// char *type[] = {"Word", "Pipe", "In", "Out", "App", "Hdoc"};
-
-
-// 	tokens = NULL;
-
-// 	line = readline("minishell$ ");
-// 	while (line)
-// 	{
-// 		lexar(line, &tokens);
-
-// 		if (syntax_error(tokens))
-// 		{
-// 			free_tokens(&tokens);
-// 			line = readline("minishell$ ");
-// 			continue ;
-// 		}
-
-
-// 		// expand_env(&tokens, env_list);
-// 		// remove_quotes(tokens);
+	tmp = *token;
+	prv = tmp;
+	while(tmp)
+	{
+		if (tmp->type == WORD && check_dollar(tmp->str) && prv->type != HDOC)
+		{
+			str = expand_env(tmp->str, env);
+			free(tmp->str);
+			tmp->str = ft_strdup(str);
+			printf("str: %s\n", str);
+		}
+		prv = tmp;
+		tmp = tmp->next;
+	}
+}
 
 
 
 
-
-
-
-// 		free_tokens(&tokens);
-// 		line = readline("minishell$ ");
-// 	}
-// 	return (0);
-// }
 
 // cat > file
 // ls > file
 // >>>
 // <>
 // $?
+// {}
+// ()
+// echo $565

@@ -5,6 +5,7 @@
 		"minishell.h": "c",
 		"libft.h": "c",
 		"minishell_structs.h": "c",
-		"readline.h": "c"
+		"readline.h": "c",
+		"sstream": "c"
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 22:06:09 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/10 22:07:34 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/19 06:34:20 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ typedef struct s_file
 
 typedef struct s_data
 {
-	char	*cmd; // only cmd
 	char	**args; // args[0] = cmd
 	t_env	env;
 	t_file	file;

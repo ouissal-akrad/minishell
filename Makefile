@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+         #
+#    By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/23 03:03:58 by bel-idri          #+#    #+#              #
-#    Updated: 2023/07/11 18:18:30 by ouakrad          ###   ########.fr        #
+#    Updated: 2023/07/13 18:53:49 by bel-idri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,8 +14,9 @@ NAME = minishell
 
 NAME_BONUS = minishell_bonus
 
-SRCS = mandatory/executing/env.c \
-	mandatory/executing/builtins.c \
+SRCS = mandatory/parsing/parsing.c \
+	mandatory/main.c \
+	mandatory/executing/env.c \
 	# mandatory/executing/tttttt.c \
 	# mandatory/parsing/ttttt.c \
 
