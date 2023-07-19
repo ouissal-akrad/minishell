@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/19 08:40:23 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/19 09:23:53 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -331,10 +331,12 @@ char *expand_env(char *str, t_env *env)
 			backup[k - 1] = '\0';
 			final = ft_strjoin(final, backup); // free final
 			// free(backup);
-			j = i;
+			j = 1;
 			while (str[i + j] && (ft_isalnum(str[i + j]) || str[i + j] == '_'))
 				j++;
-			if (i == j)
+			printf("j: %d\n", j);
+			printf("i: %d\n", i);
+			if (i + 1 == j)
 			{
 				final = ft_strjoin(final, "$"); //
 				i++;
