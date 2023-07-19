@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:54:09 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/18 15:59:16 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/19 10:27:57 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ void	print_env(t_env *env)
 		if (tmp->var != NULL && tmp->val != NULL)
 			printf("%s=%s\n", tmp->var, tmp->val);
 		tmp = tmp->next;
+		
 	}
 }
 
