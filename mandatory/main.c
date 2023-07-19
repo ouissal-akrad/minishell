@@ -40,17 +40,16 @@ int	main(int argc, char *argv[], char *env[])
 
 
 		expanding(&tokens, env_list);
+		remove_quotes(tokens);
+
 		tmp = tokens;
 
 
-		// while (tmp)
-		// {
-
-		// 	printf("str: %s\n", tmp->str);
-		// 	count_dollar(tmp->str);
-		// 	printf("type: %d\n", tmp->type);
-		// 	tmp = tmp->next;
-		// }
+		while (tmp)
+		{
+			printf("str: %s\n", tmp->str);
+			tmp = tmp->next;
+		}
 
 
 

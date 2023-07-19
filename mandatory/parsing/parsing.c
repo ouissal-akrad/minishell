@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/19 12:42:58 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/19 16:01:13 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -290,7 +290,7 @@ int	check_dollar(char *str)
 	return (0);
 }
 
-char *get_env_val(char *var, t_env *env)
+char *get_val(char *var, t_env *env)
 {
 	t_env *tmp;
 
@@ -303,6 +303,11 @@ char *get_env_val(char *var, t_env *env)
 	}
 	return (ft_strdup(""));
 }
+
+// char *final()
+// {
+// 	char
+// }
 
 char *expand_env(char *str, t_env *env)  // $_  $g      j
 {
@@ -329,6 +334,7 @@ char *expand_env(char *str, t_env *env)  // $_  $g      j
 		if ((str[i] == '$' && quote != SQ))
 		{
 			backup[k - 1] = '\0';
+			j = 1; // other function
 			final = ft_strjoin(final, backup); // free final
 			if (str[i + 1] == '?' || ft_isdigit(str[i + 1]) || ((str[i + 1] == '\'' || str[i + 1] == '\"') && str[i + 2]))
 			{
@@ -339,7 +345,6 @@ char *expand_env(char *str, t_env *env)  // $_  $g      j
 				k = 0;
 				continue;
 			}
-			j = 1;
 			while (str[i + j] && (ft_isalnum(str[i + j]) || str[i + j] == '_'))
 				j++;
 			if (j == 1)
@@ -349,7 +354,7 @@ char *expand_env(char *str, t_env *env)  // $_  $g      j
 				continue;
 			}
 			var = ft_substr(str, i + 1, j - 1);
-			val = get_env_val(var, env);
+			val = get_val(var, env);
 			free(var);
 			k = 0;
 			final = ft_strjoin(final, val); //
@@ -379,7 +384,7 @@ void expanding(t_tokens **token, t_env *env)
 			str = expand_env(tmp->str, env);
 			free(tmp->str);
 			tmp->str = ft_strdup(str);
-			printf("str: %s\n", str);
+			// printf("str: %s\n", str);
 		}
 		prv = tmp;
 		tmp = tmp->next;
