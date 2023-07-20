@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 13:35:12 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/18 08:49:35 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/20 09:26:47 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,14 @@ void	delete_node(t_env *head, char *var);
 void	ft_lstadd_backk(t_env **lst, t_env *new);
 t_env	*ft_lstneww(char *env_name, char *env_content);
 t_env	*create_list(char *str[]);
+void    ft_lstfree(t_env *head);
+void	free_leaks(char **args);
 /*----------------pwd---------------------*/
 void	my_pwd(void);
 /*----------------unset---------------------*/
 void	my_unset(t_env **env, char **args);
 /*----------------exit---------------------*/
-void	my_exit(char **str);
+void	my_exit(t_env **env,char **str);
 int		all_digit(char *str);
 /*----------------export---------------------*/
 void	my_export(t_env **env, char **cmd);
@@ -46,7 +48,7 @@ void	sort_env(t_env **env);
 void	swap_env(t_env *a, t_env *b);
 void	print_env_ex(t_env *env);
 int		all_str(char *str);
-t_env	*ft_csp(t_env *env, char **s, int c);
+void	ft_csp(t_env *env, char **s, int c);
 t_env	*find_env(t_env *env, char *name);
-int    is_valid(char *str);
+void	sequal(t_env *env, char *prev, char *rest, int plus);
 #endif

@@ -6,30 +6,11 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:55:18 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/14 16:33:56 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/20 07:21:58 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell_executing.h"
-
-/*
-echo "hello"
-------------------------
-name="ouissal"
-echo "My name is $name"
-------------------------
-echo "This text will be saved in a file." > file.txt
-------------------------
-echo "$(cat file.txt)"
-------------------------
-echo "$(pwd)"
-
-*/
-/*
-cmd =====> args[0 ]= echo
-args = -n
-file = fd;
-*/
 
 int	newline_checker(char *str)
 {

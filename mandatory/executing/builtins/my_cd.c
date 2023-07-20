@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:55:55 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/19 13:11:17 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/20 09:38:45 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ char	*find(t_env *env, char *to_find)
 	}
 	return (NULL);
 }
+
 void	update_env(t_env *env, char *oldpwd, char *pwd)
 {
 	while (env)

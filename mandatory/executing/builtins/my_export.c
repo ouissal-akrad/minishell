@@ -6,11 +6,17 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:46:00 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/19 11:40:34 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/20 08:26:02 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell_executing.h"
+
+void	ft_error(char *str)
+{
+	printf("minishell: export: `%s`: not a valid identifier\n", str);
+	return ;
+}
 
 int	all_str(char *str)
 {
@@ -42,18 +48,18 @@ t_env	*find_env(t_env *env, char *name)
 void	print_env_ex(t_env *env)
 {
 	t_env	*tmp;
-	int i;
+	int		i;
 
 	tmp = env;
 	while (tmp != NULL)
-	{	
+	{
 		if (tmp->var != NULL && tmp->val != NULL)
 		{
 			i = -1;
 			printf("declare -x ");
 			while (tmp->var[++i])
 				printf("%c", tmp->var[i]);
-			printf ("=\"");
+			printf("=\"");
 			i = -1;
 			while (tmp->val[++i])
 			{
@@ -120,7 +126,7 @@ int	check(char *str)
 	int	i;
 
 	if (!ft_isalpha(str[0]) && str[0] != '_')
-		return 0;
+		return (0);
 	i = 1;
 	while (str[i])
 	{
@@ -134,69 +140,69 @@ int	check(char *str)
 	return (1);
 }
 
-int count_plus(char *str)
+int	count_plus(char *str)
 {
-    int plus_count = 0;
-    int i = 0;
+	int	plus_count;
+	int	i;
 
-    while (str[i])
+	plus_count = 0;
+	i = 0;
+	while (str[i])
 	{
-		if(!ft_isalpha(str[i]))
+		if (!ft_isalpha(str[i]))
 		{
 			if (str[i] == '+')
 			{
 				plus_count++;
 				if (plus_count > 1)
-					return 0;
-			} 
+					return (0);
+			}
 			else if (str[i] == '=' && plus_count == 1)
-				return 1;
+				return (1);
 		}
-        i++;
-    }
-    return 0;
+		i++;
+	}
+	return (0);
 }
 
-t_env *ft_csp(t_env *env, char **s, int c)
+void	ft_csp(t_env *env, char **s, int c)
 {
-    int     plus;
-    size_t  i;
-    size_t  cmd;
+	int		plus;
+	size_t	i;
+	size_t	cmd;
 	char	*tmp;
-    char    *old_val;
-    char    *prev;
-    char    *rest;
-    t_env   *new_var;
-    t_env   *existing_var;
+	char	*prev;
+	char	*rest;
 
-    cmd = 1;
-    while (s[cmd])
-    {
-        plus = 0;
-        i = 0;
-        prev = NULL;
-        rest = NULL;
+	cmd = 1;
+	while (s[cmd])
+	{
+		plus = 0;
+		i = 0;
+		prev = NULL;
+		rest = NULL;
 		tmp = s[cmd];
-        if (tmp[0] != '_' && !ft_isalpha(tmp[0]))
-        {
-            printf("minishell: export: `%s`: not a valid identifier\n", tmp);
-			cmd ++;
+		if (tmp[0] != '_' && !ft_isalpha(tmp[0]))
+		{
+			printf("minishell: export: `%s`: not a valid identifier\n", s[cmd]);
+			cmd++;
 			continue ;
-        }
-        while (tmp[i] && tmp[i] != c)
-            i++;
-        if (tmp[i] == c)
-        {
+		}
+		while (tmp[i] && tmp[i] != c)
+			i++;
+		//with equal
+		if (tmp[i] == c)
+		{
 			//with plus
-			if(ft_strchr(tmp,'+') != NULL)
+			if (ft_strchr(tmp, '+') != NULL)
 			{
 				if (count_plus(tmp) == 1)
 					plus = 1;
-				else if(count_plus(tmp) == 0)
+				else if (count_plus(tmp) == 0)
 				{
-					printf("minishell: export: `%s`: not a valid identifier\n", tmp);
-					// return (env);
-					cmd ++;
+					printf("minishell: export: `%s`: not a valid identifier\n",
+							s[cmd]);
+					cmd++;
 					continue ;
 				}
 				prev = tmp;
@@ -210,55 +216,57 @@ t_env *ft_csp(t_env *env, char **s, int c)
 				prev[i] = '\0';
 				rest = tmp + i + 1;
 			}
-        }
+		}
 		//without = ,rest == NULL
-        else
-            prev = ft_strdup(tmp);
+		else
+			prev = ft_strdup(tmp);
 		if (!check(prev))
 		{
-			printf("minishell: export: %s: not a valid identifier\n", s[cmd]);
-			cmd ++;
+			printf("minishell: export: `%s`: not a valid identifier\n", s[cmd]);
+			cmd++;
 			continue ;
 		}
-        existing_var = find_env(env, prev);
-        if (existing_var != NULL)
-        {
-			// Duplicate the new value and store it in the existing variable and + exists
-            if (plus && existing_var->val)
-            {
-                old_val = ft_strdup(existing_var->val);
-                free(existing_var->val);
-                existing_var->val = ft_strjoin(old_val, rest);
-                free(old_val);
-            }
-			// assign new value to the old variable if it exists
-            else
-            {
-                free(existing_var->val);
-				if(!rest)
-                	existing_var->val = NULL;
-				else
-                	existing_var->val = ft_strdup(rest);
-            }
-        }
-        else
-        {
-			// Create a new env variable
-            new_var = ft_lstneww(prev, rest);
-            if (new_var == NULL)
-            {
-				cmd ++;
-				continue ;
-			}
-            ft_lstadd_backk(&env, new_var);
-        }
-        cmd++;
-    }
+		// check
+		sequal(env, prev, rest, plus);
+		cmd++;
+	}
 	//resort env
-    sort_env(&env);
-	puts("-------------------");
-	// print_env_ex(env);
-	puts("-------------------");
-    return (env);
+	sort_env(&env);
 }
 
+void	sequal(t_env *env, char *prev, char *rest, int plus)
+{
+	t_env	*new_var;
+	t_env	*existing_var;
+	char	*old_val;
+
+	existing_var = find_env(env, prev);
+	if (existing_var != NULL)
+	{
+		// Duplicate the new value and store it in the existing variable and + exists
+		if (plus && existing_var->val)
+		{
+			old_val = ft_strdup(existing_var->val);
+			free(existing_var->val);
+			existing_var->val = ft_strjoin(old_val, rest);
+			free(old_val);
+		}
+		// assign new value to the old variable if it exists
+		else
+		{
+			free(existing_var->val);
+			if (!rest)
+				existing_var->val = NULL;
+			else
+				existing_var->val = ft_strdup(rest);
+		}
+	}
+	else
+	{
+		// Create a new env variable
+		new_var = ft_lstneww(prev, rest);
+		if (new_var == NULL)
+			return ;
+		ft_lstadd_backk(&env, new_var);
+	}
+}

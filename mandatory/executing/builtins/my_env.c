@@ -6,11 +6,40 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:54:09 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/19 12:11:01 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/20 09:26:29 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell_executing.h"
+
+void	ft_lstfree(t_env *head)
+{
+	t_env	*current;
+	t_env	*next;
+
+	current = head;
+	while (current != NULL)
+	{
+		next = current->next;
+		free(current->var);
+		free(current->val);
+		free(current);
+		current = next;
+	}
+}
+
+void	free_leaks(char **args)
+{
+	int	i;
+
+	i = 0;
+	while (args[i])
+	{
+		free(args[i]);
+		i++;
+	}
+	free(args);
+}
 
 void	delete_node(t_env *head, char *var)
 {
@@ -75,7 +104,6 @@ void	print_env(t_env *env)
 		if (tmp->var != NULL && tmp->val != NULL)
 			printf("%s=%s\n", tmp->var, tmp->val);
 		tmp = tmp->next;
-		
 	}
 }
 

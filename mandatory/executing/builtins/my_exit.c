@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:20:28 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/15 08:20:02 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/20 08:37:22 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	all_digit(char *str)
 	return (1);
 }
 
-void	my_exit(char **cmd)
+void	my_exit(t_env **env,char **cmd)
 {
 	int	i;
 
@@ -36,6 +36,7 @@ void	my_exit(char **cmd)
 	{
 		printf("exit\n");
 		g_exit = 0;
+		ft_lstfree(*env);
 		exit(0);
 	}
 	else if (all_digit(cmd[i]) == 0 || ((all_digit(cmd[i]) == 1) && ft_atoi(cmd[i]) <= 0))
@@ -43,6 +44,7 @@ void	my_exit(char **cmd)
 		printf("minishell: exit: ");
 		printf("%s: numeric argument required\n", cmd[i]);
 		g_exit = 255;
+		ft_lstfree(*env);
 		exit(255);
 	}
 	else if (cmd[2])
@@ -51,5 +53,6 @@ void	my_exit(char **cmd)
 		return(printf("minishell: exit: too many arguments\n"),free(NULL));
     }
 	g_exit = ft_atoi(cmd[i]);
+	ft_lstfree(*env);
 	exit(ft_atoi(cmd[i]) % 256);
 }

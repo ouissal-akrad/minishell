@@ -6,11 +6,16 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:21:57 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/18 11:26:08 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/20 09:35:50 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell_executing.h"
+
+void f()
+{
+	system("leaks minishell");
+}
 
 int	main(int ac, char **av, char *env[])
 {
@@ -22,6 +27,7 @@ int	main(int ac, char **av, char *env[])
 	(void)av;
 	new_env = create_list(env);
 	line = readline("minishell$ ");
+	atexit(f);
 	while (line)
 	{
 		add_history(line);
@@ -37,10 +43,13 @@ int	main(int ac, char **av, char *env[])
 		else if (ft_strcmp(l[0], "env") == 0)
 			my_env(new_env);
 		else if (ft_strcmp(l[0], "exit") == 0)
-			my_exit(l);
+			my_exit(&new_env,l);
 		else if (ft_strcmp(l[0], "export") == 0)
 			my_export(&new_env,l);
 		free(line);
 		line = readline("minishell$ ");
 	}
+	clear_history();
+	free_leaks(l);
+	ft_lstfree(new_env);
 }
