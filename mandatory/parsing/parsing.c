@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/19 16:01:13 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/22 09:34:25 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -304,10 +304,78 @@ char *get_val(char *var, t_env *env)
 	return (ft_strdup(""));
 }
 
-// char *final()
+int count_j(char *str, int i)
+{
+	int j;
+
+	j = 1;
+	while (str[i + j] && (ft_isalnum(str[i + j]) || str[i + j] == '_'))
+		j++;
+	return (j);
+}
+
+typedef struct s_exp
+{
+	char *var;
+	char *val;
+	char *final;
+	char *backup;
+} t_exp;
+
+// char *expand_env(char *str, t_env *env)  // $_  $g      j
 // {
-// 	char
+// 	int i;
+// 	int j;
+// 	int k;
+// 	int quote;
+// 	char *var;
+// 	char *val;
+// 	char *final;
+// 	char *backup;
+
+// 	final = ft_strdup("");
+// 	i = -1;
+// 	quote = OQ;
+// 	backup = ft_calloc(ft_strlen(str) + 1, 1);
+// 	k = 0;
+// 	while (str[++i])
+// 	{
+// 		backup[k++] = str[i];
+// 		is_quote(str, i, &quote);
+// 		if ((str[i] == '$' && quote != SQ) && ((ft_isalpha(str[i + 1])) || str[i + 1] == '_' || str[i + 1] == '?' || str[i + 1] == '\'' || str[i + 1] == '\"'))
+// 		{
+// 			backup[k - 1] = '\0';
+// 			k = 0;
+// 			final = ft_strjoin(final, backup); // free final
+// 			if ((str[i + 1] == '\"' && quote != DQ) || str[i + 1] == '\'' || str[i + 1] == '?')
+// 			{
+// 				if (str[i + 1] == '?')
+// 					final = ft_strjoin(final, ft_itoa(9999));
+// 				i++;
+// 				is_quote(str, i, &quote);
+// 				continue;
+// 			}
+// 			j = count_j(str, i);
+// 			if (j == 1)
+// 			{
+// 				final = ft_strjoin(final, "$"); //
+// 				continue;
+// 			}
+// 			var = ft_substr(str, i + 1, j - 1);
+// 			val = get_val(var, env);
+// 			free(var);
+// 			final = ft_strjoin(final, val); //
+// 			free(val);
+// 			i = i + j - 1;
+// 			printf("i: %d\n", i);
+// 		}
+// 	}
+// 	backup[k] = '\0';
+// 	final = ft_strjoin(final, backup);
+// 	free(backup);
+// 	return (final);
 // }
+
 
 char *expand_env(char *str, t_env *env)  // $_  $g      j
 {
@@ -320,53 +388,47 @@ char *expand_env(char *str, t_env *env)  // $_  $g      j
 	char *final;
 	char *backup;
 
-
 	final = ft_strdup("");
 	i = -1;
 	quote = OQ;
 	backup = ft_calloc(ft_strlen(str) + 1, 1);
 	k = 0;
-
 	while (str[++i])
 	{
 		backup[k++] = str[i];
 		is_quote(str, i, &quote);
-		if ((str[i] == '$' && quote != SQ))
+		if ((str[i] == '$' && quote != SQ) && ((ft_isalpha(str[i + 1])) || str[i + 1] == '_' || str[i + 1] == '?' || str[i + 1] == '\'' || str[i + 1] == '\"'))
 		{
 			backup[k - 1] = '\0';
-			j = 1; // other function
+			k = 0;
 			final = ft_strjoin(final, backup); // free final
-			if (str[i + 1] == '?' || ft_isdigit(str[i + 1]) || ((str[i + 1] == '\'' || str[i + 1] == '\"') && str[i + 2]))
+			if ((str[i + 1] == '\"' && quote != DQ) || str[i + 1] == '\'' || str[i + 1] == '?')
 			{
 				if (str[i + 1] == '?')
 					final = ft_strjoin(final, ft_itoa(9999));
-				if (str[i + 1] == '?' || ft_isdigit(str[i + 1]))
-					i++;
-				k = 0;
+				i++;
+				is_quote(str, i, &quote);
 				continue;
 			}
-			while (str[i + j] && (ft_isalnum(str[i + j]) || str[i + j] == '_'))
-				j++;
+			j = count_j(str, i);
 			if (j == 1)
 			{
 				final = ft_strjoin(final, "$"); //
-				k = 0;
 				continue;
 			}
 			var = ft_substr(str, i + 1, j - 1);
 			val = get_val(var, env);
 			free(var);
-			k = 0;
 			final = ft_strjoin(final, val); //
 			free(val);
 			i = i + j - 1;
+			printf("i: %d\n", i);
 		}
 	}
 	backup[k] = '\0';
 	final = ft_strjoin(final, backup);
 	free(backup);
 	return (final);
-
 }
 
 void expanding(t_tokens **token, t_env *env)
