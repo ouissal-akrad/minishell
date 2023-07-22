@@ -6,18 +6,18 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:54:09 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/20 09:26:29 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/22 14:45:13 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell_executing.h"
 
-void	ft_lstfree(t_env *head)
+void	ft_lstfree(t_env **head)
 {
 	t_env	*current;
 	t_env	*next;
 
-	current = head;
+	current = *head;
 	while (current != NULL)
 	{
 		next = current->next;
@@ -101,9 +101,34 @@ void	print_env(t_env *env)
 	tmp = env;
 	while (tmp != NULL)
 	{
+		if(env->flag == 1 && (ft_strcmp("PATH",tmp->var) == 0 || ft_strcmp("SHELL",tmp->var) == 0))
+		{
+			tmp = tmp->next;
+			continue;
+		}
 		if (tmp->var != NULL && tmp->val != NULL)
 			printf("%s=%s\n", tmp->var, tmp->val);
 		tmp = tmp->next;
+	}
+}
+
+void shlvl(t_env *env)
+{
+	int new_val;
+	while(env)
+	{
+		if (ft_strcmp(env->var, "SHLVL") == 0)
+		{
+			new_val = ft_atoi(env->val) + 1;
+			free(env->val);
+			if(new_val == 1000)
+				env->val = ft_strdup("");
+			else if(ft_strcmp(env->var, "") == 0)
+				env->val = ft_itoa(1);
+			else
+				env->val = ft_itoa(new_val);
+		}
+		env = env->next;
 	}
 }
 
@@ -127,9 +152,11 @@ t_env	*create_list(char *str[])
 		}
 		i++;
 	}
+	env->flag = 0;
+	shlvl(env);
 	return (env);
 }
-void	my_env(t_env *env)
+void	my_env(t_env **env)
 {
-	print_env(env);
+	print_env(*env);
 }

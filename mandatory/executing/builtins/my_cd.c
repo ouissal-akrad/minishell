@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:55:55 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/20 09:38:45 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/22 08:58:36 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ void	my_cd(t_env **env, char **args)
 	// cd with args
 	else
 		path = args[1];
+	// get OLPWD
 	if (getcwd(oldpwd, PATH_MAX) == NULL)
 	{
 		perror("getcwd");

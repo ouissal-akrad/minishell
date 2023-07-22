@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:46:00 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/20 08:26:02 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/22 14:40:15 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,36 +44,42 @@ t_env	*find_env(t_env *env, char *name)
 	}
 	return (NULL);
 }
-
 void	print_env_ex(t_env *env)
 {
-	t_env	*tmp;
+	t_env	*tmp = env;
 	int		i;
 
-	tmp = env;
 	while (tmp != NULL)
-	{
-		if (tmp->var != NULL && tmp->val != NULL)
-		{
-			i = -1;
-			printf("declare -x ");
-			while (tmp->var[++i])
-				printf("%c", tmp->var[i]);
-			printf("=\"");
-			i = -1;
-			while (tmp->val[++i])
-			{
-				if (tmp->val[i] == '\"')
-					printf("\\");
-				printf("%c", tmp->val[i]);
-			}
-			printf("\"\n");
-		}
-		else
-			printf("declare -x %s\n", tmp->var);
-		tmp = tmp->next;
-	}
+{
+    if (env->flag == 1 && (ft_strcmp("PATH", tmp->var) == 0 || ft_strcmp("SHELL",
+            tmp->var) == 0 || ft_strcmp("_", tmp->var) == 0))
+    {
+        tmp = tmp->next;
+        continue ;
+    }
+    if (tmp->var != NULL && tmp->val != NULL)
+    {
+		
+        i = -1;
+        printf("declare -x ");
+        while (tmp->var[++i])
+            printf("%c", tmp->var[i]);
+        printf("=\"");
+        i = -1;
+        while (tmp->val[++i])
+        {
+            if (tmp->val[i] == '\"')
+                printf("\\");
+            printf("%c", tmp->val[i]);
+        }
+        printf("\"\n");
+    }
+    else if (tmp->var != NULL)
+        printf("declare -x %s\n", tmp->var);
+    tmp = tmp->next;
 }
+}
+
 void	swap_env(t_env *a, t_env *b)
 {
 	char	*var_temp;
@@ -231,7 +237,10 @@ void	ft_csp(t_env *env, char **s, int c)
 		cmd++;
 	}
 	//resort env
-	sort_env(&env);
+	// sort_env(&env);
+	print_env_ex(env);
+	puts("-----------------------------");
+	print_env(env);
 }
 
 void	sequal(t_env *env, char *prev, char *rest, int plus)
