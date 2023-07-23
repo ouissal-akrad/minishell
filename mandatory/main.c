@@ -13,7 +13,7 @@ int	main(int argc, char *argv[], char *env[])
 	(void)argv;
 
 	env_list = create_list(env); // free env_list
-	// char *type[] = {"Word", "Pipe", "In", "Out", "App", "Hdoc"};
+	char *type[] = {"Word", "Pipe", "In", "Out", "App", "Hdoc"};
 
 
 	tokens = NULL;
@@ -25,7 +25,7 @@ int	main(int argc, char *argv[], char *env[])
 	{
 		add_history(line);
 		lexar(line, &tokens);
-
+		add_is_d(&tokens);
 		if (syntax_error(tokens))
 		{
 			free_tokens(&tokens);
@@ -34,13 +34,25 @@ int	main(int argc, char *argv[], char *env[])
 		}
 
 
-		//expand_env(&tokens, env_list);
-		// remove_quotes(tokens);
+		// expand_env(&tokens, env_list);
 
 
 
+		ambiguous_redirect(&tokens);
 		expanding(&tokens, env_list);
+		// split_var_no_quote(&tokens);
 		remove_quotes(tokens);
+		remove_null_tokens(&tokens);
+
+
+		//ls > ""
+		// write error in 2
+
+		// bash-3.2$ ls > s > ""
+		// bash: : No such file or directory
+		// bash-3.2$ ls > s
+		// bash-3.2$ ls > s > $r
+		// bash: $r: ambiguous redirect
 
 		tmp = tokens;
 
@@ -48,10 +60,11 @@ int	main(int argc, char *argv[], char *env[])
 		while (tmp)
 		{
 			printf("str: %s\n", tmp->str);
+			printf("type: %s\n", type[tmp->type]);
+			printf("-----------------\n");
+			// printf("is_d: %d\n", tmp->is_d);
 			tmp = tmp->next;
 		}
-
-
 
 		free_tokens(&tokens);
 		line = readline("minishell$ ");
