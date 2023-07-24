@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/24 15:24:46 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/24 17:16:55 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void	add_token(t_tokens **tokens, char *str, t_token type)
 		exit(1); // free tokens 3la bara
 	new->str = str;
 	new->type = type;
-	new->is_d = 0;
+	new->is_d = 4;
 	new->var = NULL;
 	new->next = NULL;
 	if (!*tokens)
@@ -553,8 +553,8 @@ void ambiguous_redirect(t_tokens **tokens)
 			fprintf(stderr, "minishell: %s:ambiguous redirect\n", tmp->next->var);
 			return ;
 		}
-		else if (tmp->type == HDOC)
-			tmp->is_d = 3;
+		else if (tmp->type == HDOC && tmp->next->is_d == 1 && check_no_expanding_valid(tmp->next->str))
+			tmp->next->is_d = 3;
 		tmp = tmp->next;
 	}
 }
@@ -574,72 +574,90 @@ int count_n_tokens(t_tokens *tokens)
 	return (c);
 }
 
-void	add_data(t_data **data, t_tokens *tokens, t_env *env)
-{
-	t_data	*new;
-	t_data	*tmp;
-	t_tokens	*tmp_tokens;
-	int i;
-
-	i = -1;
-	tmp_tokens = tokens;
-
-	new = (t_data *)malloc(sizeof(t_data));
-	if (!new)
-		exit(1); // free data 3la bara
-
-	new->args = ft_calloc(count_n_tokens(tmp_tokens),1); // wach darouri
-	if (!new->args)
-		exit(1);
-
-	while (++i)
-	{
-		if (tmp_tokens->type == WORD)
-			new->args[i] = ft_strdup(tmp_tokens->str);
-		else if (tmp_tokens->type != PIPE)
-			break ;
-		tmp_tokens = tmp_tokens->next;
-	}
-	new->env = env;
-	new->file.in = 0;
-	new->file.out = 0;
-	new->file.app = 0;
-	new->next = NULL;
-
-	if (!*data)
-		*data = new;
-	else
-	{
-		tmp = *data;
-		while (tmp->next)
-			tmp = tmp->next;
-		tmp->next = new;
-	}
-}
-
-
-
 void create_data(t_data **data, t_tokens *tokens, t_env *env)
 {
-	t_tokens	*tmp_tokens;
-	t_env		*tmp_env;
+	t_tokens *tmp;
+	t_data *new;
+	t_data *tmp_data;
+	int i;
+	int j;
 
-	tmp_tokens = tokens;
-	tmp_env = env;
-
-
-	// node for every pipe
-	// args = cmd + args
-	// env = env
-	while (tmp_tokens)
+	tmp = tokens;
+	while (tmp)
 	{
-		if (tmp_tokens->type == PIPE)
-		{
-			add_data(data, tmp_tokens, env);
-			tmp_tokens = tmp_tokens->next;
-			env = tmp_env;
-		}
-		tmp_tokens = tmp_tokens->next;
+		tmp = tmp->next;
 	}
-	add_data(data, tmp_tokens, env);
+	tmp = tokens;
+	while (tmp)
+	{
+		new = (t_data *)malloc(sizeof(t_data));
+		if (!new)
+			exit(1); // free tokens 3la bara
+		new->args = (char **)malloc(sizeof(char *) * (count_n_tokens(tokens) + 1));
+		new->env = env;
+		new->file.in = 0;
+		new->file.out = 1;
+		new->file.app = 0;
+		new->file.hdoc = 0;
+		new->file.in_name = NULL;
+		new->file.out_name = NULL;
+		new->file.app_name = NULL;
+		new->file.hdoc_name = NULL;
+
+		if (!new->args)
+			exit(1); // free tokens 3la bara
+		i = 0;
+		j = 0;
+		while (tmp && tmp->type != PIPE)
+		{
+			if (tmp->type == WORD)
+			{
+				new->args[i] = ft_strdup(tmp->str);
+				i++;
+			}
+			else if (tmp->type == IN)
+			{
+				new->file.in_name = ft_strdup(tmp->next->str);
+				new->file.in_d = tmp->next->is_d;
+				tmp = tmp->next;
+			}
+			else if (tmp->type == OUT)
+			{
+				new->file.out_name = ft_strdup(tmp->next->str);
+				new->file.out_d = tmp->next->is_d;
+				tmp = tmp->next;
+			}
+			else if (tmp->type == APP)
+			{
+				new->file.app_name = ft_strdup(tmp->next->str);
+				new->file.app_d = tmp->next->is_d;
+				new->file.app = 1;
+				tmp = tmp->next;
+			}
+			else if (tmp->type == HDOC)
+			{
+				new->file.hdoc_name = ft_strdup(tmp->next->str);
+				new->file.hdoc = tmp->next->is_d;
+				tmp = tmp->next;
+			}
+			tmp = tmp->next;
+		}
+		new->args[i] = NULL;
+		new->next = NULL;
+		if (!*data)
+			*data = new;
+		else
+		{
+			tmp_data = *data;
+			while (tmp_data->next)
+				tmp_data = tmp_data->next;
+			tmp_data->next = new;
+		}
+		if (tmp)
+			tmp = tmp->next;
+	}
 }
+// int	redirections(t_tokens **tokens, t_data **data);
+// {
+
+// }

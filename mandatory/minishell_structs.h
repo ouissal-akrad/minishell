@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 22:06:09 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/23 18:55:54 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/24 17:02:04 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,17 @@ typedef struct s_file
 {
 	// int	type;
 	int out;
+	char *out_name;
+	int out_d;
 	int in;
+	char *in_name;
+	int in_d;
 	int app;
+	char *app_name;
+	int app_d;
+	int hdoc;
+	char *hdoc_name;
+	int hdoc_d;
 	// char *file_name;
 }			t_file;
 

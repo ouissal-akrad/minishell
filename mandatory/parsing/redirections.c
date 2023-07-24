@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/09 15:13:05 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/10 21:49:23 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/24 16:38:39 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ type: 0
 minishell$ > hshs
 */
 
-int	redirections(t_tokens *red)
+int	redirection(t_tokens *red)
 {
 	int	fd;
 
