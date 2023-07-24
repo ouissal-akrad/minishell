@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/23 17:28:19 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/24 15:24:46 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,9 @@ char	*add_spaces(char *str)
 	int		i;
 	int		j;
 
-	new = (char *)ft_calloc((int)ft_strlen(str) + count_tokens(str) + 1, 1);
+	new = (char *)ft_calloc((int)ft_strlen(str) + count_tokens(str) + 1, 1); // wach darouri
+	if (!new)
+		exit(1); // free tokens 3la bara
 	quote = OQ;
 	i = -1;
 	j = 0;
@@ -83,7 +85,7 @@ void	add_token(t_tokens **tokens, char *str, t_token type)
 
 	new = (t_tokens *)malloc(sizeof(t_tokens));
 	if (!new)
-		exit(1);
+		exit(1); // free tokens 3la bara
 	new->str = str;
 	new->type = type;
 	new->is_d = 0;
@@ -328,7 +330,9 @@ char *replace_space(char *str)
 	int		j;
 	char	*new;
 
-	new = (char *)ft_calloc(ft_strlen(str) + 1, 1);
+	new = (char *)ft_calloc(ft_strlen(str) + 1, 1); // wach darouri
+	if (!new)
+		exit(1); // free tokens 3la bara
 	i = -1;
 	j = 0;
 	while (str[++i])
@@ -411,7 +415,9 @@ char	*expand_env(char *str, t_env *env)
 	exp.final = ft_strdup("");
 	i = -1;
 	exp.quote = OQ;
-	exp.backup = ft_calloc(ft_strlen(str) + 1, 1);
+	exp.backup = ft_calloc(ft_strlen(str) + 1, 1); // wach darouri
+	if (!exp.backup)
+		exit(1); // free tokens 3la bara
 	exp.k = 0;
 	while (str[++i])
 	{
@@ -446,6 +452,7 @@ void	expanding(t_tokens **tokens, t_env *env)
 			str = expand_env(tmp->str, env);
 			free(tmp->str);
 			tmp->str = ft_strdup(str);
+			free(str);
 		}
 		prv = tmp;
 		tmp = tmp->next;
@@ -542,10 +549,97 @@ void ambiguous_redirect(t_tokens **tokens)
 	{
 		if ((tmp->type == IN || tmp->type == OUT || tmp->type == APP) && tmp->next->is_d == 1 && check_no_expanding_valid(tmp->next->str))
 		{
-			tmp->next->is_d = 0;
+			tmp->next->is_d = 2;
 			fprintf(stderr, "minishell: %s:ambiguous redirect\n", tmp->next->var);
 			return ;
 		}
+		else if (tmp->type == HDOC)
+			tmp->is_d = 3;
 		tmp = tmp->next;
 	}
+}
+
+int count_n_tokens(t_tokens *tokens)
+{
+	t_tokens *tmp;
+	int c;
+
+	c = 0;
+	tmp = tokens;
+	while (tmp)
+	{
+		c++;
+		tmp = tmp->next;
+	}
+	return (c);
+}
+
+void	add_data(t_data **data, t_tokens *tokens, t_env *env)
+{
+	t_data	*new;
+	t_data	*tmp;
+	t_tokens	*tmp_tokens;
+	int i;
+
+	i = -1;
+	tmp_tokens = tokens;
+
+	new = (t_data *)malloc(sizeof(t_data));
+	if (!new)
+		exit(1); // free data 3la bara
+
+	new->args = ft_calloc(count_n_tokens(tmp_tokens),1); // wach darouri
+	if (!new->args)
+		exit(1);
+
+	while (++i)
+	{
+		if (tmp_tokens->type == WORD)
+			new->args[i] = ft_strdup(tmp_tokens->str);
+		else if (tmp_tokens->type != PIPE)
+			break ;
+		tmp_tokens = tmp_tokens->next;
+	}
+	new->env = env;
+	new->file.in = 0;
+	new->file.out = 0;
+	new->file.app = 0;
+	new->next = NULL;
+
+	if (!*data)
+		*data = new;
+	else
+	{
+		tmp = *data;
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = new;
+	}
+}
+
+
+
+void create_data(t_data **data, t_tokens *tokens, t_env *env)
+{
+	t_tokens	*tmp_tokens;
+	t_env		*tmp_env;
+
+	tmp_tokens = tokens;
+	tmp_env = env;
+
+
+	// node for every pipe
+	// args = cmd + args
+	// env = env
+	while (tmp_tokens)
+	{
+		if (tmp_tokens->type == PIPE)
+		{
+			add_data(data, tmp_tokens, env);
+			tmp_tokens = tmp_tokens->next;
+			env = tmp_env;
+		}
+		tmp_tokens = tmp_tokens->next;
+	}
+	add_data(data, tmp_tokens, env);
 }
