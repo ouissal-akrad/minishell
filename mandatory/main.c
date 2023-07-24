@@ -69,18 +69,17 @@ int	main(int argc, char *argv[], char *env[])
 
 		while (tmp)
 		{
+			i = 0;
+			printf("args: \n");
 			while (tmp->args[i])
 			{
-				printf("args: %s\n", tmp->args[i]);
+				printf("arg[%d]: %s\n", i, tmp->args[i]);
 				i++;
 			}
-			i = 0;
-			printf("file in: %d | %s\n", tmp->file.in, tmp->file.in_name);
-			printf("file out: %d | %s\n", tmp->file.out, tmp->file.out_name);
-			printf("file app: %d | %s\n", tmp->file.app, tmp->file.app_name);
-			printf("file hdoc: %d | %s\n", tmp->file.hdoc, tmp->file.hdoc_name);
+			printf("file.out: %d\n", tmp->file.out);
+			printf("file.in: %d\n", tmp->file.in);
+			printf("file.app: %d\n", tmp->file.app);
 			printf("-----------------\n");
-
 
 			tmp = tmp->next;
 		}

@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/24 17:16:55 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/24 17:44:46 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -574,7 +574,7 @@ int count_n_tokens(t_tokens *tokens)
 	return (c);
 }
 
-void create_data(t_data **data, t_tokens *tokens, t_env *env)
+void creat_nodes(t_data **data, t_tokens *tokens, t_env *env)
 {
 	t_tokens *tmp;
 	t_data *new;
@@ -583,72 +583,36 @@ void create_data(t_data **data, t_tokens *tokens, t_env *env)
 	int j;
 
 	tmp = tokens;
-	while (tmp)
-	{
-		tmp = tmp->next;
-	}
-	tmp = tokens;
+	i = 0;
 	while (tmp)
 	{
 		new = (t_data *)malloc(sizeof(t_data));
 		if (!new)
-			exit(1); // free tokens 3la bara
-		new->args = (char **)malloc(sizeof(char *) * (count_n_tokens(tokens) + 1));
+			exit(1);
+		new->args = ft_calloc(count_n_tokens(tokens) + 1, sizeof(char *));
+		if (!new->args)
+			exit(1); // wach darouri
+		j = 0;
+		while (tmp)
+		{
+			if (tmp->type == WORD)
+				new->args[j++] = ft_strdup(tmp->str);
+			else if (tmp->type == IN || tmp->type == OUT || tmp->type == APP || tmp->type == HDOC)
+				tmp = tmp->next;
+			else if (tmp->type == PIPE)
+				break ;
+			tmp = tmp->next;
+		}
 		new->env = env;
 		new->file.in = 0;
 		new->file.out = 1;
 		new->file.app = 0;
-		new->file.hdoc = 0;
-		new->file.in_name = NULL;
-		new->file.out_name = NULL;
-		new->file.app_name = NULL;
-		new->file.hdoc_name = NULL;
-
-		if (!new->args)
-			exit(1); // free tokens 3la bara
-		i = 0;
-		j = 0;
-		while (tmp && tmp->type != PIPE)
-		{
-			if (tmp->type == WORD)
-			{
-				new->args[i] = ft_strdup(tmp->str);
-				i++;
-			}
-			else if (tmp->type == IN)
-			{
-				new->file.in_name = ft_strdup(tmp->next->str);
-				new->file.in_d = tmp->next->is_d;
-				tmp = tmp->next;
-			}
-			else if (tmp->type == OUT)
-			{
-				new->file.out_name = ft_strdup(tmp->next->str);
-				new->file.out_d = tmp->next->is_d;
-				tmp = tmp->next;
-			}
-			else if (tmp->type == APP)
-			{
-				new->file.app_name = ft_strdup(tmp->next->str);
-				new->file.app_d = tmp->next->is_d;
-				new->file.app = 1;
-				tmp = tmp->next;
-			}
-			else if (tmp->type == HDOC)
-			{
-				new->file.hdoc_name = ft_strdup(tmp->next->str);
-				new->file.hdoc = tmp->next->is_d;
-				tmp = tmp->next;
-			}
-			tmp = tmp->next;
-		}
-		new->args[i] = NULL;
 		new->next = NULL;
+		tmp_data = *data;
 		if (!*data)
 			*data = new;
 		else
 		{
-			tmp_data = *data;
 			while (tmp_data->next)
 				tmp_data = tmp_data->next;
 			tmp_data->next = new;
@@ -657,7 +621,8 @@ void create_data(t_data **data, t_tokens *tokens, t_env *env)
 			tmp = tmp->next;
 	}
 }
-// int	redirections(t_tokens **tokens, t_data **data);
-// {
 
-// }
+void create_data(t_data **data, t_tokens *tokens, t_env *env)
+{
+	creat_nodes(data, tokens, env);
+}
