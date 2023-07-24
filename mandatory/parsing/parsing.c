@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/24 17:44:46 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/24 18:53:59 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -621,6 +621,7 @@ void creat_nodes(t_data **data, t_tokens *tokens, t_env *env)
 			tmp = tmp->next;
 	}
 }
+
 
 void create_data(t_data **data, t_tokens *tokens, t_env *env)
 {
