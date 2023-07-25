@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:55:18 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/25 07:22:18 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/25 07:44:52 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	newline_checker(char *str)
 	return (0);
 }
 
-void	my_echo(char **args)
+void	my_echo(t_data *data)
 {
 	int	i;
 	int	new_line;
@@ -35,17 +35,17 @@ void	my_echo(char **args)
 	i = 1;
 	flag = 0;
 	new_line = 1;
-	while (args[i])
+	while (data->args[i])
 	{
-		while (args[i] && newline_checker(args[i]) == 1 && flag == 0)
+		while (data->args[i] && newline_checker(data->args[i]) == 1 && flag == 0)
 		{
 			i++;
 			new_line = 0;
 		}
 		flag = 1;
-		if(args[i])
-			printf("%s", args[i]);
-		if (args[++i])
+		if(data->args[i])
+			printf("%s", data->args[i]);
+		if (data->args[++i])
 			printf(" ");
 	}
 	if (new_line)

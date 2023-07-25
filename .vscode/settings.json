@@ -21,6 +21,9 @@
 		"memory": "c",
 		"ratio": "c",
 		"tuple": "c",
-		"utility": "c"
+		"utility": "c",
+		"string": "c",
+		"string_view": "c",
+		"vector": "c"
 	}
 }
