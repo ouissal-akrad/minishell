@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 22:06:09 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/10 22:07:34 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/25 03:21:06 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,21 +22,18 @@ typedef struct s_env
 	struct s_env	*next;
 }			t_env;
 
-typedef struct s_file
-{
-	// int	type;
-	int out;
-	int in;
-	int app;
-	// char *file_name;
-}			t_file;
+// typedef struct s_file
+// {
+// 	int out;
+// 	int in;
+// }			t_file;
 
 typedef struct s_data
 {
-	char	*cmd; // only cmd
 	char	**args; // args[0] = cmd
-	t_env	env;
-	t_file	file;
+	t_env	*env;
+	int out;
+	int in;
 	struct s_data	*next;
 }			t_data;
 
@@ -61,9 +58,22 @@ typedef enum e_token
 
 typedef struct s_tokens
 {
-	char			*str;
+	char	*str;
 	t_token	type;
+	int		is_d;
+	char	*var;
 	struct s_tokens	*next;
 }					t_tokens;
+
+typedef struct s_expvar
+{
+	int j;
+	int k;
+	int quote;
+	char *var;
+	char *val;
+	char *final;
+	char *backup;
+} t_expvar;
 
 #endif
