@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 13:35:14 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/25 03:23:04 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/25 06:00:24 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ int	syntax_error_halper(t_tokens *tmp);
 int	syntax_error_quote(t_tokens *tokens);
 int	syntax_error(t_tokens *tokens);
 void	remove_quotes(t_tokens *tokens);
-int	redirections(t_tokens **tokens, t_data **data);
 
 void expanding(t_tokens **token, t_env *env);
 void split_var_no_quote(t_tokens **token);
@@ -38,6 +37,7 @@ void ambiguous_redirect(t_tokens **tokens);
 int create_data(t_data **data, t_tokens *tokens, t_env *env);
 void free_data(t_data **data);
 void free_env(t_env **env);
+void close_files(t_data *data);
 
 
 

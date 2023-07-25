@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/25 03:42:47 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/25 06:01:59 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	is_quote(char *str, int i, int *quote)
 		*quote = OQ;
 }
 
-int	count_tokens(char *str)
+int	count_tok(char *str)
 {
 	int	i;
 	int	count;
@@ -54,9 +54,7 @@ char	*add_spaces(char *str)
 	int		i;
 	int		j;
 
-	new = (char *)ft_calloc((int)ft_strlen(str) + count_tokens(str) + 1, 1); // wach darouri
-	if (!new)
-		exit(1); // free tokens 3la bara
+	new = (char *)ft_calloc((int)ft_strlen(str) + count_tok(str) + 1, 1);
 	quote = OQ;
 	i = -1;
 	j = 0;
@@ -83,9 +81,7 @@ void	add_token(t_tokens **tokens, char *str, t_token type)
 	t_tokens	*new;
 	t_tokens	*tmp;
 
-	new = (t_tokens *)malloc(sizeof(t_tokens));
-	if (!new)
-		exit(1); // free tokens 3la bara
+	new = ft_calloc(1, sizeof(t_tokens));
 	new->str = str;
 	new->type = type;
 	new->is_d = 0;
@@ -201,17 +197,17 @@ int	check_dollar(char *str)
 	return (0);
 }
 
-void add_is_d(t_tokens **tokens)
+void	add_is_d(t_tokens **tokens)
 {
 	t_tokens	*tmp;
 
 	tmp = *tokens;
-
 	while (tmp)
 	{
-		if (tmp->type == WORD && !check_quotes(tmp->str) && check_dollar(tmp->str))
+		if (tmp->type == WORD && !check_quotes(tmp->str) \
+			&& check_dollar(tmp->str))
 		{
-			tmp->is_d = 1; // 1 = dollar
+			tmp->is_d = 1;
 			tmp->var = tmp->str;
 		}
 		tmp = tmp->next;
@@ -324,15 +320,13 @@ void	remove_quotes(t_tokens *tokens)
 	}
 }
 
-char *replace_space(char *str)
+char	*replace_space(char *str)
 {
 	int		i;
 	int		j;
 	char	*new;
 
-	new = (char *)ft_calloc(ft_strlen(str) + 1, 1); // wach darouri
-	if (!new)
-		exit(1); // free tokens 3la bara
+	new = (char *)ft_calloc(ft_strlen(str) + 1, 1);
 	i = -1;
 	j = 0;
 	while (str[++i])
@@ -415,9 +409,7 @@ char	*expand_env(char *str, t_env *env)
 	exp.final = ft_strdup("");
 	i = -1;
 	exp.quote = OQ;
-	exp.backup = ft_calloc(ft_strlen(str) + 1, 1); // wach darouri
-	if (!exp.backup)
-		exit(1); // free tokens 3la bara
+	exp.backup = ft_calloc(ft_strlen(str) + 1, 1);
 	exp.k = 0;
 	while (str[++i])
 	{
@@ -459,7 +451,7 @@ void	expanding(t_tokens **tokens, t_env *env)
 	}
 }
 
-int check_newline(char *str)
+int	check_newline(char *str)
 {
 	int	i;
 
@@ -472,15 +464,14 @@ int check_newline(char *str)
 	return (0);
 }
 
-void split_var_no_quote(t_tokens **tokens)
+void	split_var_no_quote(t_tokens **tokens)
 {
 	t_tokens	*tmp;
 	t_tokens	*next;
-	int 		i;
-	char 		**split;
+	int			i;
+	char		**split;
 
 	tmp = *tokens;
-
 	while (tmp)
 	{
 		if (tmp->type == WORD && check_newline(tmp->str))
@@ -503,7 +494,7 @@ void split_var_no_quote(t_tokens **tokens)
 	}
 }
 
-void remove_null_tokens(t_tokens **tokens)
+void	remove_null_tokens(t_tokens **tokens)
 {
 	t_tokens	*tmp;
 	t_tokens	*prv;
@@ -527,29 +518,29 @@ void remove_null_tokens(t_tokens **tokens)
 	}
 }
 
-int check_no_expanding_valid(char *str)
+int	check_no_expanding_valid(char *str)
 {
 	int	i;
 
 	i = -1;
-	if(ft_strlen(str) == 1 && str[0] == '$')
+	if (ft_strlen(str) == 1 && str[0] == '$')
 		return (0);
 	else if (str[0] == '$' && str[1] != '_' && !ft_isalpha(str[1]))
 		return (0);
 	return (1);
 }
 
-void ambiguous_redirect(t_tokens **tokens)
+void	ambiguous_redirect(t_tokens **tokens)
 {
-	t_tokens *tmp;
+	t_tokens	*tmp;
 
 	tmp = *tokens;
-
 	while (tmp)
 	{
-		if ((tmp->type == IN || tmp->type == OUT || tmp->type == APP) && tmp->next->is_d == 1 && check_no_expanding_valid(tmp->next->str))
+		if ((tmp->type == IN || tmp->type == OUT || tmp->type == APP) \
+			&& tmp->next->is_d == 1 && check_no_expanding_valid(tmp->next->str))
 		{
-			tmp->next->is_d = 2; // ambiguous redirect
+			tmp->next->is_d = 2;
 			write(2, "minishell: ", 11);
 			write(2, tmp->next->str, ft_strlen(tmp->next->str));
 			write(2, ": ambiguous redirect\n", 21);
@@ -563,8 +554,8 @@ void ambiguous_redirect(t_tokens **tokens)
 
 int	count_n_tokens(t_tokens *tokens)
 {
-	t_tokens *tmp;
-	int c;
+	t_tokens	*tmp;
+	int			c;
 
 	c = 0;
 	tmp = tokens;
@@ -578,11 +569,11 @@ int	count_n_tokens(t_tokens *tokens)
 
 void	creat_nodes(t_data **data, t_tokens *tokens, t_env *env)
 {
-	t_tokens *tmp;
-	t_data *new;
-	t_data *tmp_data;
-	int i;
-	int j;
+	t_tokens	*tmp;
+	t_data		*new;
+	t_data		*tmp_data;
+	int			i;
+	int			j;
 
 	tmp = tokens;
 	i = 0;
@@ -592,14 +583,13 @@ void	creat_nodes(t_data **data, t_tokens *tokens, t_env *env)
 		if (!new)
 			exit(1);
 		new->args = ft_calloc(count_n_tokens(tokens) + 1, sizeof(char *));
-		if (!new->args)
-			exit(1); // wach darouri
 		j = 0;
 		while (tmp)
 		{
 			if (tmp->type == WORD)
 				new->args[j++] = ft_strdup(tmp->str);
-			else if (tmp->type == IN || tmp->type == OUT || tmp->type == APP || tmp->type == HDOC)
+			else if (tmp->type == IN || tmp->type == OUT || \
+				tmp->type == APP || tmp->type == HDOC)
 				tmp = tmp->next;
 			else if (tmp->type == PIPE)
 				break ;
@@ -625,11 +615,11 @@ void	creat_nodes(t_data **data, t_tokens *tokens, t_env *env)
 
 void	open_hdoc(t_data **data, t_tokens *tokens, t_env *env)
 {
-	t_tokens *tmp;
-	t_data *tmp_data;
-	char *line;
-	char *exp;
-	int i;
+	t_tokens	*tmp;
+	t_data		*tmp_data;
+	char		*line;
+	char		*exp;
+	int			i;
 
 	tmp = tokens;
 	i = 0;
@@ -689,7 +679,9 @@ int	open_files(t_data **data, t_tokens *tokens)
 				if (tmp_data->in == -1)
 				{
 					write(2, "minishell: ", 11);
-					perror(tmp->next->str);
+					write(2, tmp->next->str, ft_strlen(tmp->next->str));
+					write(2, ": ", 2);
+					perror("");
 					return (1);
 				}
 				tmp = tmp->next;
@@ -701,7 +693,9 @@ int	open_files(t_data **data, t_tokens *tokens)
 				if (tmp_data->out == -1)
 				{
 					write(2, "minishell: ", 11);
-					perror(tmp->next->str);
+					write(2, tmp->next->str, ft_strlen(tmp->next->str));
+					write(2, ": ", 2);
+					perror("");
 					return (1);
 				}
 				tmp = tmp->next;
@@ -713,7 +707,9 @@ int	open_files(t_data **data, t_tokens *tokens)
 				if (tmp_data->out == -1)
 				{
 					write(2, "minishell: ", 11);
-					perror(tmp->next->str);
+					write(2, tmp->next->str, ft_strlen(tmp->next->str));
+					write(2, ": ", 2);
+					perror("");
 					return (1);
 				}
 				tmp = tmp->next;
@@ -732,7 +728,7 @@ int	create_data(t_data **data, t_tokens *tokens, t_env *env)
 	return (open_files(data, tokens));
 }
 
-void	ree_data(t_data **data)
+void	free_data(t_data **data)
 {
 	t_data	*tmp;
 	int		i;
@@ -761,3 +757,19 @@ void	free_env(t_env **env)
 		free(tmp);
 	}
 }
+
+void	close_files(t_data *data)
+{
+	t_data	*tmp;
+
+	tmp = data;
+	while (tmp)
+	{
+		if (tmp->in != 0)
+			close(tmp->in);
+		if (tmp->out != 1)
+			close(tmp->out);
+		tmp = tmp->next;
+	}
+}
+
