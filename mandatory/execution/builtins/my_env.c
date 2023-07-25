@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:54:09 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/25 15:14:57 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/25 15:49:56 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,6 @@ void	print_env(t_env *env)
 	t_env	*tmp;
 	
 	tmp = env;
-	printf("=================>%d\n",env->flag);
 	while (tmp != NULL)
 	{
 		if(env->flag >= 1 && (ft_strcmp("PATH",tmp->var) == 0 || ft_strcmp("SHELL",tmp->var) == 0))

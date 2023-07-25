@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:46:00 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/25 15:19:44 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/25 15:42:01 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ int	count_plus(char *str)
 			if (str[i] == '+')
 			{
 				plus_count++;
-				if (plus_count > 1)
+				if (plus_count > 1 && str[i + 1] == '=')
 					return (-1);
 			}
 			else if (str[i] == '=' && plus_count == 1)
