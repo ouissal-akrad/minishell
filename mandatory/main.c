@@ -7,6 +7,8 @@ int	main(int argc, char *argv[], char *env[])
 	t_data		*data;
 	t_env		*env_list;
 
+	t_data		*tmp;
+
 
 	(void)argc;
 	(void)argv;
@@ -51,9 +53,31 @@ int	main(int argc, char *argv[], char *env[])
 			tokens = NULL;
 			data = NULL;
 			line = readline("minishell$ ");
+			close_files(data);
 			continue ;
 		}
 
+
+		tmp = data;
+		int i = 0;
+
+		while (tmp)
+		{
+			i = 0;
+			while (tmp->args[i])
+			{
+				printf("args[%d] = %s\n", i, tmp->args[i]);
+				i++;
+			}
+			printf("in = %d\n", tmp->in);
+			printf("out = %d\n", tmp->out);
+			printf("-------------------\n");
+			tmp = tmp->next;
+		}
+
+
+
+		close_files(data);
 		free_tokens(&tokens);
 		tokens = NULL;
 		free_data(&data);
@@ -62,7 +86,6 @@ int	main(int argc, char *argv[], char *env[])
 	}
 
 	free_env(&env_list);
-
 	return (0);
 }
 
