@@ -11,7 +11,7 @@ int	main(int argc, char *argv[], char *env[])
 	(void)argc;
 	(void)argv;
 
-	env_list = create_list(env); 
+	env_list = create_list(env);
 
 
 	tokens = NULL;
@@ -33,6 +33,7 @@ int	main(int argc, char *argv[], char *env[])
 		if (syntax_error(tokens))
 		{
 			free_tokens(&tokens);
+			tokens = NULL;
 			line = readline("minishell$ ");
 			continue ;
 		}
@@ -47,12 +48,16 @@ int	main(int argc, char *argv[], char *env[])
 		{
 			free_tokens(&tokens);
 			free_data(&data);
+			tokens = NULL;
+			data = NULL;
 			line = readline("minishell$ ");
 			continue ;
 		}
 
 		free_tokens(&tokens);
-		// free_data(&data);
+		tokens = NULL;
+		free_data(&data);
+		data = NULL;
 		line = readline("minishell$ ");
 	}
 
@@ -60,3 +65,6 @@ int	main(int argc, char *argv[], char *env[])
 
 	return (0);
 }
+
+
+// s > "" : double free

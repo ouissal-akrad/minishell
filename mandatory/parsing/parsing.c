@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/25 03:42:47 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/25 05:19:15 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ char	*add_spaces(char *str)
 
 void	add_token(t_tokens **tokens, char *str, t_token type)
 {
-	t_tokens	*new;
+	t_tokens	     *new;
 	t_tokens	*tmp;
 
 	new = (t_tokens *)malloc(sizeof(t_tokens));
@@ -689,7 +689,9 @@ int	open_files(t_data **data, t_tokens *tokens)
 				if (tmp_data->in == -1)
 				{
 					write(2, "minishell: ", 11);
-					perror(tmp->next->str);
+					write(2, tmp->next->str, ft_strlen(tmp->next->str));
+					write(2, ": ", 2);
+					perror("");
 					return (1);
 				}
 				tmp = tmp->next;
@@ -701,7 +703,9 @@ int	open_files(t_data **data, t_tokens *tokens)
 				if (tmp_data->out == -1)
 				{
 					write(2, "minishell: ", 11);
-					perror(tmp->next->str);
+					write(2, tmp->next->str, ft_strlen(tmp->next->str));
+					write(2, ": ", 2);
+					perror("");
 					return (1);
 				}
 				tmp = tmp->next;
@@ -713,7 +717,9 @@ int	open_files(t_data **data, t_tokens *tokens)
 				if (tmp_data->out == -1)
 				{
 					write(2, "minishell: ", 11);
-					perror(tmp->next->str);
+					write(2, tmp->next->str, ft_strlen(tmp->next->str));
+					write(2, ": ", 2);
+					perror("");
 					return (1);
 				}
 				tmp = tmp->next;
@@ -732,7 +738,7 @@ int	create_data(t_data **data, t_tokens *tokens, t_env *env)
 	return (open_files(data, tokens));
 }
 
-void	ree_data(t_data **data)
+void	free_data(t_data **data)
 {
 	t_data	*tmp;
 	int		i;
