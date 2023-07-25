@@ -6,14 +6,14 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 22:06:09 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/25 07:15:28 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/25 07:23:59 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_STRUCTS_H
 # define MINISHELL_STRUCTS_H
 
-/// executing
+/// execution
 
 typedef struct s_env
 {

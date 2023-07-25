@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    Makefile_origin                                    :+:      :+:    :+:    #
+#    Makefile_original                                  :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+         #
+#    By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/23 03:03:58 by bel-idri          #+#    #+#              #
-#    Updated: 2023/06/22 13:55:59 by bel-idri         ###   ########.fr        #
+#    Updated: 2023/07/25 07:23:59 by ouakrad          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,11 +15,11 @@ NAME = minishell
 NAME_BONUS = minishell_bonus
 
 SRCS = mandatory/main.c \
-	# mandatory/executing/tttttt.c \
+	# mandatory/execution/tttttt.c \
 	# mandatory/parsing/ttttt.c \
 
 SRCS_BONUS = bonus/main_bonus.c \
-	# bonus/executing/tttttt.c \
+	# bonus/execution/tttttt.c \
 	# bonus/parsing/ttttt.c \
 
 SRCS_LIBFT = libft/ft_atoi.c \

@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_executing.h                              :+:      :+:    :+:   */
+/*   minishell_execution.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 13:35:12 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/25 07:16:50 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/25 07:23:01 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_EXECUTING_H
-# define MINISHELL_EXECUTING_H
+#ifndef MINISHELL_EXECUTION_H
+# define MINISHELL_EXECUTION_H
 
 # include "../minishell.h"
 # include <errno.h>

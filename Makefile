@@ -6,7 +6,7 @@
 #    By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/23 03:03:58 by bel-idri          #+#    #+#              #
-#    Updated: 2023/07/25 07:18:31 by ouakrad          ###   ########.fr        #
+#    Updated: 2023/07/25 07:23:59 by ouakrad          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,19 +15,19 @@ NAME = minishell
 NAME_BONUS = minishell_bonus
 
 SRCS = mandatory/main.c \
-		mandatory/executing/builtins/my_cd.c \
-		mandatory/executing/builtins/my_echo.c \
-		mandatory/executing/helper.c \
-		mandatory/executing/builtins/my_env.c \
-		mandatory/executing/builtins/my_pwd.c \
-		mandatory/executing/builtins/my_unset.c \
-		mandatory/executing/builtins/my_exit.c \
-		mandatory/executing/builtins/my_export.c \
-		mandatory/executing/builtins/pipe.c \
+		mandatory/execution/builtins/my_cd.c \
+		mandatory/execution/builtins/my_echo.c \
+		mandatory/execution/helper.c \
+		mandatory/execution/builtins/my_env.c \
+		mandatory/execution/builtins/my_pwd.c \
+		mandatory/execution/builtins/my_unset.c \
+		mandatory/execution/builtins/my_exit.c \
+		mandatory/execution/builtins/my_export.c \
+		mandatory/execution/builtins/pipe.c \
 		mandatory/parsing/parsing.c
 
 SRCS_BONUS = bonus/main_bonus.c \
-	# bonus/executing/tttttt.c \
+	# bonus/execution/tttttt.c \
 	# bonus/parsing/ttttt.c \
 
 SRCS_LIBFT = libft/ft_atoi.c \

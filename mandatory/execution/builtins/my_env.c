@@ -6,11 +6,11 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:54:09 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/22 14:45:13 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/25 07:22:18 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell_executing.h"
+#include "../minishell_execution.h"
 
 void	ft_lstfree(t_env **head)
 {
