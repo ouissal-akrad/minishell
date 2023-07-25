@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 13:35:14 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/24 16:34:24 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/25 02:04:30 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void split_var_no_quote(t_tokens **token);
 void add_is_d(t_tokens **tokens);
 void remove_null_tokens(t_tokens **tokens);
 void ambiguous_redirect(t_tokens **tokens);
-void create_data(t_data **data, t_tokens *tokens, t_env *env);
+int create_data(t_data **data, t_tokens *tokens, t_env *env);
 
 
 

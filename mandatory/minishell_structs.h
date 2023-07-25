@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 22:06:09 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/24 17:27:57 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/25 02:06:39 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ typedef struct s_file
 {
 	int out;
 	int in;
-	int app;
 }			t_file;
 
 typedef struct s_data

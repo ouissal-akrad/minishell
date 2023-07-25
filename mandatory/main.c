@@ -44,8 +44,12 @@ int	main(int argc, char *argv[], char *env[])
 		split_var_no_quote(&tokens);
 		remove_quotes(tokens);
 		remove_null_tokens(&tokens);
-		create_data(&data, tokens, env_list);
-		// redirections(&tokens, &data);
+		if (create_data(&data, tokens, env_list))
+		{
+			free_tokens(&tokens);
+			line = readline("minishell$ ");
+			continue ;
+		}
 
 
 		//ls > ""
@@ -78,7 +82,6 @@ int	main(int argc, char *argv[], char *env[])
 			}
 			printf("file.out: %d\n", tmp->file.out);
 			printf("file.in: %d\n", tmp->file.in);
-			printf("file.app: %d\n", tmp->file.app);
 			printf("-----------------\n");
 
 			tmp = tmp->next;

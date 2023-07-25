@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/24 18:53:59 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/25 02:06:37 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void	add_token(t_tokens **tokens, char *str, t_token type)
 		exit(1); // free tokens 3la bara
 	new->str = str;
 	new->type = type;
-	new->is_d = 4;
+	new->is_d = 0;
 	new->var = NULL;
 	new->next = NULL;
 	if (!*tokens)
@@ -211,7 +211,7 @@ void add_is_d(t_tokens **tokens)
 	{
 		if (tmp->type == WORD && !check_quotes(tmp->str) && check_dollar(tmp->str))
 		{
-			tmp->is_d = 1;
+			tmp->is_d = 1; // 1 = dollar
 			tmp->var = tmp->str;
 		}
 		tmp = tmp->next;
@@ -549,11 +549,11 @@ void ambiguous_redirect(t_tokens **tokens)
 	{
 		if ((tmp->type == IN || tmp->type == OUT || tmp->type == APP) && tmp->next->is_d == 1 && check_no_expanding_valid(tmp->next->str))
 		{
-			tmp->next->is_d = 2;
+			tmp->next->is_d = 2; // ambiguous redirect
 			fprintf(stderr, "minishell: %s:ambiguous redirect\n", tmp->next->var);
 			return ;
 		}
-		else if (tmp->type == HDOC && tmp->next->is_d == 1 && check_no_expanding_valid(tmp->next->str))
+		else if (tmp->type == HDOC && !check_quotes(tmp->next->str))
 			tmp->next->is_d = 3;
 		tmp = tmp->next;
 	}
@@ -606,7 +606,6 @@ void creat_nodes(t_data **data, t_tokens *tokens, t_env *env)
 		new->env = env;
 		new->file.in = 0;
 		new->file.out = 1;
-		new->file.app = 0;
 		new->next = NULL;
 		tmp_data = *data;
 		if (!*data)
@@ -622,8 +621,106 @@ void creat_nodes(t_data **data, t_tokens *tokens, t_env *env)
 	}
 }
 
+void open_hdoc(t_data **data, t_tokens *tokens, t_env *env)
+{
+	t_tokens *tmp;
+	t_data *tmp_data;
+	char *line;
+	char *exp;
+	int i;
 
-void create_data(t_data **data, t_tokens *tokens, t_env *env)
+	tmp = tokens;
+	i = 0;
+	tmp_data = *data;
+	while (tmp)
+	{
+		if (tmp->type == PIPE)
+			tmp_data = tmp_data->next;
+		if (tmp->type == HDOC)
+		{
+			unlink("/tmp/hdoc");
+			tmp_data->file.in = open("/tmp/hdoc", O_RDWR | O_CREAT | O_TRUNC, 0644);
+			if (tmp_data->file.in == -1)
+				exit(1);
+			line = readline("> ");
+			while (ft_strcmp(line, tmp->next->str))
+			{
+				if (tmp->next->is_d == 3)
+				{
+					exp = expand_env(line, env);
+					free(line);
+					line = ft_strdup(exp);
+					free(exp);
+				}
+				write(tmp_data->file.in, line, ft_strlen(line));
+				write(tmp_data->file.in, "\n", 1);
+				free(line);
+				line = readline("> ");
+			}
+			free(line);
+			tmp = tmp->next;
+		}
+		if (tmp)
+			tmp = tmp->next;
+	}
+}
+
+int open_files(t_data **data, t_tokens *tokens)
+{
+	t_tokens *tmp;
+	t_data *tmp_data;
+
+	tmp = tokens;
+	tmp_data = *data;
+	while (tmp)
+	{
+		if (tmp->type == PIPE)
+			tmp_data = tmp_data->next;
+		if (tmp->type == IN || tmp->type == OUT || tmp->type == APP)
+		{
+			if (tmp->next->is_d == 2)
+				return (1);
+			if (tmp->type == IN)
+			{
+				tmp_data->file.in = open(tmp->next->str, O_RDONLY);
+				if (tmp_data->file.in == -1)
+				{
+					fprintf(stderr, "minishell: %s: No such file or directory\n", tmp->next->str);
+					exit(1);
+				}
+				tmp = tmp->next;
+			}
+			else if (tmp->type == OUT)
+			{
+				tmp_data->file.out = open(tmp->next->str, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+				if (tmp_data->file.out == -1)
+				{
+					fprintf(stderr, "minishell: %s: No such file or directory\n", tmp->next->str);
+					exit(1);
+				}
+				tmp = tmp->next;
+			}
+			else if (tmp->type == APP)
+			{
+				tmp_data->file.out = open(tmp->next->str, O_WRONLY | O_CREAT | O_APPEND, 0644);
+				if (tmp_data->file.out == -1)
+				{
+					fprintf(stderr, "minishell: %s: No such file or directory\n", tmp->next->str);
+					exit(1);
+				}
+				tmp = tmp->next;
+			}
+		}
+		if (tmp)
+			tmp = tmp->next;
+	}
+	return (0);
+}
+
+int create_data(t_data **data, t_tokens *tokens, t_env *env)
 {
 	creat_nodes(data, tokens, env);
+	open_hdoc(data, tokens, env);
+	return (open_files(data, tokens));
+
 }
