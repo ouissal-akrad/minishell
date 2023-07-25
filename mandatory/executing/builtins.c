@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:21:52 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/11 19:57:14 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/12 04:44:49 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,41 +61,58 @@ void	my_unset(t_env **env, char **args)
 	print_env(env);
 }
 
-void	my_echo(char **str)
+/*
+echo "hello"
+------------------------
+name="ouissal"
+echo "My name is $name"
+------------------------
+echo "This text will be saved in a file." > file.txt
+------------------------
+echo "$(cat file.txt)"
+------------------------
+echo "$(pwd)"
+
+*/
+/*
+cmd =====> args[0 ]= echo
+args = -n
+file = fd;
+*/
+
+int newline_checker(char *str)
+{
+    int i = 0;
+    if (str[i] == '-')
+        i++;
+    while (str[i] == 'n')
+        i++;
+    if (str[i] == '\0')
+        return 1;
+    return 0;
+}
+
+void	my_echo(char **args)
 {
 	int	i;
-	int	check;
+	int	new_line;
+	int	flag;
 
-	i = 3;
-	check = 0;
-	int fd = 1;
-	int new_line = 1;
-	printf("=====>%s\n",str[i]);
-	if (str[i] && !ft_strcmp(str[i], "-n"))
+	i = 2;
+	flag = 0;
+	new_line = 1;
+	while (args[i])
 	{
-		new_line = 0;
-		i++;
-	}
-	if (str[i] && str[i + 1] && !ft_strcmp(str[i + 1], ">"))
-	{
-		fd = open(str[i + 2], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (fd == -1)
+		while (newline_checker(args[i]) == 1 && flag == 0)
 		{
-			perror("open");
-			exit(1);
+			i++;
+			new_line = 0;
 		}
-		str[i + 1] = NULL;
-		str[i + 2] = NULL;
-	}
-	while (str[i] && ft_strncmp(str[i], "-", 1) == 0)
-		i++;
-	while (str[i] && ft_strcmp(str[i], ""))
-	{
-		dprintf(fd, "%s ", str[i]);
-		i++;
+		flag = 1;
+		printf("%s",args[i]);
+		if (args[++i])
+			printf(" ");
 	}
 	if (new_line)
-		dprintf(fd, "\n");
-	close(fd);
-	return ;
+		printf("\n");
 }

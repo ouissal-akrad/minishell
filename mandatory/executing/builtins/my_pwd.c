@@ -1,21 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstdelone.c                                     :+:      :+:    :+:   */
+/*   my_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/29 12:44:11 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/13 17:15:41 by ouakrad          ###   ########.fr       */
+/*   Created: 2023/07/14 09:53:30 by ouakrad           #+#    #+#             */
+/*   Updated: 2023/07/14 14:11:11 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../minishell_executing.h"
 
-void	ft_lstdelone(t_list *lst, void (*del)(void *))
+void	my_pwd(void)
 {
-	if (!lst || !del)
-		return ;
-	del(lst->content);
-	free(lst);
+	char	cwd[1024];
+
+	if (getcwd(cwd, sizeof(cwd)) == NULL)
+		printf("pwd: Error occurred.\n");
+	else
+		printf("%s\n", cwd);
 }

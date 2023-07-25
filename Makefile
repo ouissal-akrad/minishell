@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+         #
+#    By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/23 03:03:58 by bel-idri          #+#    #+#              #
-#    Updated: 2023/07/13 18:53:49 by bel-idri         ###   ########.fr        #
+#    Updated: 2023/07/25 07:03:10 by ouakrad          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,9 +14,15 @@ NAME = minishell
 
 NAME_BONUS = minishell_bonus
 
-SRCS = mandatory/parsing/parsing.c \
-	mandatory/main.c \
-	mandatory/executing/env.c \
+SRCS = mandatory/executing/main.c \
+		mandatory/executing/builtins/my_cd.c \
+		mandatory/executing/builtins/my_echo.c \
+		mandatory/executing/builtins/my_env.c \
+		mandatory/executing/builtins/my_pwd.c \
+		mandatory/executing/builtins/my_unset.c \
+		mandatory/executing/builtins/my_exit.c \
+		mandatory/executing/builtins/my_export.c \
+		mandatory/executing/builtins/pipe.c \
 	# mandatory/executing/tttttt.c \
 	# mandatory/parsing/ttttt.c \
 
@@ -78,7 +84,7 @@ OBJS_LIBFT = $(SRCS_LIBFT:.c=.o)
 CC = cc
 
 # CFLAGS = -Wall -Wextra -Werror -I/goinfre/bel-idri/.brew/opt/readline/include		#---On Bilal Mac---#
-CFLAGS = -Wall -Wextra -Werror -I/readline/include
+CFLAGS = -Wall -Wextra -Werror -I/readline/include  #-g -fsanitize=address 
 
 # RLFLAGES = -lreadline -lhistory -L/goinfre/bel-idri/.brew/opt/readline/lib		#---On Bilal Mac---#
 RLFLAGES = -lreadline
