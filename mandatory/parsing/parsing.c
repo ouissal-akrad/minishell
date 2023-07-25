@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/25 02:06:37 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/25 03:42:47 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -550,7 +550,9 @@ void ambiguous_redirect(t_tokens **tokens)
 		if ((tmp->type == IN || tmp->type == OUT || tmp->type == APP) && tmp->next->is_d == 1 && check_no_expanding_valid(tmp->next->str))
 		{
 			tmp->next->is_d = 2; // ambiguous redirect
-			fprintf(stderr, "minishell: %s:ambiguous redirect\n", tmp->next->var);
+			write(2, "minishell: ", 11);
+			write(2, tmp->next->str, ft_strlen(tmp->next->str));
+			write(2, ": ambiguous redirect\n", 21);
 			return ;
 		}
 		else if (tmp->type == HDOC && !check_quotes(tmp->next->str))
@@ -559,7 +561,7 @@ void ambiguous_redirect(t_tokens **tokens)
 	}
 }
 
-int count_n_tokens(t_tokens *tokens)
+int	count_n_tokens(t_tokens *tokens)
 {
 	t_tokens *tmp;
 	int c;
@@ -574,7 +576,7 @@ int count_n_tokens(t_tokens *tokens)
 	return (c);
 }
 
-void creat_nodes(t_data **data, t_tokens *tokens, t_env *env)
+void	creat_nodes(t_data **data, t_tokens *tokens, t_env *env)
 {
 	t_tokens *tmp;
 	t_data *new;
@@ -604,8 +606,8 @@ void creat_nodes(t_data **data, t_tokens *tokens, t_env *env)
 			tmp = tmp->next;
 		}
 		new->env = env;
-		new->file.in = 0;
-		new->file.out = 1;
+		new->in = 0;
+		new->out = 1;
 		new->next = NULL;
 		tmp_data = *data;
 		if (!*data)
@@ -621,7 +623,7 @@ void creat_nodes(t_data **data, t_tokens *tokens, t_env *env)
 	}
 }
 
-void open_hdoc(t_data **data, t_tokens *tokens, t_env *env)
+void	open_hdoc(t_data **data, t_tokens *tokens, t_env *env)
 {
 	t_tokens *tmp;
 	t_data *tmp_data;
@@ -639,8 +641,8 @@ void open_hdoc(t_data **data, t_tokens *tokens, t_env *env)
 		if (tmp->type == HDOC)
 		{
 			unlink("/tmp/hdoc");
-			tmp_data->file.in = open("/tmp/hdoc", O_RDWR | O_CREAT | O_TRUNC, 0644);
-			if (tmp_data->file.in == -1)
+			tmp_data->in = open("/tmp/hdoc", O_RDWR | O_CREAT | O_TRUNC, 0644);
+			if (tmp_data->in == -1)
 				exit(1);
 			line = readline("> ");
 			while (ft_strcmp(line, tmp->next->str))
@@ -652,8 +654,8 @@ void open_hdoc(t_data **data, t_tokens *tokens, t_env *env)
 					line = ft_strdup(exp);
 					free(exp);
 				}
-				write(tmp_data->file.in, line, ft_strlen(line));
-				write(tmp_data->file.in, "\n", 1);
+				write(tmp_data->in, line, ft_strlen(line));
+				write(tmp_data->in, "\n", 1);
 				free(line);
 				line = readline("> ");
 			}
@@ -665,10 +667,10 @@ void open_hdoc(t_data **data, t_tokens *tokens, t_env *env)
 	}
 }
 
-int open_files(t_data **data, t_tokens *tokens)
+int	open_files(t_data **data, t_tokens *tokens)
 {
-	t_tokens *tmp;
-	t_data *tmp_data;
+	t_tokens	*tmp;
+	t_data		*tmp_data;
 
 	tmp = tokens;
 	tmp_data = *data;
@@ -676,37 +678,43 @@ int open_files(t_data **data, t_tokens *tokens)
 	{
 		if (tmp->type == PIPE)
 			tmp_data = tmp_data->next;
-		if (tmp->type == IN || tmp->type == OUT || tmp->type == APP)
+		if (tmp->type == IN || tmp->type == OUT \
+			|| tmp->type == APP)
 		{
 			if (tmp->next->is_d == 2)
 				return (1);
 			if (tmp->type == IN)
 			{
-				tmp_data->file.in = open(tmp->next->str, O_RDONLY);
-				if (tmp_data->file.in == -1)
+				tmp_data->in = open(tmp->next->str, O_RDONLY);
+				if (tmp_data->in == -1)
 				{
-					fprintf(stderr, "minishell: %s: No such file or directory\n", tmp->next->str);
-					exit(1);
+					write(2, "minishell: ", 11);
+					perror(tmp->next->str);
+					return (1);
 				}
 				tmp = tmp->next;
 			}
 			else if (tmp->type == OUT)
 			{
-				tmp_data->file.out = open(tmp->next->str, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-				if (tmp_data->file.out == -1)
+				tmp_data->out = open(tmp->next->str, \
+					O_WRONLY | O_CREAT | O_TRUNC, 0644);
+				if (tmp_data->out == -1)
 				{
-					fprintf(stderr, "minishell: %s: No such file or directory\n", tmp->next->str);
-					exit(1);
+					write(2, "minishell: ", 11);
+					perror(tmp->next->str);
+					return (1);
 				}
 				tmp = tmp->next;
 			}
 			else if (tmp->type == APP)
 			{
-				tmp_data->file.out = open(tmp->next->str, O_WRONLY | O_CREAT | O_APPEND, 0644);
-				if (tmp_data->file.out == -1)
+				tmp_data->out = open(tmp->next->str, O_WRONLY \
+					| O_CREAT | O_APPEND, 0644);
+				if (tmp_data->out == -1)
 				{
-					fprintf(stderr, "minishell: %s: No such file or directory\n", tmp->next->str);
-					exit(1);
+					write(2, "minishell: ", 11);
+					perror(tmp->next->str);
+					return (1);
 				}
 				tmp = tmp->next;
 			}
@@ -717,10 +725,39 @@ int open_files(t_data **data, t_tokens *tokens)
 	return (0);
 }
 
-int create_data(t_data **data, t_tokens *tokens, t_env *env)
+int	create_data(t_data **data, t_tokens *tokens, t_env *env)
 {
 	creat_nodes(data, tokens, env);
 	open_hdoc(data, tokens, env);
 	return (open_files(data, tokens));
+}
 
+void	ree_data(t_data **data)
+{
+	t_data	*tmp;
+	int		i;
+
+	tmp = *data;
+	while (tmp)
+	{
+		i = -1;
+		while (tmp->args[++i])
+			free(tmp->args[i]);
+		free(tmp->args);
+		tmp = tmp->next;
+	}
+}
+
+void	free_env(t_env **env)
+{
+	t_env	*tmp;
+
+	while (*env)
+	{
+		tmp = *env;
+		*env = (*env)->next;
+		free(tmp->var);
+		free(tmp->val);
+		free(tmp);
+	}
 }

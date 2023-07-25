@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 22:06:09 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/25 02:06:39 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/25 03:21:06 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,18 @@ typedef struct s_env
 	struct s_env	*next;
 }			t_env;
 
-typedef struct s_file
-{
-	int out;
-	int in;
-}			t_file;
+// typedef struct s_file
+// {
+// 	int out;
+// 	int in;
+// }			t_file;
 
 typedef struct s_data
 {
 	char	**args; // args[0] = cmd
 	t_env	*env;
-	t_file	file;
+	int out;
+	int in;
 	struct s_data	*next;
 }			t_data;
 
