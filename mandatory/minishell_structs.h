@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 22:06:09 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/25 06:44:52 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/25 06:59:57 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,23 @@ typedef enum e_token
 
 typedef struct s_tokens
 {
-	char			*str;
-	t_token			type;
-	int is_d;
-	char *var;
+
+	char	*str;
+	t_token	type;
+	int		is_d;
+	char	*var;
 	struct s_tokens	*next;
 }					t_tokens;
+
+typedef struct s_expvar
+{
+	int j;
+	int k;
+	int quote;
+	char *var;
+	char *val;
+	char *final;
+	char *backup;
+} t_expvar;
 
 #endif
