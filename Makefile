@@ -6,7 +6,7 @@
 #    By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/23 03:03:58 by bel-idri          #+#    #+#              #
-#    Updated: 2023/07/25 07:03:10 by ouakrad          ###   ########.fr        #
+#    Updated: 2023/07/25 07:18:31 by ouakrad          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,17 +14,17 @@ NAME = minishell
 
 NAME_BONUS = minishell_bonus
 
-SRCS = mandatory/executing/main.c \
+SRCS = mandatory/main.c \
 		mandatory/executing/builtins/my_cd.c \
 		mandatory/executing/builtins/my_echo.c \
+		mandatory/executing/helper.c \
 		mandatory/executing/builtins/my_env.c \
 		mandatory/executing/builtins/my_pwd.c \
 		mandatory/executing/builtins/my_unset.c \
 		mandatory/executing/builtins/my_exit.c \
 		mandatory/executing/builtins/my_export.c \
 		mandatory/executing/builtins/pipe.c \
-	# mandatory/executing/tttttt.c \
-	# mandatory/parsing/ttttt.c \
+		mandatory/parsing/parsing.c
 
 SRCS_BONUS = bonus/main_bonus.c \
 	# bonus/executing/tttttt.c \

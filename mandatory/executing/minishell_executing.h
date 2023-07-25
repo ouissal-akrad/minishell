@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 13:35:12 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/25 07:08:23 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/25 07:16:50 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include "../minishell.h"
 # include <errno.h>
 # include <limits.h>
-#include <string.h>
+# include <string.h>
 
 int		g_exit;
 /*-------------------------builtins-------------------------------*/
@@ -36,7 +36,8 @@ void	ft_lstadd_backk(t_env **lst, t_env *new);
 t_env	*ft_lstneww(char *env_name, char *env_content);
 t_env	*create_list(char *str[]);
 void	ft_lstfree(t_env **head);
-void shlvl(t_env *env);
+void	shlvl(t_env *env);
+t_env	*no_env(void);
 /*----------------pwd---------------------*/
 void	my_pwd(void);
 /*----------------unset---------------------*/
@@ -58,7 +59,7 @@ char	*join_path(char *path, char *cmd);
 char	*find_path(char *cmd, char *envp[]);
 void	free_leaks(char **paths);
 void	execution(char *av[], char **env, int i);
-void	pipex( t_env *env);
+void	pipex(t_env *env);
 void	second(char *av[], char **env, int pfd[2]);
 void	first(char *av[], char **env, int pfd[2]);
 char	**env_list_to_char_array(t_env *env_list);

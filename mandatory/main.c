@@ -5,7 +5,7 @@ int	main(int argc, char *argv[], char *env[])
 	char		*line;
 	t_tokens	*tokens;
 	t_data		*data;
-	t_env		*env_list;
+	t_env		*new_env;
 
 	t_data		*tmp;
 
@@ -13,7 +13,10 @@ int	main(int argc, char *argv[], char *env[])
 	(void)argc;
 	(void)argv;
 
-	env_list = create_list(env);
+	if(!*env)
+		new_env = no_env();
+	else
+		new_env = create_list(env);
 
 
 	tokens = NULL;
@@ -41,12 +44,12 @@ int	main(int argc, char *argv[], char *env[])
 		}
 
 		ambiguous_redirect(&tokens);
-		expanding(&tokens, env_list);
+		expanding(&tokens, new_env);
 		split_var_no_quote(&tokens);
 		remove_quotes(tokens);
 		remove_null_tokens(&tokens);
 
-		if (create_data(&data, tokens, env_list))
+		if (create_data(&data, tokens, new_env))
 		{
 			free_tokens(&tokens);
 			free_data(&data);
@@ -59,22 +62,25 @@ int	main(int argc, char *argv[], char *env[])
 
 
 		tmp = data;
-		int i = 0;
+		// int i = 0;
 
-		while (tmp)
-		{
-			i = 0;
-			while (tmp->args[i])
-			{
-				printf("args[%d] = %s\n", i, tmp->args[i]);
-				i++;
-			}
-			printf("in = %d\n", tmp->in);
-			printf("out = %d\n", tmp->out);
-			printf("-------------------\n");
-			tmp = tmp->next;
-		}
+		// while (tmp)
+		// {
+		// 	i = 0;
+		// 	while (tmp->args[i])
+		// 	{
+		// 		printf("args[%d] = %s\n", i, tmp->args[i]);
+		// 		i++;
+		// 	}
+		// 	printf("in = %d\n", tmp->in);
+		// 	printf("out = %d\n", tmp->out);
+		// 	printf("-------------------\n");
+		// 	tmp = tmp->next;
+		// }
 
+
+		//direction(l,&new_env);
+		// hna
 
 
 		close_files(data);
@@ -84,8 +90,8 @@ int	main(int argc, char *argv[], char *env[])
 		data = NULL;
 		line = readline("minishell$ ");
 	}
-
-	free_env(&env_list);
+	clear_history();
+	free_env(&new_env);
 	return (0);
 }
 

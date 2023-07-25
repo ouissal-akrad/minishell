@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:21:57 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/22 14:47:25 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/25 07:13:59 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,30 +52,4 @@ t_env *no_env()
 	ft_lstadd_backk(&env, ft_lstneww("SHELL", "/bin/zsh"));
 	env->flag = 1;
 	return (env);
-}
-int	main(int ac, char **av, char *env[])
-{
-	char	*line;
-	char	**l;
-	t_env	*new_env;
-
-	(void)ac;
-	(void)av;
-	if(!*env)
-		new_env = no_env();
-	else
-		new_env = create_list(env);
-	line = readline("minishell$ ");
-	// atexit(f);
-	while (line)
-	{
-		add_history(line);
-		l = ft_split(line, ' ');
-		direction(l,&new_env);
-		free(line);
-		free_leaks(l);
-		line = readline("minishell$ ");
-	}
-	clear_history();
-	ft_lstfree(&new_env);
 }
