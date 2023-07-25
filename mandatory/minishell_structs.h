@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 22:06:09 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/25 06:59:57 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/25 07:07:56 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ typedef struct s_data
 	char **args; // args[0] = cmd
 	t_env			env;
 	int				in;
-	int				ouit;
+	int				out;
 	struct s_data	*next;
 }					t_data;
 
