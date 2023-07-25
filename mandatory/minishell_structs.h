@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 22:06:09 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/25 03:21:06 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/25 06:45:28 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,10 @@ typedef struct s_env
 {
 	char	*var;
 	char	*val;
+	int	flag;
+	struct s_env	*prev;
 	struct s_env	*next;
 }			t_env;
-
-// typedef struct s_file
-// {
-// 	int out;
-// 	int in;
-// }			t_file;
 
 typedef struct s_data
 {
