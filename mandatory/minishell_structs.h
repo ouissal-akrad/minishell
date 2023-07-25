@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 22:06:09 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/22 12:24:19 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/25 06:44:52 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,20 +24,12 @@ typedef struct s_env
 	struct s_env	*next;
 }					t_env;
 
-typedef struct s_file
-{
-	// int	type;
-	int				out;
-	int				in;
-	int				app;
-	// char *file_name;
-}					t_file;
-
 typedef struct s_data
 {
-	char 			**args; // args[0] = cmd
+	char **args; // args[0] = cmd
 	t_env			env;
-	t_file			file;
+	int				in;
+	int				ouit;
 	struct s_data	*next;
 }					t_data;
 
@@ -64,6 +56,8 @@ typedef struct s_tokens
 {
 	char			*str;
 	t_token			type;
+	int is_d;
+	char *var;
 	struct s_tokens	*next;
 }					t_tokens;
 

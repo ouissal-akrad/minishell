@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:46:00 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/22 14:40:15 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/24 10:23:36 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,9 +238,9 @@ void	ft_csp(t_env *env, char **s, int c)
 	}
 	//resort env
 	// sort_env(&env);
-	print_env_ex(env);
-	puts("-----------------------------");
-	print_env(env);
+	// print_env_ex(env);
+	// puts("-----------------------------");
+	// print_env(env);
 }
 
 void	sequal(t_env *env, char *prev, char *rest, int plus)
@@ -252,7 +252,7 @@ void	sequal(t_env *env, char *prev, char *rest, int plus)
 	existing_var = find_env(env, prev);
 	if (existing_var != NULL)
 	{
-		// Duplicate the new value and store it in the existing variable and + exists
+		// Duplicate the new value and store it in the existing variable and + exists 
 		if (plus && existing_var->val)
 		{
 			old_val = ft_strdup(existing_var->val);
