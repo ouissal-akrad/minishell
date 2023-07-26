@@ -98,21 +98,6 @@ int	main(int argc, char *argv[], char *env[])
 }
 
 
-// s > "" : double free
-
-// bash-3.2$ export y="a b"
-// bash-3.2$ ls > $y
-// bash: $y: ambiguous redirect
-
-// minishell$ ls > $USER
-// minishell: $USER: ambiguous redirect
 
 
 //  if -1 no exucte
-//bash-3.2$ ls -la > f r
-//ls: r: No such file or directory
-// bash-3.2$ ls -la > "" r
-// bash: : No such file or directory
-
-//  << a cat
-// 'bel-idri'
