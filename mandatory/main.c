@@ -7,6 +7,7 @@ int	main(int argc, char *argv[], char *env[])
 	t_data		*data;
 	t_env		*new_env;
 
+	t_tokens	*tmp_t;
 	t_data		*tmp;
 
 
@@ -44,12 +45,25 @@ int	main(int argc, char *argv[], char *env[])
 		}
 
 		expanding(&tokens, new_env);
-		ambiguous_redirect(&tokens);
 		split_var_no_quote(&tokens);
+
+		ambiguous_redirect(&tokens);
 		remove_quotes(tokens);
 		remove_null_tokens(&tokens);
 		create_data(&data, tokens, new_env);
 
+
+		tmp_t = tokens;
+
+		while (tmp_t)
+		{
+			printf("str = %s\n", tmp_t->str);
+			printf("type = %d\n", tmp_t->type);
+			printf("is_d = %d\n", tmp_t->is_d);
+			printf("var = %s\n", tmp_t->var);
+			printf("-------------------\n");
+			tmp_t = tmp_t->next;
+		}
 
 		tmp = data;
 		int i = 0;
@@ -93,3 +107,10 @@ int	main(int argc, char *argv[], char *env[])
 
 // minishell$ ls > $USER
 // minishell: $USER: ambiguous redirect
+
+
+//  if -1 no exucte
+//bash-3.2$ ls -la > f r
+//ls: r: No such file or directory
+// bash-3.2$ ls -la > "" r
+// bash: : No such file or directory

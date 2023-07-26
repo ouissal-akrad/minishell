@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/26 14:35:04 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/26 17:42:30 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,10 +208,8 @@ void	add_is_d(t_tokens **tokens)
 	{
 		if (tmp->type == WORD && !check_quotes(tmp->str) \
 			&& check_dollar(tmp->str))
-		{
 			tmp->is_d = 1;
-			tmp->var = ft_strdup(tmp->str);
-		}
+		tmp->var = ft_strdup(tmp->str);
 		tmp = tmp->next;
 	}
 }
@@ -480,6 +478,8 @@ void	split_var_no_quote(t_tokens **tokens)
 		{
 			next = tmp->next;
 			split = ft_split(tmp->str, '\n');
+			if (split[1])
+				tmp->is_d = 2;
 			tmp->next = NULL;
 			free(tmp->str);
 			tmp->str = ft_strdup(split[0]);
@@ -540,12 +540,9 @@ void	ambiguous_redirect(t_tokens **tokens)
 	while (tmp)
 	{
 		if ((tmp->type == IN || tmp->type == OUT || tmp->type == APP) \
-			&& tmp->next->is_d == 1 && (!ft_strlen(tmp->next->str) || check_newline(tmp->next->str)))
+			&& tmp->next->is_d == 1 && !ft_strlen(tmp->next->str))
 		{
 			tmp->next->is_d = 2;
-			write(2, "minishell: ", 11);
-			write(2, tmp->next->var, ft_strlen(tmp->next->var));
-			write(2, ": ambiguous redirect\n", 21);
 			return ;
 		}
 		else if (tmp->type == HDOC && !check_quotes(tmp->next->str))
@@ -615,6 +612,17 @@ void	creat_nodes(t_data **data, t_tokens *tokens, t_env *env)
 	}
 }
 
+void go_to_pipe(t_tokens **tokens)
+{
+
+	while (*tokens)
+	{
+		if ((*tokens)->type == PIPE)
+			break ;
+		*tokens = (*tokens)->next;
+	}
+}
+
 void	open_hdoc(t_data **data, t_tokens *tokens, t_env *env)
 {
 	t_tokens	*tmp;
@@ -635,7 +643,13 @@ void	open_hdoc(t_data **data, t_tokens *tokens, t_env *env)
 			unlink("/tmp/hdoc");
 			tmp_data->in = open("/tmp/hdoc", O_RDWR | O_CREAT | O_TRUNC, 0644);
 			if (tmp_data->in == -1)
-				exit(1);
+			{
+				write(2, "minishell: ", 11);
+				write(2, tmp->next->str, ft_strlen(tmp->next->str));
+				write(2, ": ", 2);
+				perror("");
+				go_to_pipe(&tmp);
+			}
 			line = readline("> ");
 			while (ft_strcmp(line, tmp->next->str))
 			{
@@ -659,16 +673,6 @@ void	open_hdoc(t_data **data, t_tokens *tokens, t_env *env)
 	}
 }
 
-void go_to_pipe(t_tokens *tokens)
-{
-
-	while (tokens)
-	{
-		if (tokens->type == PIPE)
-			break ;
-		tokens = tokens->next;
-	}
-}
 
 void	open_files(t_data **data, t_tokens *tokens)
 {
@@ -685,7 +689,14 @@ void	open_files(t_data **data, t_tokens *tokens)
 			|| tmp->type == APP)
 		{
 			if (tmp->next->is_d == 2)
-				go_to_pipe(tmp);
+			{
+				write(2, "minishell: ", 11);
+				write(2, tmp->next->var, ft_strlen(tmp->next->var));
+				write(2, ": ambiguous redirect\n", 21);
+				tmp_data->in = -1;
+				go_to_pipe(&tmp);
+				continue ;
+			}
 			else if (tmp->type == IN)
 			{
 				tmp_data->in = open(tmp->next->str, O_RDONLY);
@@ -695,9 +706,8 @@ void	open_files(t_data **data, t_tokens *tokens)
 					write(2, tmp->next->str, ft_strlen(tmp->next->str));
 					write(2, ": ", 2);
 					perror("");
-					go_to_pipe(tmp);
+					go_to_pipe(&tmp);
 				}
-				tmp = tmp->next;
 			}
 			else if (tmp->type == OUT)
 			{
@@ -709,9 +719,8 @@ void	open_files(t_data **data, t_tokens *tokens)
 					write(2, tmp->next->str, ft_strlen(tmp->next->str));
 					write(2, ": ", 2);
 					perror("");
-					go_to_pipe(tmp);
+					go_to_pipe(&tmp);
 				}
-				tmp = tmp->next;
 			}
 			else if (tmp->type == APP)
 			{
@@ -723,10 +732,11 @@ void	open_files(t_data **data, t_tokens *tokens)
 					write(2, tmp->next->str, ft_strlen(tmp->next->str));
 					write(2, ": ", 2);
 					perror("");
-					go_to_pipe(tmp);
+					go_to_pipe(&tmp);
 				}
-				tmp = tmp->next;
 			}
+			if (tmp)
+				tmp = tmp->next;
 		}
 		if (tmp)
 			tmp = tmp->next;
