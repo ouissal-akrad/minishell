@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/26 17:42:30 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/26 23:39:16 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -303,19 +303,21 @@ void	remove_quotes(t_tokens *tokens)
 	while (tmp)
 	{
 		if (tmp->type == WORD)
-		i = -1;
-		j = 0;
-		while (tmp->str[++i])
 		{
-			is_quote(tmp->str, i, &quote);
-			if (tmp->str[i] == '\'' && (quote == SQ || quote == OQ))
-				continue ;
-			else if (tmp->str[i] == '\"' && (quote == DQ || quote == OQ))
-				continue ;
-			else
-				tmp->str[j++] = tmp->str[i];
+			i = -1;
+			j = 0;
+			while (tmp->str[++i])
+			{
+				is_quote(tmp->str, i, &quote);
+				if (tmp->str[i] == '\'' && (quote == SQ || quote == OQ))
+					continue ;
+				else if (tmp->str[i] == '\"' && (quote == DQ || quote == OQ))
+					continue ;
+				else
+					tmp->str[j++] = tmp->str[i];
+			}
+			tmp->str[j] = '\0';
 		}
-		tmp->str[j] = '\0';
 		tmp = tmp->next;
 	}
 }
@@ -378,7 +380,7 @@ int	expand_env_halper(char *str, int *i, t_expvar *exp, t_env *env)
 	{
 		if (str[*i + 1] == '?')
 			exp->final = ft_strjoin(exp->final, ft_itoa(9999));
-		if (str[*i + 1] != '\"' && str[*i + 0] != '\'')
+		if (str[*i + 1] != '\"' && str[*i + 1] != '\'')
 			*i = *i + 1;
 		is_quote(str, *i, &exp->quote);
 		return (1);
@@ -401,7 +403,7 @@ int	expand_env_halper(char *str, int *i, t_expvar *exp, t_env *env)
 	return (0);
 }
 
-char	*expand_env(char *str, t_env *env)
+char	*expand_env(char *str, t_env *env, int state)
 {
 	int			i;
 	t_expvar	exp;
@@ -415,9 +417,16 @@ char	*expand_env(char *str, t_env *env)
 	{
 		exp.backup[exp.k++] = str[i];
 		is_quote(str, i, &exp.quote);
-		if ((str[i] == '$' && exp.quote != SQ) && ((ft_isalpha(str[i + 1])) \
+		if (state && ((str[i] == '$' && exp.quote != SQ) && ((ft_isalpha(str[i + 1])) \
 			|| str[i + 1] == '_' || str[i + 1] == '?' || str[i + 1] == '\'' \
-			|| str[i + 1] == '\"'))
+			|| str[i + 1] == '\"')))
+		{
+			if (expand_env_halper(str, &i, &exp, env))
+				continue ;
+		}
+		else if (!state && (str[i] == '$' && ((ft_isalpha(str[i + 1])) \
+			|| str[i + 1] == '_' || str[i + 1] == '?' || str[i + 1] == '\'' \
+			|| str[i + 1] == '\"')))
 		{
 			if (expand_env_halper(str, &i, &exp, env))
 				continue ;
@@ -441,7 +450,7 @@ void	expanding(t_tokens **tokens, t_env *env)
 	{
 		if (tmp->type == WORD && check_dollar(tmp->str) && prv->type != HDOC)
 		{
-			str = expand_env(tmp->str, env);
+			str = expand_env(tmp->str, env, 1);
 			free(tmp->str);
 			tmp->str = ft_strdup(str);
 			free(str);
@@ -651,11 +660,13 @@ void	open_hdoc(t_data **data, t_tokens *tokens, t_env *env)
 				go_to_pipe(&tmp);
 			}
 			line = readline("> ");
+			if (!line)
+				break ;
 			while (ft_strcmp(line, tmp->next->str))
 			{
 				if (tmp->next->is_d == 3)
 				{
-					exp = expand_env(line, env);
+					exp = expand_env(line, env, 0);
 					free(line);
 					line = ft_strdup(exp);
 					free(exp);
@@ -664,6 +675,8 @@ void	open_hdoc(t_data **data, t_tokens *tokens, t_env *env)
 				write(tmp_data->in, "\n", 1);
 				free(line);
 				line = readline("> ");
+				if (!line)
+					break ;
 			}
 			free(line);
 			tmp = tmp->next;

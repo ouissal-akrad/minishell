@@ -21,6 +21,8 @@
 		"memory": "c",
 		"ratio": "c",
 		"tuple": "c",
-		"utility": "c"
+		"utility": "c",
+		"locale": "c",
+		"string": "c"
 	}
 }

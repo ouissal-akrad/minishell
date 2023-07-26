@@ -46,7 +46,6 @@ int	main(int argc, char *argv[], char *env[])
 
 		expanding(&tokens, new_env);
 		split_var_no_quote(&tokens);
-
 		ambiguous_redirect(&tokens);
 		remove_quotes(tokens);
 		remove_null_tokens(&tokens);
@@ -55,15 +54,15 @@ int	main(int argc, char *argv[], char *env[])
 
 		tmp_t = tokens;
 
-		while (tmp_t)
-		{
-			printf("str = %s\n", tmp_t->str);
-			printf("type = %d\n", tmp_t->type);
-			printf("is_d = %d\n", tmp_t->is_d);
-			printf("var = %s\n", tmp_t->var);
-			printf("-------------------\n");
-			tmp_t = tmp_t->next;
-		}
+		// while (tmp_t)
+		// {
+		// 	printf("str = %s\n", tmp_t->str);
+		// 	printf("type = %d\n", tmp_t->type);
+		// 	printf("is_d = %d\n", tmp_t->is_d);
+		// 	printf("var = %s\n", tmp_t->var);
+		// 	printf("-------------------\n");
+		// 	tmp_t = tmp_t->next;
+		// }
 
 		tmp = data;
 		int i = 0;
@@ -114,3 +113,6 @@ int	main(int argc, char *argv[], char *env[])
 //ls: r: No such file or directory
 // bash-3.2$ ls -la > "" r
 // bash: : No such file or directory
+
+//  << a cat
+// 'bel-idri'
