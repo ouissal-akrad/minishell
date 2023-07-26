@@ -43,8 +43,8 @@ int	main(int argc, char *argv[], char *env[])
 			continue ;
 		}
 
-		ambiguous_redirect(&tokens);
 		expanding(&tokens, new_env);
+		ambiguous_redirect(&tokens);
 		split_var_no_quote(&tokens);
 		remove_quotes(tokens);
 		remove_null_tokens(&tokens);
@@ -74,7 +74,6 @@ int	main(int argc, char *argv[], char *env[])
 
 
 		close_files(data);
-		free_tokens(&tokens);
 		tokens = NULL;
 		free_data(&data);
 		data = NULL;
@@ -87,3 +86,10 @@ int	main(int argc, char *argv[], char *env[])
 
 
 // s > "" : double free
+
+// bash-3.2$ export y="a b"
+// bash-3.2$ ls > $y
+// bash: $y: ambiguous redirect
+
+// minishell$ ls > $USER
+// minishell: $USER: ambiguous redirect

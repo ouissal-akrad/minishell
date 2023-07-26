@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/26 03:03:34 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/26 04:15:27 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,8 @@ void	free_tokens(t_tokens **tokens)
 		tmp = *tokens;
 		*tokens = (*tokens)->next;
 		free(tmp->str);
+		if (tmp->var)
+			free(tmp->var);
 		free(tmp);
 	}
 }
@@ -208,7 +210,7 @@ void	add_is_d(t_tokens **tokens)
 			&& check_dollar(tmp->str))
 		{
 			tmp->is_d = 1;
-			tmp->var = tmp->str;
+			tmp->var = ft_strdup(tmp->str);
 		}
 		tmp = tmp->next;
 	}
@@ -538,11 +540,11 @@ void	ambiguous_redirect(t_tokens **tokens)
 	while (tmp)
 	{
 		if ((tmp->type == IN || tmp->type == OUT || tmp->type == APP) \
-			&& tmp->next->is_d == 1 && check_no_expanding_valid(tmp->next->str))
+			&& tmp->next->is_d == 1 && !ft_strlen(tmp->next->str))
 		{
 			tmp->next->is_d = 2;
 			write(2, "minishell: ", 11);
-			write(2, tmp->next->str, ft_strlen(tmp->next->str));
+			write(2, tmp->next->var, ft_strlen(tmp->next->var));
 			write(2, ": ambiguous redirect\n", 21);
 			return ;
 		}
