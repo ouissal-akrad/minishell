@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:54:09 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/25 07:22:18 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/25 15:49:56 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,23 +41,15 @@ void	free_leaks(char **args)
 	free(args);
 }
 
-void	delete_node(t_env *head, char *var)
+void delete_node(t_env *curr)
 {
-	t_env	*curr;
-
-	curr = head;
-	while (curr != NULL && ft_strcmp(curr->var, var) != 0)
-		curr = curr->next;
-	if (curr != NULL)
-	{
-		if (curr->prev != NULL)
-			curr->prev->next = curr->next;
-		if (curr->next != NULL)
-			curr->next->prev = curr->prev;
-		free(curr->var);
-		free(curr->val);
-		free(curr);
-	}
+    if (curr->prev != NULL)
+        curr->prev->next = curr->next;
+    if (curr->next != NULL)
+        curr->next->prev = curr->prev;
+    free(curr->var);
+    free(curr->val);
+    free(curr);
 }
 
 t_env	*ft_lstneww(char *env_name, char *env_content)
@@ -97,11 +89,11 @@ void	ft_lstadd_backk(t_env **lst, t_env *new)
 void	print_env(t_env *env)
 {
 	t_env	*tmp;
-
+	
 	tmp = env;
 	while (tmp != NULL)
 	{
-		if(env->flag == 1 && (ft_strcmp("PATH",tmp->var) == 0 || ft_strcmp("SHELL",tmp->var) == 0))
+		if(env->flag >= 1 && (ft_strcmp("PATH",tmp->var) == 0 || ft_strcmp("SHELL",tmp->var) == 0))
 		{
 			tmp = tmp->next;
 			continue;
@@ -152,7 +144,6 @@ t_env	*create_list(char *str[])
 		}
 		i++;
 	}
-	env->flag = 0;
 	shlvl(env);
 	return (env);
 }

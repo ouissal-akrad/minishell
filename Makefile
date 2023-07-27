@@ -6,7 +6,7 @@
 #    By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/23 03:03:58 by bel-idri          #+#    #+#              #
-#    Updated: 2023/07/25 07:23:59 by ouakrad          ###   ########.fr        #
+#    Updated: 2023/07/27 11:10:43 by ouakrad          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ SRCS = mandatory/main.c \
 		mandatory/execution/builtins/my_unset.c \
 		mandatory/execution/builtins/my_exit.c \
 		mandatory/execution/builtins/my_export.c \
-		mandatory/execution/builtins/pipe.c \
+		mandatory/execution/execution.c \
 		mandatory/parsing/parsing.c
 
 SRCS_BONUS = bonus/main_bonus.c \

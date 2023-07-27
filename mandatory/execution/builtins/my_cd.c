@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:55:55 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/25 07:22:18 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/25 07:46:29 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,13 @@ void	update_env(t_env *env, char *oldpwd, char *pwd)
 	}
 }
 
-void	my_cd(t_env **env, char **args)
+void	my_cd(t_env **env, t_data *data)
 {
 	char oldpwd[PATH_MAX];
 	char pwd[PATH_MAX];
 	char *path;
 	// cd without args
-	if (args[1] == NULL)
+	if (data->args[1] == NULL)
 	{
 		path = find(*env, "HOME");
 		if (path == NULL)
@@ -58,7 +58,7 @@ void	my_cd(t_env **env, char **args)
 		}
 	}
 	// cd -
-	else if (args[1] != NULL && ft_strcmp(args[1], "-") == 0)
+	else if (data->args[1] != NULL && ft_strcmp(data->args[1], "-") == 0)
 	{
 		path = find(*env, "OLDPWD");
 		if (path == NULL)
@@ -68,9 +68,9 @@ void	my_cd(t_env **env, char **args)
 			return ;
 		}
 	}
-	// cd with args
+	// cd with data->args
 	else
-		path = args[1];
+		path = data->args[1];
 	// get OLPWD
 	if (getcwd(oldpwd, PATH_MAX) == NULL)
 	{
@@ -92,7 +92,7 @@ void	my_cd(t_env **env, char **args)
 		g_exit = 1;
 		return ;
 	}
-	if(args[1] != NULL && ft_strcmp(args[1],"-") == 0)
+	if(data->args[1] != NULL && ft_strcmp(data->args[1],"-") == 0)
 		printf("%s\n",pwd);
 	// update env
 	update_env(*env, oldpwd, pwd);

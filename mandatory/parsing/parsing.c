@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/26 03:03:34 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/25 07:32:22 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -567,7 +567,7 @@ int	count_n_tokens(t_tokens *tokens)
 	return (c);
 }
 
-void	creat_nodes(t_data **data, t_tokens *tokens, t_env *env)
+void	creat_nodes(t_data **data, t_tokens *tokens)
 {
 	t_tokens	*tmp;
 	t_data		*new;
@@ -595,7 +595,6 @@ void	creat_nodes(t_data **data, t_tokens *tokens, t_env *env)
 				break ;
 			tmp = tmp->next;
 		}
-		new->env = env;
 		new->in = 0;
 		new->out = 1;
 		new->next = NULL;
@@ -740,7 +739,7 @@ void	open_files(t_data **data, t_tokens *tokens)
 
 void	create_data(t_data **data, t_tokens *tokens, t_env *env)
 {
-	creat_nodes(data, tokens, env);
+	creat_nodes(data, tokens);
 	open_hdoc(data, tokens, env);
 	open_files(data, tokens);
 }
