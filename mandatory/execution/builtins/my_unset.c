@@ -6,35 +6,34 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:54:33 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/25 07:22:18 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/25 15:48:06 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell_execution.h"
 
-void	my_unset(t_env **env, char **args)
+void	my_unset(t_env **env, t_data *data)
 {
 	t_env	*cur;
 	int		i;
 
-	cur = *env;
 	i = 1;
-	while (args[i] != NULL)
+	while (data->args[i] != NULL)
 	{
 		cur = *env;
 		while (cur != NULL)
 		{
-			if (ft_strcmp(cur->var, args[i]) == 0)
+			if((*env)->flag >= 1 && ft_strcmp(cur->var, "_") == 0)
+				cur = cur->next;
+			else if (ft_strcmp(cur->var, data->args[i]) == 0 )
 			{
 				if (cur->prev == NULL)
 					*env = cur->next;
-				// if(cur != NULL)
-				delete_node(*env, cur->var);
+				delete_node(cur);
 				break ;
 			}
 			cur = cur->next;
 		}
 		i++;
 	}
-	// print_env(*env);
 }

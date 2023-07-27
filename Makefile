@@ -23,7 +23,7 @@ SRCS = mandatory/main.c \
 		mandatory/execution/builtins/my_unset.c \
 		mandatory/execution/builtins/my_exit.c \
 		mandatory/execution/builtins/my_export.c \
-		mandatory/execution/builtins/pipe.c \
+		mandatory/execution/execution.c \
 		mandatory/parsing/parsing.c
 
 SRCS_BONUS = bonus/main_bonus.c \

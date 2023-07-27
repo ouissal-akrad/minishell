@@ -20,20 +20,21 @@ int	main(int argc, char *argv[], char *env[])
 
 	t_tokens	*tmp_t;
 	t_data		*tmp;
-
-
 	(void)argc;
 	(void)argv;
-
+	
 	if(!*env)
+	{
 		new_env = no_env();
+		new_env->flag = 1;
+	}
 	else
+	{
 		new_env = create_list(env);
-
-
+		new_env->flag = 0;
+	}
 	tokens = NULL;
 	data = NULL;
-
 
 	line = readline("minishell$ ");
 	while (line)
@@ -93,14 +94,11 @@ int	main(int argc, char *argv[], char *env[])
 			tmp = tmp->next;
 		}
 
-
-		//direction(l,&new_env);
-		// hna
-
-
+		// ME
+		direction(data,&new_env);
 		close_files(data);
 		tokens = NULL;
-		free_data(&data);
+		// free_data(&data);
 		data = NULL;
 		line = readline("minishell$ ");
 	}

@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 22:06:09 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/25 07:23:59 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/25 15:11:02 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ typedef struct s_env
 {
 	char			*var;
 	char			*val;
-	int				flag;
+	int			flag;
 	struct s_env	*prev;
 	struct s_env	*next;
 }					t_env;
@@ -27,7 +27,6 @@ typedef struct s_env
 typedef struct s_data
 {
 	char **args; // args[0] = cmd
-	t_env			*env;
 	int				in;
 	int				out;
 	struct s_data	*next;
