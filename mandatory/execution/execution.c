@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipe.c                                             :+:      :+:    :+:   */
+/*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 09:48:12 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/27 07:55:15 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/27 08:04:53 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell_execution.h"
+#include "minishell_execution.h"
 
 char	*join_path(char *path, char *cmd)
 {
@@ -106,18 +106,18 @@ char	**env_list_to_char_array(t_env *env_list)
 
 void	execution(t_data *data, t_env *env_list)
 {
-	char	**envp;
+	char	**env;
 	char	*path;
 	pid_t	pid;
 	int		status;
 
-	envp = env_list_to_char_array(env_list);
-	if (!envp)
+	env = env_list_to_char_array(env_list);
+	if (!env)
 		return ;
-	path = find_path(data->args[0], envp);
+	path = find_path(data->args[0], env);
 	if (!path)
 	{
-		free_leaks(envp);
+		free_leaks(env);
 		return ;
 	}
 	pid = fork();
@@ -125,7 +125,7 @@ void	execution(t_data *data, t_env *env_list)
 	{
 		perror("fork");
 		free(path);
-		free_leaks(envp);
+		free_leaks(env);
 		return ;
 	}
 	else if (pid == 0)
@@ -134,7 +134,7 @@ void	execution(t_data *data, t_env *env_list)
 			dup2(data->in, STDIN_FILENO);
 		if (data->out != -1)
 			dup2(data->out, STDOUT_FILENO);
-		execve(path, data->args, envp);
+		execve(path, data->args, env);
 		perror(data->args[0]);
 		exit(1);
 	}
@@ -147,5 +147,5 @@ void	execution(t_data *data, t_env *env_list)
 			fprintf(stderr, "Child process terminated abnormally\n");
 	}
 	free(path);
-	free_leaks(envp);
+	free_leaks(env);
 }
