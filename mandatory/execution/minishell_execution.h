@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 13:35:12 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/25 09:35:08 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/27 07:59:34 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,9 @@ void	my_export(t_env **env, t_data *data);
 t_env	*find_env(t_env *env, char *name);
 void	sequal(t_env *env, char *prev, char *rest, int plus);
 /*----------------execution---------------------*/
+void	free_leaks(char **paths);
 char	*join_path(char *path, char *cmd);
 char	*find_path(char *cmd, char *envp[]);
-void	free_leaks(char **paths);
-void	execution(char *av[], char **env, int i);
-void	pipex(t_env *env);
-void	second(char *av[], char **env, int pfd[2]);
-void	first(char *av[], char **env, int pfd[2]);
+void	execution(t_data *data, t_env *env);
 char	**env_list_to_char_array(t_env *env_list);
 #endif

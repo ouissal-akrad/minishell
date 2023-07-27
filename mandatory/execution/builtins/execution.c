@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 09:48:12 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/25 07:22:18 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/27 07:55:15 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,27 +66,6 @@ char	*find_path(char *cmd, char *envp[])
 	exit(0);
 }
 
-void	execution(char *av[], char **env, int i)
-{
-	char	*path;
-	char	**w_args;
-	char	*cmd;
-
-	if (av[i])
-	{
-		w_args = ft_split(av[i], ' ');
-		if (!w_args || !w_args[0])
-			return ;
-		cmd = w_args[0];
-		// path = find_path(cmd, env);
-        // printf("===========>%s\n",cmd);
-        // printf("=======>path : %s\n",path);
-		execve(path, w_args, env);
-		free_leaks(w_args);
-	}
-	return ;
-}
-
 char	**env_list_to_char_array(t_env *env_list)
 {
 	int		count;
@@ -94,6 +73,8 @@ char	**env_list_to_char_array(t_env *env_list)
 	int		i;
 	int		var_len;
 	int		val_len;
+	char	**env_array;
+	char	*var_val_str;
 
 	count = 0;
 	curr = env_list;
@@ -102,14 +83,14 @@ char	**env_list_to_char_array(t_env *env_list)
 		count++;
 		curr = curr->next;
 	}
-	char **env_array = malloc((count + 1) * sizeof(char *));
+	env_array = malloc((count + 1) * sizeof(char *));
 	i = 0;
 	curr = env_list;
 	while (curr != NULL)
 	{
 		var_len = ft_strlen(curr->var);
 		val_len = ft_strlen(curr->val);
-		char *var_val_str = malloc(var_len + val_len + 2);
+		var_val_str = malloc(var_len + val_len + 2);
 		if (!var_val_str)
 			return (NULL);
 		strcpy(var_val_str, curr->var);
@@ -123,34 +104,48 @@ char	**env_list_to_char_array(t_env *env_list)
 	return (env_array);
 }
 
-// t_data *fill()
-// {
-//     t_data *data;
-
-//     data->args = (char **) malloc(3 * sizeof(char *));
-//     data->args[0] = "ls";
-//     data->args[1] = "-l";å
-//     data->args[2] = NULL;
-//     data->file.in = "input.txt";
-//     data->file.out = "output.txt";
-//     data->next = NULL;
-//     return(data);
-// }
-
-void	pipex(t_env *env)
+void	execution(t_data *data, t_env *env_list)
 {
-    // char *av[] = {"infile", "grep l", "wc -l", "outfile"};
-	int		pfd[2];
-	// int		id;
-	// int		pid;
-	char	**env_array;
-    
-	env_array = env_list_to_char_array(env);
-	if (pipe(pfd) == -1)
-		return (perror("pipe: "));
-    
-	close(pfd[0]);
-	close(pfd[1]);
-	wait(NULL);
-	wait(NULL);
+	char	**envp;
+	char	*path;
+	pid_t	pid;
+	int		status;
+
+	envp = env_list_to_char_array(env_list);
+	if (!envp)
+		return ;
+	path = find_path(data->args[0], envp);
+	if (!path)
+	{
+		free_leaks(envp);
+		return ;
+	}
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork");
+		free(path);
+		free_leaks(envp);
+		return ;
+	}
+	else if (pid == 0)
+	{
+		if (data->in != -1)
+			dup2(data->in, STDIN_FILENO);
+		if (data->out != -1)
+			dup2(data->out, STDOUT_FILENO);
+		execve(path, data->args, envp);
+		perror(data->args[0]);
+		exit(1);
+	}
+	else
+	{
+		waitpid(pid, &status, 0);
+		if (WIFEXITED(status))
+			status = WEXITSTATUS(status);
+		else
+			fprintf(stderr, "Child process terminated abnormally\n");
+	}
+	free(path);
+	free_leaks(envp);
 }

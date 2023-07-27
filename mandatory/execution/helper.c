@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:21:57 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/25 15:07:02 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/27 07:55:00 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ void	direction(t_data *data, t_env **new_env)
 		my_exit(new_env, data);
 	else if (ft_strcmp(cmd, "export") == 0)
 		my_export(new_env, data);
-	// else
-	// 	pipex(new_env);
+	else
+		execution(data,*new_env);
 }
 t_env	*no_env(void)
 {
