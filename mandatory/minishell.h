@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 00:16:06 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/25 07:23:27 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/27 20:22:58 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,6 @@
 # include <termios.h>
 # include <curses.h>
 # include <term.h>
+# include <signal.h>
 
 # endif

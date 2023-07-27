@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+         #
+#    By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/23 03:03:58 by bel-idri          #+#    #+#              #
-#    Updated: 2023/07/25 07:23:59 by ouakrad          ###   ########.fr        #
+#    Updated: 2023/07/27 20:27:08 by bel-idri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -84,7 +84,7 @@ OBJS_LIBFT = $(SRCS_LIBFT:.c=.o)
 CC = cc
 
 # CFLAGS = -Wall -Wextra -Werror -I/goinfre/bel-idri/.brew/opt/readline/include		#---On Bilal Mac---#
-CFLAGS = -Wall -Wextra -Werror -I/readline/include  #-g -fsanitize=address 
+CFLAGS = -Wall -Wextra -Werror -I/readline/include  #-g -fsanitize=address
 
 # RLFLAGES = -lreadline -lhistory -L/goinfre/bel-idri/.brew/opt/readline/lib		#---On Bilal Mac---#
 RLFLAGES = -lreadline

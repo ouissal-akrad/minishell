@@ -1,5 +1,16 @@
 #include "minishell.h"
 
+void	sig(int sig)
+{
+	if (sig == SIGINT)
+	{
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
+}
+
 int	main(int argc, char *argv[], char *env[])
 {
 	char		*line;
@@ -27,6 +38,7 @@ int	main(int argc, char *argv[], char *env[])
 	line = readline("minishell$ ");
 	while (line)
 	{
+		signal(SIGINT, &sig);
 		if (ft_strlen(line) == 0)
 		{
 			line = readline("minishell$ ");
