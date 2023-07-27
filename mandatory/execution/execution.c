@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 09:48:12 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/27 08:04:53 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/27 11:38:45 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ char	**env_list_to_char_array(t_env *env_list)
 		var_val_str = malloc(var_len + val_len + 2);
 		if (!var_val_str)
 			return (NULL);
+		//
 		strcpy(var_val_str, curr->var);
 		strcat(var_val_str, "=");
 		strcat(var_val_str, curr->val);
@@ -104,22 +105,11 @@ char	**env_list_to_char_array(t_env *env_list)
 	return (env_array);
 }
 
-void	execution(t_data *data, t_env *env_list)
+void	exec_cmd(t_data *data, char *path, char **env)
 {
-	char	**env;
-	char	*path;
 	pid_t	pid;
 	int		status;
 
-	env = env_list_to_char_array(env_list);
-	if (!env)
-		return ;
-	path = find_path(data->args[0], env);
-	if (!path)
-	{
-		free_leaks(env);
-		return ;
-	}
 	pid = fork();
 	if (pid == -1)
 	{
@@ -136,7 +126,6 @@ void	execution(t_data *data, t_env *env_list)
 			dup2(data->out, STDOUT_FILENO);
 		execve(path, data->args, env);
 		perror(data->args[0]);
-		exit(1);
 	}
 	else
 	{
@@ -148,4 +137,62 @@ void	execution(t_data *data, t_env *env_list)
 	}
 	free(path);
 	free_leaks(env);
+}
+
+void exec_pipe(t_data *data, t_env *env_list)
+{
+    char **env = env_list_to_char_array(env_list);
+    if (!env)
+        return;
+    char *path = find_path(data->args[0], env);
+    if (!path)
+    {
+        free_leaks(env);
+        return;
+    }
+    if (data->next != NULL)
+    {
+        int pipefd[2];
+        if (pipe(pipefd) == -1)
+        {
+            perror("pipe");
+            free(path);
+            free_leaks(env);
+            return;
+        }
+        pid_t pid = fork();
+        if (pid == -1)
+        {
+            perror("fork");
+            close(pipefd[0]);
+            close(pipefd[1]);
+            free(path);
+            free_leaks(env);
+            return;
+        }
+        else if (pid == 0)
+        {
+            if (data->in != -1)
+                dup2(data->in, STDIN_FILENO);
+            close(pipefd[0]);
+           	dup2(pipefd[1], STDOUT_FILENO);
+            execve(path, data->args, env);
+            perror(data->args[0]);
+        }
+        else
+        {
+            close(pipefd[1]);
+            free(path);
+            free_leaks(env);
+            data->next->in = pipefd[0];
+            exec_pipe(data->next, env_list);
+            int status;
+            waitpid(pid, &status, 0);
+			g_exit = status;
+        }
+    }
+    else
+    {
+        exec_cmd(data, path, env);
+    }
 }

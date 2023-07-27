@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:21:57 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/27 07:55:00 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/27 10:41:47 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,27 @@ void	direction(t_data *data, t_env **new_env)
 	else if (ft_strcmp(cmd, "export") == 0)
 		my_export(new_env, data);
 	else
-		execution(data,*new_env);
+		exec_pipe(data,*new_env);
+}
+
+int is_builtins(char *cmd)
+{
+	if (ft_strcmp(cmd, "pwd") == 0)
+		return(0);
+	else if (ft_strcmp(cmd, "unset") == 0)
+		return(0);
+	else if (ft_strcmp(cmd, "echo") == 0)
+		return(0);
+	else if (ft_strcmp(cmd, "cd") == 0)
+		return(0);
+	else if (ft_strcmp(cmd, "env") == 0)
+		return(0);
+	else if (ft_strcmp(cmd, "exit") == 0)
+		return(0);
+	else if (ft_strcmp(cmd, "export") == 0)
+		return(0);
+	else 
+		return(1);
 }
 t_env	*no_env(void)
 {
