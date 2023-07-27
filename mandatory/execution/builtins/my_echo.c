@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:55:18 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/25 07:44:52 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/27 21:15:24 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,13 @@ void	my_echo(t_data *data)
 		}
 		flag = 1;
 		if(data->args[i])
-			printf("%s", data->args[i]);
+		{
+			ft_putstr_fd(data->args[i], data->out);
+			// printf("%s", data->args[i]);
+		}
 		if (data->args[++i])
-			printf(" ");
+			ft_putstr_fd(" ", data->out);
 	}
 	if (new_line)
-		printf("\n");
+		ft_putstr_fd("\n", data->out);
 }

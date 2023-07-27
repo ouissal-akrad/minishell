@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:46:00 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/25 15:42:01 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/27 21:22:01 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ t_env	*find_env(t_env *env, char *name)
 	}
 	return (NULL);
 }
+
 void	print_env_ex(t_env *env)
 {
 	t_env	*tmp;

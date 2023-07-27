@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 09:48:12 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/27 11:38:45 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/27 21:18:44 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,16 +44,9 @@ char	*join_path(char *path, char *cmd)
 char	*find_path(char *cmd, char *envp[])
 {
 	int	i;
-
-	if (ft_strchr(cmd, '/'))
-	{
-		if (access(cmd, X_OK) != 0)
-			return (write(2, "Command not found!\n", 20), NULL);
-		cmd = ft_strdup(cmd);
-		if (!cmd)
-			return (write(2, "Memorry Error!\n", 15), NULL);
-		return (cmd);
-	}
+	
+	if (ft_strchr(cmd, '/') || !is_builtins(cmd))
+		return(cmd);
 	i = -1;
 	while (envp[++i])
 	{
@@ -105,7 +98,7 @@ char	**env_list_to_char_array(t_env *env_list)
 	return (env_array);
 }
 
-void	exec_cmd(t_data *data, char *path, char **env)
+void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list)
 {
 	pid_t	pid;
 	int		status;
@@ -124,8 +117,13 @@ void	exec_cmd(t_data *data, char *path, char **env)
 			dup2(data->in, STDIN_FILENO);
 		if (data->out != -1)
 			dup2(data->out, STDOUT_FILENO);
-		execve(path, data->args, env);
-		perror(data->args[0]);
+		if(!is_builtins(path))
+				exec_builtin(data,env_list);
+		else 
+		{
+			execve(path, data->args, env);
+			perror(data->args[0]);
+		}
 	}
 	else
 	{
@@ -176,8 +174,14 @@ void exec_pipe(t_data *data, t_env *env_list)
                 dup2(data->in, STDIN_FILENO);
             close(pipefd[0]);
            	dup2(pipefd[1], STDOUT_FILENO);
-            execve(path, data->args, env);
+			printf("[%s]\n", path);
+			if(!is_builtins(path))
+				exec_builtin(data,&env_list);
+			else 
+			{
+          		execve(path, data->args, env);
             perror(data->args[0]);
+			}
         }
         else
         {
@@ -193,6 +197,6 @@ void exec_pipe(t_data *data, t_env *env_list)
     }
     else
     {
-        exec_cmd(data, path, env);
+        exec_cmd(data, path, env, &env_list);
     }
 }
