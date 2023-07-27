@@ -49,33 +49,25 @@ int	main(int argc, char *argv[], char *env[])
 		split_var_no_quote(&tokens);
 		remove_quotes(tokens);
 		remove_null_tokens(&tokens);
+		create_data(&data, tokens, new_env);
 
-		if (create_data(&data, tokens, new_env))
-		{
-			free_tokens(&tokens);
-			free_data(&data);
-			tokens = NULL;
-			data = NULL;
-			line = readline("minishell$ ");
-			close_files(data);
-			continue ;
-		}
+
 		tmp = data;
-		// int i = 0;
+		int i = 0;
 
-		// while (tmp)
-		// {
-		// 	i = 0;
-		// 	while (tmp->args[i])
-		// 	{
-		// 		printf("args[%d] = %s\n", i, tmp->args[i]);
-		// 		i++;
-		// 	}
-		// 	printf("in = %d\n", tmp->in);
-		// 	printf("out = %d\n", tmp->out);
-		// 	printf("-------------------\n");
-		// 	tmp = tmp->next;
-		// }
+		while (tmp)
+		{
+			i = 0;
+			while (tmp->args[i])
+			{
+				printf("args[%d] = %s\n", i, tmp->args[i]);
+				i++;
+			}
+			printf("in = %d\n", tmp->in);
+			printf("out = %d\n", tmp->out);
+			printf("-------------------\n");
+			tmp = tmp->next;
+		}
 
 		// ME
 		direction(data,&new_env);

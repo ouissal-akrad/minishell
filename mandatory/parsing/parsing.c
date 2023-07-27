@@ -656,7 +656,18 @@ void	open_hdoc(t_data **data, t_tokens *tokens, t_env *env)
 	}
 }
 
-int	open_files(t_data **data, t_tokens *tokens)
+void go_to_pipe(t_tokens *tokens)
+{
+
+	while (tokens)
+	{
+		if (tokens->type == PIPE)
+			break ;
+		tokens = tokens->next;
+	}
+}
+
+void	open_files(t_data **data, t_tokens *tokens)
 {
 	t_tokens	*tmp;
 	t_data		*tmp_data;
@@ -671,8 +682,15 @@ int	open_files(t_data **data, t_tokens *tokens)
 			|| tmp->type == APP)
 		{
 			if (tmp->next->is_d == 2)
-				return (1);
-			if (tmp->type == IN)
+			{
+				go_to_pipe(tmp);
+				if (tmp->type == PIPE)
+				{
+					tmp_data = tmp_data->next;
+					continue ;
+				}
+			}
+			else if (tmp->type == IN)
 			{
 				tmp_data->in = open(tmp->next->str, O_RDONLY);
 				if (tmp_data->in == -1)
@@ -681,7 +699,7 @@ int	open_files(t_data **data, t_tokens *tokens)
 					write(2, tmp->next->str, ft_strlen(tmp->next->str));
 					write(2, ": ", 2);
 					perror("");
-					return (1);
+					go_to_pipe(tmp);
 				}
 				tmp = tmp->next;
 			}
@@ -695,7 +713,7 @@ int	open_files(t_data **data, t_tokens *tokens)
 					write(2, tmp->next->str, ft_strlen(tmp->next->str));
 					write(2, ": ", 2);
 					perror("");
-					return (1);
+					go_to_pipe(tmp);
 				}
 				tmp = tmp->next;
 			}
@@ -709,7 +727,7 @@ int	open_files(t_data **data, t_tokens *tokens)
 					write(2, tmp->next->str, ft_strlen(tmp->next->str));
 					write(2, ": ", 2);
 					perror("");
-					return (1);
+					go_to_pipe(tmp);
 				}
 				tmp = tmp->next;
 			}
@@ -717,14 +735,13 @@ int	open_files(t_data **data, t_tokens *tokens)
 		if (tmp)
 			tmp = tmp->next;
 	}
-	return (0);
 }
 
-int	create_data(t_data **data, t_tokens *tokens, t_env *env)
+void	create_data(t_data **data, t_tokens *tokens, t_env *env)
 {
 	creat_nodes(data, tokens);
 	open_hdoc(data, tokens, env);
-	return (open_files(data, tokens));
+	open_files(data, tokens);
 }
 
 void	free_data(t_data **data)
