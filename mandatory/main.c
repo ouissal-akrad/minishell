@@ -1,5 +1,16 @@
 #include "minishell.h"
 
+void	sig(int sig)
+{
+	if (sig == SIGINT)
+	{
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
+}
+
 int	main(int argc, char *argv[], char *env[])
 {
 	char		*line;
@@ -7,6 +18,7 @@ int	main(int argc, char *argv[], char *env[])
 	t_data		*data;
 	t_env		*new_env;
 
+	t_tokens	*tmp_t;
 	t_data		*tmp;
 	(void)argc;
 	(void)argv;
@@ -27,6 +39,7 @@ int	main(int argc, char *argv[], char *env[])
 	line = readline("minishell$ ");
 	while (line)
 	{
+		signal(SIGINT, &sig);
 		if (ft_strlen(line) == 0)
 		{
 			line = readline("minishell$ ");
@@ -44,13 +57,25 @@ int	main(int argc, char *argv[], char *env[])
 			continue ;
 		}
 
-		ambiguous_redirect(&tokens);
 		expanding(&tokens, new_env);
 		split_var_no_quote(&tokens);
+		ambiguous_redirect(&tokens);
 		remove_quotes(tokens);
 		remove_null_tokens(&tokens);
 		create_data(&data, tokens, new_env);
 
+
+		tmp_t = tokens;
+
+		// while (tmp_t)
+		// {
+		// 	printf("str = %s\n", tmp_t->str);
+		// 	printf("type = %d\n", tmp_t->type);
+		// 	printf("is_d = %d\n", tmp_t->is_d);
+		// 	printf("var = %s\n", tmp_t->var);
+		// 	printf("-------------------\n");
+		// 	tmp_t = tmp_t->next;
+		// }
 
 		tmp = data;
 		int i = 0;
@@ -72,7 +97,6 @@ int	main(int argc, char *argv[], char *env[])
 		// ME
 		direction(data,&new_env);
 		close_files(data);
-		free_tokens(&tokens);
 		tokens = NULL;
 		// free_data(&data);
 		data = NULL;
@@ -84,4 +108,6 @@ int	main(int argc, char *argv[], char *env[])
 }
 
 
-// s > "" : double free
+
+
+//  if -1 no exucte
