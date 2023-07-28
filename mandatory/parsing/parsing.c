@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/27 15:45:40 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/28 21:59:53 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ char	*add_spaces(char *str)
 	int		i;
 	int		j;
 
-	new = (char *)ft_calloc((int)ft_strlen(str) + count_tok(str) + 1, 1);
+	new = (char *)ft_calloc((int)ft_strlen(str) + count_tok(str) + 1, 1); // free
 	quote = OQ;
 	i = -1;
 	j = 0;
@@ -105,14 +105,14 @@ char	**split_tokens(char *str)
 	int		quote;
 	char	*str_spaces;
 
-	str_spaces = add_spaces(str);
+	str_spaces = add_spaces(str); // free
 	free(str);
 	i = -1;
 	quote = OQ;
 	while (str_spaces[++i])
 	{
 		is_quote(str_spaces, i, &quote);
-		if (str_spaces[i] == ' ' && !quote)
+		if (!quote && (str_spaces[i] == ' ' || str_spaces[i + 1] == '\t'))
 			str_spaces[i] = '\n';
 	}
 	tokens = ft_split(str_spaces, '\n');
@@ -129,8 +129,7 @@ void	free_tokens(t_tokens **tokens)
 		tmp = *tokens;
 		*tokens = (*tokens)->next;
 		free(tmp->str);
-		if (tmp->var)
-			free(tmp->var);
+		free(tmp->var);
 		free(tmp);
 	}
 }
@@ -157,15 +156,15 @@ void	lexar(char *str, t_tokens **tokens)
 	{
 		quote = OQ;
 		is_quote(str_t[i], i, &quote);
-		if (!ft_strncmp(str_t[i], "|", ft_strlen(str_t[i])) && !quote)
+		if (!ft_strcmp(str_t[i], "|") && !quote)
 			add_token(tokens, ft_strdup("|"), PIPE);
-		else if (!ft_strncmp(str_t[i], "<", ft_strlen(str_t[i])) && !quote)
+		else if (!ft_strcmp(str_t[i], "<") && !quote)
 			add_token(tokens, ft_strdup("<"), IN);
-		else if (!ft_strncmp(str_t[i], ">", ft_strlen(str_t[i])) && !quote)
+		else if (!ft_strcmp(str_t[i], ">") && !quote)
 			add_token(tokens, ft_strdup(">"), OUT);
-		else if (!ft_strncmp(str_t[i], ">>", 2) && !quote)
+		else if (!ft_strcmp(str_t[i], ">>") && !quote)
 			add_token(tokens, ft_strdup(">>"), APP);
-		else if (!ft_strncmp(str_t[i], "<<", 2) && !quote)
+		else if (!ft_strcmp(str_t[i], "<<") && !quote)
 			add_token(tokens, ft_strdup("<<"), HDOC);
 		else
 			add_token(tokens, ft_strdup(str_t[i]), WORD);
@@ -338,6 +337,7 @@ char	*replace_space(char *str)
 		else
 			new[j++] = str[i];
 	}
+	free(str);
 	return (new);
 }
 
@@ -351,12 +351,19 @@ char	*get_val(char *var, t_env *env, int quote)
 		if (!ft_strcmp(tmp->var, var))
 		{
 			if (quote == OQ)
+			{
+				free(var);
 				return (replace_space(tmp->val));
+			}
 			else
+			{
+				free(var);
 				return (ft_strdup(tmp->val));
+			}
 		}
 		tmp = tmp->next;
 	}
+	free(var);
 	return (NULL);
 }
 
@@ -393,7 +400,7 @@ int	expand_env_halper(char *str, int *i, t_expvar *exp, t_env *env)
 	}
 	exp->var = ft_substr(str, *i + 1, exp->j - 1);
 	exp->val = get_val(exp->var, env, exp->quote);
-	free(exp->var);
+	// free(exp->var);
 	if (exp->val)
 	{
 		exp->final = ft_strjoin(exp->final, exp->val);
@@ -550,10 +557,7 @@ void	ambiguous_redirect(t_tokens **tokens)
 	{
 		if ((tmp->type == IN || tmp->type == OUT || tmp->type == APP) \
 			&& tmp->next->is_d == 1 && !ft_strlen(tmp->next->str))
-		{
 			tmp->next->is_d = 2;
-			return ;
-		}
 		else if (tmp->type == HDOC && !check_quotes(tmp->next->str))
 			tmp->next->is_d = 3;
 		tmp = tmp->next;
@@ -658,11 +662,21 @@ void	open_hdoc(t_data **data, t_tokens *tokens, t_env *env)
 				perror("");
 				go_to_pipe(&tmp);
 			}
-			line = readline("> ");
-			if (!line)
-				break ;
-			while (ft_strcmp(line, tmp->next->str))
+			while (1)
 			{
+				line = readline("> ");
+				if (!line)
+				{
+					close(tmp_data->in);
+					tmp_data->in = open("/tmp/hdoc", O_RDONLY);
+					break ;
+				}
+				if (!ft_strcmp(line, tmp->next->str))
+				{
+					close(tmp_data->in);
+					tmp_data->in = open("/tmp/hdoc", O_RDONLY);
+					break ;
+				}
 				if (tmp->next->is_d == 3)
 				{
 					exp = expand_env(line, env, 0);
@@ -673,9 +687,6 @@ void	open_hdoc(t_data **data, t_tokens *tokens, t_env *env)
 				write(tmp_data->in, line, ft_strlen(line));
 				write(tmp_data->in, "\n", 1);
 				free(line);
-				line = readline("> ");
-				if (!line)
-					break ;
 			}
 			free(line);
 			tmp = tmp->next;
@@ -765,16 +776,19 @@ void	create_data(t_data **data, t_tokens *tokens, t_env *env)
 void	free_data(t_data **data)
 {
 	t_data	*tmp;
+	t_data	*prev;
 	int		i;
 
 	tmp = *data;
 	while (tmp)
 	{
+		prev = tmp;
 		i = -1;
 		while (tmp->args[++i])
 			free(tmp->args[i]);
 		free(tmp->args);
 		tmp = tmp->next;
+		free(prev);
 	}
 }
 

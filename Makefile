@@ -6,7 +6,7 @@
 #    By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/23 03:03:58 by bel-idri          #+#    #+#              #
-#    Updated: 2023/07/27 20:27:08 by bel-idri         ###   ########.fr        #
+#    Updated: 2023/07/28 17:24:38 by bel-idri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -83,11 +83,11 @@ OBJS_LIBFT = $(SRCS_LIBFT:.c=.o)
 
 CC = cc
 
-# CFLAGS = -Wall -Wextra -Werror -I/goinfre/bel-idri/.brew/opt/readline/include		#---On Bilal Mac---#
-CFLAGS = -Wall -Wextra -Werror -I/readline/include  #-g -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -I/Users/bel-idri/.brew/opt/readline/include		#---On Bilal Mac---#
+# CFLAGS = -Wall -Wextra -Werror -I/readline/include  #-g -fsanitize=address
 
-# RLFLAGES = -lreadline -lhistory -L/goinfre/bel-idri/.brew/opt/readline/lib		#---On Bilal Mac---#
-RLFLAGES = -lreadline
+RLFLAGES = -lreadline -lhistory -L/Users/bel-idri/.brew/opt/readline/lib		#---On Bilal Mac---#
+# RLFLAGES = -lreadline
 
 RM = rm -f
 

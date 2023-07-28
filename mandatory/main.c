@@ -1,15 +1,15 @@
 #include "minishell.h"
 
-void	sig(int sig)
-{
-	if (sig == SIGINT)
-	{
-		printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	}
-}
+// void	sig(int sig)
+// {
+// 	if (sig == SIGINT)
+// 	{
+// 		printf("\n");
+// 		rl_on_new_line();
+// 		rl_replace_line("", 0);
+// 		rl_redisplay();
+// 	}
+// }
 
 int	main(int argc, char *argv[], char *env[])
 {
@@ -18,11 +18,11 @@ int	main(int argc, char *argv[], char *env[])
 	t_data		*data;
 	t_env		*new_env;
 
-	t_tokens	*tmp_t;
+	// t_tokens	*tmp_t;
 	t_data		*tmp;
 	(void)argc;
 	(void)argv;
-	
+
 	if(!*env)
 	{
 		new_env = no_env();
@@ -36,12 +36,19 @@ int	main(int argc, char *argv[], char *env[])
 	tokens = NULL;
 	data = NULL;
 
-	line = readline("minishell$ ");
-	while (line)
+	while (1)
 	{
-		signal(SIGINT, &sig);
+		// signal(SIGINT, &sig);
+		line = readline("minishell$ ");
+		if (!line)
+		{
+			printf("exit HNAA\n");
+			break ;
+		}
+
 		if (ft_strlen(line) == 0)
 		{
+			free(line);
 			line = readline("minishell$ ");
 			continue ;
 		}
@@ -65,7 +72,7 @@ int	main(int argc, char *argv[], char *env[])
 		create_data(&data, tokens, new_env);
 
 
-		tmp_t = tokens;
+		// tmp_t = tokens;
 
 		// while (tmp_t)
 		// {
@@ -95,12 +102,12 @@ int	main(int argc, char *argv[], char *env[])
 		}
 
 		// ME
-		direction(data,&new_env);
-		close_files(data);
+		// direction(data,&new_env);
+
+		free_tokens(&tokens);
+		free_data(&data);
 		tokens = NULL;
-		// free_data(&data);
 		data = NULL;
-		line = readline("minishell$ ");
 	}
 	clear_history();
 	free_env(&new_env);
