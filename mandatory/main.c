@@ -1,15 +1,15 @@
 #include "minishell.h"
 
-void	sig(int sig)
-{
-	if (sig == SIGINT)
-	{
-		printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	}
-}
+// void	sig(int sig)
+// {
+// 	if (sig == SIGINT)
+// 	{
+// 		printf("\n");
+// 		rl_on_new_line();
+// 		rl_replace_line("", 0);
+// 		rl_redisplay();
+// 	}
+// }
 
 int	main(int argc, char *argv[], char *env[])
 {
@@ -39,7 +39,7 @@ int	main(int argc, char *argv[], char *env[])
 	line = readline("minishell$ ");
 	while (line)
 	{
-		signal(SIGINT, &sig);
+		// signal(SIGINT, &sig);
 		if (ft_strlen(line) == 0)
 		{
 			line = readline("minishell$ ");
@@ -65,6 +65,7 @@ int	main(int argc, char *argv[], char *env[])
 		create_data(&data, tokens, new_env);
 
 
+
 		tmp_t = tokens;
 
 		// while (tmp_t)
@@ -76,27 +77,26 @@ int	main(int argc, char *argv[], char *env[])
 		// 	printf("-------------------\n");
 		// 	tmp_t = tmp_t->next;
 		// }
-
 		tmp = data;
-		int i = 0;
+		// int i = 0;
 
-		while (tmp)
-		{
-			i = 0;
-			while (tmp->args[i])
-			{
-				printf("args[%d] = %s\n", i, tmp->args[i]);
-				i++;
-			}
-			printf("in = %d\n", tmp->in);
-			printf("out = %d\n", tmp->out);
-			printf("-------------------\n");
-			tmp = tmp->next;
-		}
+		// while (tmp)
+		// {
+		// 	i = 0;
+		// 	while (tmp->args[i])
+		// 	{
+		// 		printf("args[%d] = %s\n", i, tmp->args[i]);
+		// 		i++;
+		// 	}
+		// 	printf("in = %d\n", tmp->in);
+		// 	printf("out = %d\n", tmp->out);
+		// 	printf("-------------------\n");
+		// 	tmp = tmp->next;
+		// }
 
 		// ME
 		direction(data,&new_env);
-		close_files(data);
+		// close_files(data);
 		tokens = NULL;
 		// free_data(&data);
 		data = NULL;

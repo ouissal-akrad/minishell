@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/27 15:45:40 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/28 15:20:09 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -552,7 +552,7 @@ void	ambiguous_redirect(t_tokens **tokens)
 			&& tmp->next->is_d == 1 && !ft_strlen(tmp->next->str))
 		{
 			tmp->next->is_d = 2;
-			return ;
+			// return ;
 		}
 		else if (tmp->type == HDOC && !check_quotes(tmp->next->str))
 			tmp->next->is_d = 3;

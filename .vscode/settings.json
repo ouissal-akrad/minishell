@@ -23,6 +23,8 @@
 		"tuple": "c",
 		"utility": "c",
 		"locale": "c",
-		"string": "c"
+		"string": "c",
+		"string_view": "c",
+		"vector": "c"
 	}
 }
