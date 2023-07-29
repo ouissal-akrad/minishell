@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/29 22:31:29 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/29 23:28:25 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -571,28 +571,38 @@ void	split_var_no_quote(t_tokens **tokens)
 	}
 }
 
-void	remove_null_tokens(t_tokens **tokens)
+void 	remove_null_tokens(t_tokens **tokens)
 {
 	t_tokens	*tmp;
-	t_tokens	*n;
+	t_tokens	*prv;
 
 	tmp = *tokens;
-	n = tmp;
+	prv = tmp;
+	while (tmp && tmp->type == WORD && tmp->is_d == 1 && !ft_strlen(tmp->str))
+	{
+		*tokens = tmp->next;
+		if (tmp->str)
+			free(tmp->str);
+		if (tmp->var)
+			free(tmp->var);
+		free(tmp);
+		tmp = *tokens;
+	}
 	while (tmp)
 	{
 		if (tmp->type == WORD && tmp->is_d == 1 && !ft_strlen(tmp->str))
 		{
-			n->next = tmp->next;
+			prv->next = tmp->next;
 			if (tmp->str)
 				free(tmp->str);
 			if (tmp->var)
 				free(tmp->var);
 			free(tmp);
-			tmp = n->next;
+			tmp = prv->next;
 		}
 		else
 		{
-			n = tmp;
+			prv = tmp;
 			tmp = tmp->next;
 		}
 	}
