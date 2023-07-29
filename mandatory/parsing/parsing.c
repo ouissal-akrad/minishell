@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/29 20:12:32 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/29 20:16:48 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -725,6 +725,7 @@ void	open_hdoc_helper(t_data *tmp_data, t_tokens *tmp, \
 	tmp_data->in = open(name, O_RDONLY);
 	free(name);
 	free(line);
+
 }
 
 char	*ft_strjoin_free_2(char *s1, char *s2)
