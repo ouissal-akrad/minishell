@@ -6,6 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
+/*   Updated: 2023/07/29 19:21:11 by ouakrad          ###   ########.fr       */
 /*   Updated: 2023/07/29 20:34:56 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -888,5 +889,5 @@ void	close_files(t_data *data)
 		if (tmp->out != 1)
 			close(tmp->out);
 		tmp = tmp->next;
-	}
+  }
 }

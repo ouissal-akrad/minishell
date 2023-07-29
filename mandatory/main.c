@@ -74,28 +74,27 @@ int	main(int argc, char *argv[], char *env[])
 		// 	printf("-------------------\n");
 		// 	tmp_t = tmp_t->next;
 		// }
-
-
 		tmp = data;
-		int i = 0;
-		while (tmp)
-		{
-			i = 0;
-			while (tmp->args[i])
-			{
-				printf("args[%d] = %s\n", i, tmp->args[i]);
-				i++;
-			}
-			printf("in = %d\n", tmp->in);
-			printf("out = %d\n", tmp->out);
-			printf("-------------------\n");
-			tmp = tmp->next;
-		}
+		// int i = 0;
+
+		// while (tmp)
+		// {
+		// 	i = 0;
+		// 	while (tmp->args[i])
+		// 	{
+		// 		printf("args[%d] = %s\n", i, tmp->args[i]);
+		// 		i++;
+		// 	}
+		// 	printf("in = %d\n", tmp->in);
+		// 	printf("out = %d\n", tmp->out);
+		// 	printf("-------------------\n");
+		// 	tmp = tmp->next;
+		// }
+
 
 
 		// ME
-		// direction(data,&new_env);
-
+		direction(data,&new_env);
 		free_tokens(&tokens);
 		free_data(&data);
 		tokens = NULL;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_execution.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 13:35:12 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/27 21:19:23 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/29 19:44:17 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	sequal(t_env *env, char *prev, char *rest, int plus);
 void	free_leaks(char **paths);
 char	*join_path(char *path, char *cmd);
 char	*find_path(char *cmd, char *envp[]);
-void	exec_cmd(t_data *data,char *path,char **env, t_env **env_list);
+void	exec_cmd(t_data *data,char *path,char **env, t_env **env_list, int *pipefd);
 void exec_pipe(t_data *data, t_env *env_list);
 char	**env_list_to_char_array(t_env *env_list);
 void	exec_builtin(t_data *data, t_env **new_env);
