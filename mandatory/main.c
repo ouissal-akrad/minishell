@@ -30,7 +30,7 @@ int	main(int argc, char *argv[], char *env[])
 		line = readline("minishell$ ");
 		if (!line)
 		{
-			printf("exit HNAA\n");
+			printf("exit\n");
 			break ;
 		}
 		if (ft_strlen(line) == 0)
@@ -56,7 +56,6 @@ int	main(int argc, char *argv[], char *env[])
 		remove_quotes(tokens);
 		remove_null_tokens(&tokens);
 		create_data(&data, &tokens, new_env);
-
 		if (!data)
 		{
 			free_tokens(&tokens);
