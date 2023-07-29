@@ -22,8 +22,7 @@ int	main(int argc, char *argv[], char *env[])
 	// t_data		*tmp;
 	(void)argc;
 	(void)argv;
-
-	if(!*env)
+	if (!*env)
 	{
 		new_env = no_env();
 		new_env->flag = 1;
@@ -35,7 +34,6 @@ int	main(int argc, char *argv[], char *env[])
 	}
 	tokens = NULL;
 	data = NULL;
-
 	while (1)
 	{
 		// signal(SIGINT, &sig);
@@ -45,14 +43,11 @@ int	main(int argc, char *argv[], char *env[])
 			printf("exit HNAA\n");
 			break ;
 		}
-
 		if (ft_strlen(line) == 0)
 		{
 			free(line);
-			line = readline("minishell$ ");
 			continue ;
 		}
-
 		add_history(line);
 		lexar(line, &tokens);
 		add_is_d(&tokens);
@@ -60,19 +55,15 @@ int	main(int argc, char *argv[], char *env[])
 		{
 			free_tokens(&tokens);
 			tokens = NULL;
-			line = readline("minishell$ ");
+			free(line);
 			continue ;
 		}
-
 		expanding(&tokens, new_env);
 		split_var_no_quote(&tokens);
 		ambiguous_redirect(&tokens);
 		remove_quotes(tokens);
 		remove_null_tokens(&tokens);
 		create_data(&data, tokens, new_env);
-
-
-
 
 		// tmp_t = tokens;
 		// while (tmp_t)
@@ -84,8 +75,6 @@ int	main(int argc, char *argv[], char *env[])
 		// 	printf("-------------------\n");
 		// 	tmp_t = tmp_t->next;
 		// }
-
-
 		// tmp = data;
 		// int i = 0;
 		// while (tmp)
@@ -101,10 +90,10 @@ int	main(int argc, char *argv[], char *env[])
 		// 	printf("-------------------\n");
 		// 	tmp = tmp->next;
 		// }
-
 		// ME
 		// direction(data,&new_env);
 
+		free(line);
 		free_tokens(&tokens);
 		free_data(&data);
 		tokens = NULL;
@@ -114,8 +103,5 @@ int	main(int argc, char *argv[], char *env[])
 	free_env(&new_env);
 	return (0);
 }
-
-
-
 
 //  if -1 no exucte

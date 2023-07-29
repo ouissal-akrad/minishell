@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/29 01:48:52 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/29 03:04:58 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ int	count_tok(char *str)
 		is_quote(str, i, &quote);
 		if ((str[i] == '|' || str[i] == '<' || str[i] == '>') && !quote)
 		{
-			if ((str[i] == '>' && str[i + 1] == '>') || \
-				(str[i] == '<' && str[i + 1] == '<'))
+			if ((str[i] == '>' && str[i + 1] == '>') || (str[i] == '<' && str[i
+					+ 1] == '<'))
 				i++;
 			count++;
 		}
@@ -54,7 +54,7 @@ char	*add_spaces(char *str)
 	int		i;
 	int		j;
 
-	new = (char *)ft_calloc((int)ft_strlen(str) + count_tok(str) + 1, 1); // free
+	new = (char *)ft_calloc((int)ft_strlen(str) + count_tok(str) + 1, 1);
 	quote = OQ;
 	i = -1;
 	j = 0;
@@ -65,8 +65,8 @@ char	*add_spaces(char *str)
 		{
 			new[j++] = ' ';
 			new[j++] = str[i];
-			if ((str[i] == '>' && str[i + 1] == '>' && !quote) \
-				|| (str[i] == '<' && str[i + 1] == '<' && !quote))
+			if ((str[i] == '>' && str[i + 1] == '>' && !quote) || (str[i] == '<'
+					&& str[i + 1] == '<' && !quote))
 				new[j++] = str[++i];
 			new[j++] = ' ';
 		}
@@ -106,7 +106,6 @@ char	**split_tokens(char *str)
 	char	*str_spaces;
 
 	str_spaces = add_spaces(str); // free
-	free(str);
 	i = -1;
 	quote = OQ;
 	while (str_spaces[++i])
@@ -205,7 +204,7 @@ void	add_is_d(t_tokens **tokens)
 	tmp = *tokens;
 	while (tmp)
 	{
-		if (tmp->type == WORD && !check_quotes(tmp->str) \
+		if (tmp->type == WORD && !check_quotes(tmp->str)
 			&& check_dollar(tmp->str))
 			tmp->is_d = 1;
 		tmp->var = ft_strdup(tmp->str);
@@ -279,11 +278,10 @@ int	syntax_error(t_tokens *tokens)
 			return (syntax_error_msg("newline"));
 		else if (tmp->type == PIPE && (tmp->next->type == PIPE || i == 1))
 			return (syntax_error_msg("|"));
-		else if ((tmp->type == IN || tmp->type == OUT || \
-			tmp->type == HDOC || tmp->type == APP) && \
-			(!tmp->next || tmp->next->type == PIPE || \
-			tmp->next->type == IN || tmp->next->type == OUT \
-			|| tmp->next->type == HDOC || tmp->next->type == APP))
+		else if ((tmp->type == IN || tmp->type == OUT || tmp->type == HDOC
+				|| tmp->type == APP) && (!tmp->next || tmp->next->type == PIPE
+				|| tmp->next->type == IN || tmp->next->type == OUT
+				|| tmp->next->type == HDOC || tmp->next->type == APP))
 			return (syntax_error_halper(tmp), 1);
 		tmp = tmp->next;
 	}
@@ -372,14 +370,20 @@ int	count_j(char *str, int i)
 
 int	expand_env_halper(char *str, int *i, t_expvar *exp, t_env *env)
 {
+	char	*ex_s;
+
 	exp->backup[exp->k - 1] = '\0';
 	exp->k = 0;
 	exp->final = ft_strjoin(exp->final, exp->backup);
-	if ((str[*i + 1] == '\"' && exp->quote != DQ) || \
-		str[*i + 1] == '\'' || str[*i + 1] == '?')
+	if ((str[*i + 1] == '\"' && exp->quote != DQ) || str[*i + 1] == '\''
+			|| str[*i + 1] == '?')
 	{
 		if (str[*i + 1] == '?')
-			exp->final = ft_strjoin(exp->final, ft_itoa(9999));
+		{
+			ex_s = ft_itoa(9999);
+			exp->final = ft_strjoin(exp->final, ex_s);
+			free(ex_s);
+		}
 		if (str[*i + 1] != '\"' && str[*i + 1] != '\'')
 			*i = *i + 1;
 		is_quote(str, *i, &exp->quote);
@@ -417,16 +421,16 @@ char	*expand_env(char *str, t_env *env, int state)
 	{
 		exp.backup[exp.k++] = str[i];
 		is_quote(str, i, &exp.quote);
-		if (state && ((str[i] == '$' && exp.quote != SQ) && ((ft_isalpha(str[i + 1])) \
-			|| str[i + 1] == '_' || str[i + 1] == '?' || str[i + 1] == '\'' \
-			|| str[i + 1] == '\"')))
+		if (state && ((str[i] == '$' && exp.quote != SQ) && ((ft_isalpha(str[i\
+							+ 1])) || str[i + 1] == '_' || str[i + 1] == '?'\
+					|| str[i + 1] == '\'' || str[i + 1] == '\"')))
 		{
 			if (expand_env_halper(str, &i, &exp, env))
 				continue ;
 		}
-		else if (!state && (str[i] == '$' && ((ft_isalpha(str[i + 1])) \
-			|| str[i + 1] == '_' || str[i + 1] == '?' || str[i + 1] == '\'' \
-			|| str[i + 1] == '\"')))
+		else if (!state && (str[i] == '$' && ((ft_isalpha(str[i + 1])) || str[i
+					+ 1] == '_' || str[i + 1] == '?' || str[i + 1] == '\''
+					|| str[i + 1] == '\"')))
 		{
 			if (expand_env_halper(str, &i, &exp, env))
 				continue ;
@@ -548,7 +552,7 @@ void	ambiguous_redirect(t_tokens **tokens)
 	tmp = *tokens;
 	while (tmp)
 	{
-		if ((tmp->type == IN || tmp->type == OUT || tmp->type == APP) \
+		if ((tmp->type == IN || tmp->type == OUT || tmp->type == APP)
 			&& tmp->next->is_d == 1 && !ft_strlen(tmp->next->str))
 			tmp->next->is_d = 2;
 		else if (tmp->type == HDOC && !check_quotes(tmp->next->str))
@@ -593,8 +597,8 @@ void	creat_nodes(t_data **data, t_tokens *tokens)
 		{
 			if (tmp->type == WORD)
 				new->args[j++] = ft_strdup(tmp->str);
-			else if (tmp->type == IN || tmp->type == OUT || \
-				tmp->type == APP || tmp->type == HDOC)
+			else if (tmp->type == IN || tmp->type == OUT || tmp->type == APP
+				|| tmp->type == HDOC)
 				tmp = tmp->next;
 			else if (tmp->type == PIPE)
 				break ;
@@ -617,9 +621,8 @@ void	creat_nodes(t_data **data, t_tokens *tokens)
 	}
 }
 
-void go_to_pipe(t_tokens **tokens)
+void	go_to_pipe(t_tokens **tokens)
 {
-
 	while (*tokens)
 	{
 		if ((*tokens)->type == PIPE)
@@ -689,7 +692,6 @@ void	open_hdoc(t_data **data, t_tokens *tokens, t_env *env)
 	}
 }
 
-
 void	open_files(t_data **data, t_tokens *tokens)
 {
 	t_tokens	*tmp;
@@ -701,8 +703,7 @@ void	open_files(t_data **data, t_tokens *tokens)
 	{
 		if (tmp->type == PIPE)
 			tmp_data = tmp_data->next;
-		if (tmp->type == IN || tmp->type == OUT \
-			|| tmp->type == APP)
+		if (tmp->type == IN || tmp->type == OUT || tmp->type == APP)
 		{
 			if (tmp->next->is_d == 2)
 			{
@@ -727,7 +728,7 @@ void	open_files(t_data **data, t_tokens *tokens)
 			}
 			else if (tmp->type == OUT)
 			{
-				tmp_data->out = open(tmp->next->str, \
+				tmp_data->out = open(tmp->next->str,
 					O_WRONLY | O_CREAT | O_TRUNC, 0644);
 				if (tmp_data->out == -1)
 				{
@@ -740,8 +741,8 @@ void	open_files(t_data **data, t_tokens *tokens)
 			}
 			else if (tmp->type == APP)
 			{
-				tmp_data->out = open(tmp->next->str, O_WRONLY \
-					| O_CREAT | O_APPEND, 0644);
+				tmp_data->out = open(tmp->next->str,
+					O_WRONLY | O_CREAT | O_APPEND, 0644);
 				if (tmp_data->out == -1)
 				{
 					write(2, "minishell: ", 11);
@@ -813,4 +814,3 @@ void	close_files(t_data *data)
 		tmp = tmp->next;
 	}
 }
-

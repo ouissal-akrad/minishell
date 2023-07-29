@@ -23,6 +23,8 @@
 		"tuple": "c",
 		"utility": "c",
 		"locale": "c",
-		"string": "c"
+		"string": "c",
+		"python.pythonPath": "/usr/local/bin/python3.7"
 	}
+
 }
