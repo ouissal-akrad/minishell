@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 00:16:06 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/27 20:22:58 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/29 02:27:29 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 # include "../libft/libft.h"
 # include "minishell_structs.h"
-#include "parsing/minishell_parsing.h"
-#include "execution/minishell_execution.h"
+# include "parsing/minishell_parsing.h"
+# include "execution/minishell_execution.h"
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>

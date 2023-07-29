@@ -1,16 +1,5 @@
 #include "minishell.h"
 
-// void	sig(int sig)
-// {
-// 	if (sig == SIGINT)
-// 	{
-// 		printf("\n");
-// 		rl_on_new_line();
-// 		rl_replace_line("", 0);
-// 		rl_redisplay();
-// 	}
-// }
-
 int	main(int argc, char *argv[], char *env[])
 {
 	char		*line;
@@ -22,8 +11,9 @@ int	main(int argc, char *argv[], char *env[])
 	t_data		*tmp;
 	(void)argc;
 	(void)argv;
-	
-	if(!*env)
+	sig();
+
+	if (!*env)
 	{
 		new_env = no_env();
 		new_env->flag = 1;
@@ -35,37 +25,46 @@ int	main(int argc, char *argv[], char *env[])
 	}
 	tokens = NULL;
 	data = NULL;
-
-	line = readline("minishell$ ");
-	while (line)
+	while (1)
 	{
-		// signal(SIGINT, &sig);
+		line = readline("minishell$ ");
+		if (!line)
+		{
+			printf("exit\n");
+			break ;
+		}
 		if (ft_strlen(line) == 0)
 		{
-			line = readline("minishell$ ");
+			free(line);
 			continue ;
 		}
-
 		add_history(line);
 		lexar(line, &tokens);
+		free(line);
 		add_is_d(&tokens);
 		if (syntax_error(tokens))
 		{
 			free_tokens(&tokens);
 			tokens = NULL;
-			line = readline("minishell$ ");
 			continue ;
 		}
-
 		expanding(&tokens, new_env);
+		if (!tokens)
+			continue ;
 		split_var_no_quote(&tokens);
 		ambiguous_redirect(&tokens);
 		remove_quotes(tokens);
 		remove_null_tokens(&tokens);
-		create_data(&data, tokens, new_env);
+		create_data(&data, &tokens, new_env);
+		if (!data)
+		{
+			free_tokens(&tokens);
+			tokens = NULL;
+			free(line);
+			continue ;
+		}
 
 		tmp_t = tokens;
-
 		// while (tmp_t)
 		// {
 		// 	printf("str = %s\n", tmp_t->str);
@@ -92,20 +91,18 @@ int	main(int argc, char *argv[], char *env[])
 		// 	tmp = tmp->next;
 		// }
 
+
+
 		// ME
 		direction(data,&new_env);
-		// close_files(data);
+		free_tokens(&tokens);
+		free_data(&data);
 		tokens = NULL;
-		// free_data(&data);
 		data = NULL;
-		line = readline("minishell$ ");
 	}
 	clear_history();
 	free_env(&new_env);
 	return (0);
 }
-
-
-
 
 //  if -1 no exucte
