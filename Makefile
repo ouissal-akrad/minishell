@@ -6,7 +6,7 @@
 #    By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/23 03:03:58 by bel-idri          #+#    #+#              #
-#    Updated: 2023/07/28 17:24:38 by bel-idri         ###   ########.fr        #
+#    Updated: 2023/07/29 07:00:10 by bel-idri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,8 @@ SRCS = mandatory/main.c \
 		mandatory/execution/builtins/my_exit.c \
 		mandatory/execution/builtins/my_export.c \
 		mandatory/execution/execution.c \
-		mandatory/parsing/parsing.c
+		mandatory/parsing/parsing.c \
+		mandatory/parsing/signals.c \
 
 SRCS_BONUS = bonus/main_bonus.c \
 	# bonus/execution/tttttt.c \

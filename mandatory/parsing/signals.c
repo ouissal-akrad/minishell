@@ -1,37 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoin.c                                       :+:      :+:    :+:   */
+/*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/23 11:42:12 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/29 01:51:20 by bel-idri         ###   ########.fr       */
+/*   Created: 2023/07/29 06:54:00 by bel-idri          #+#    #+#             */
+/*   Updated: 2023/07/29 09:21:31 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell_parsing.h"
 
-char	*ft_strjoin(char const *s1, char const *s2)
+void	sig_c(int sig)
 {
-	char	*str;
-	size_t	i;
-	size_t	j;
-
-	if (!s1 || !s2)
-		return (NULL);
-	str = (char *)ft_calloc(ft_strlen(s1) + ft_strlen(s2) + 1, sizeof(char));
-	if (!str)
-		return (NULL);
-	i = -1;
-	j = -1;
-	while (++i < ft_strlen(s1))
-		str[i] = s1[i];
-	while (++j < ft_strlen(s2))
+	if (sig == SIGINT)
 	{
-		str[i] = s2[j];
-		i++;
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
 	}
-	free((char *)s1);
-	return (str);
+}
+
+void	sig_d(int sig)
+{
+	if (sig == SIGQUIT)
+	{
+		return ;
+	}
+}
+
+void	sig(void)
+{
+	signal(SIGINT, sig_c);
+	signal(SIGQUIT, sig_d);
 }

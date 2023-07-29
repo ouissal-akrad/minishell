@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/28 21:59:53 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/29 20:34:56 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,12 @@ void	is_quote(char *str, int i, int *quote)
 		*quote = DQ;
 	else if (str[i] == '\"' && *quote == DQ)
 		*quote = OQ;
+}
+
+int	is_whitespace(char c)
+{
+	return (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f'
+		|| c == '\r');
 }
 
 int	count_tok(char *str)
@@ -47,17 +53,15 @@ int	count_tok(char *str)
 	return (count * 2);
 }
 
-char	*add_spaces(char *str)
+void	add_spaces_handler(char *str, char *new)
 {
-	char	*new;
-	int		quote;
-	int		i;
-	int		j;
+	int	quote;
+	int	i;
+	int	j;
 
-	new = (char *)ft_calloc((int)ft_strlen(str) + count_tok(str) + 1, 1); // free
-	quote = OQ;
 	i = -1;
 	j = 0;
+	quote = OQ;
 	while (str[++i])
 	{
 		is_quote(str, i, &quote);
@@ -65,14 +69,27 @@ char	*add_spaces(char *str)
 		{
 			new[j++] = ' ';
 			new[j++] = str[i];
-			if ((str[i] == '>' && str[i + 1] == '>' && !quote) \
-				|| (str[i] == '<' && str[i + 1] == '<' && !quote))
+			if ((str[i] == '>' && str[i + 1] == '>' && !quote) || \
+				(str[i] == '<' && str[i + 1] == '<' && !quote))
 				new[j++] = str[++i];
 			new[j++] = ' ';
 		}
 		else
 			new[j++] = str[i];
 	}
+}
+
+char	*add_spaces(char *str)
+{
+	char	*new;
+
+	new = ft_calloc(ft_strlen(str) + count_tok(str) + 1, sizeof(char));
+	if (!new)
+	{
+		free(str);
+		exit(1);
+	}
+	add_spaces_handler(str, new);
 	return (new);
 }
 
@@ -82,6 +99,11 @@ void	add_token(t_tokens **tokens, char *str, t_token type)
 	t_tokens	*tmp;
 
 	new = ft_calloc(1, sizeof(t_tokens));
+	if (!new)
+	{
+		free_tokens(tokens);
+		exit(1);
+	}
 	new->str = str;
 	new->type = type;
 	new->is_d = 0;
@@ -105,14 +127,13 @@ char	**split_tokens(char *str)
 	int		quote;
 	char	*str_spaces;
 
-	str_spaces = add_spaces(str); // free
-	free(str);
+	str_spaces = add_spaces(str);
 	i = -1;
 	quote = OQ;
 	while (str_spaces[++i])
 	{
 		is_quote(str_spaces, i, &quote);
-		if (!quote && (str_spaces[i] == ' ' || str_spaces[i + 1] == '\t'))
+		if (!quote && is_whitespace(str_spaces[i]))
 			str_spaces[i] = '\n';
 	}
 	tokens = ft_split(str_spaces, '\n');
@@ -128,8 +149,10 @@ void	free_tokens(t_tokens **tokens)
 	{
 		tmp = *tokens;
 		*tokens = (*tokens)->next;
-		free(tmp->str);
-		free(tmp->var);
+		if (tmp->str)
+			free(tmp->str);
+		if (tmp->var)
+			free(tmp->var);
 		free(tmp);
 	}
 }
@@ -185,14 +208,14 @@ int	check_quotes(char *str)
 	return (0);
 }
 
-int	check_dollar(char *str)
+int	check_char(char *str, char c)
 {
 	int	i;
 
 	i = -1;
 	while (str[++i])
 	{
-		if (str[i] == '$')
+		if (str[i] == c)
 			return (1);
 	}
 	return (0);
@@ -206,7 +229,7 @@ void	add_is_d(t_tokens **tokens)
 	while (tmp)
 	{
 		if (tmp->type == WORD && !check_quotes(tmp->str) \
-			&& check_dollar(tmp->str))
+			&& check_char(tmp->str, '$'))
 			tmp->is_d = 1;
 		tmp->var = ft_strdup(tmp->str);
 		tmp = tmp->next;
@@ -215,9 +238,9 @@ void	add_is_d(t_tokens **tokens)
 
 int	syntax_error_msg(char *str)
 {
-	ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
-	ft_putstr_fd(str, 2);
-	ft_putstr_fd("'\n", 2);
+	write(2, "minishell: syntax error near unexpected token `", 2);
+	write(2, str, ft_strlen(str));
+	write(2, "'\n", 2);
 	return (1);
 }
 
@@ -279,11 +302,10 @@ int	syntax_error(t_tokens *tokens)
 			return (syntax_error_msg("newline"));
 		else if (tmp->type == PIPE && (tmp->next->type == PIPE || i == 1))
 			return (syntax_error_msg("|"));
-		else if ((tmp->type == IN || tmp->type == OUT || \
-			tmp->type == HDOC || tmp->type == APP) && \
-			(!tmp->next || tmp->next->type == PIPE || \
-			tmp->next->type == IN || tmp->next->type == OUT \
-			|| tmp->next->type == HDOC || tmp->next->type == APP))
+		else if ((tmp->type == IN || tmp->type == OUT || tmp->type == HDOC \
+				|| tmp->type == APP) && (!tmp->next || tmp->next->type == PIPE \
+				|| tmp->next->type == IN || tmp->next->type == OUT \
+				|| tmp->next->type == HDOC || tmp->next->type == APP))
 			return (syntax_error_halper(tmp), 1);
 		tmp = tmp->next;
 	}
@@ -308,12 +330,10 @@ void	remove_quotes(t_tokens *tokens)
 			while (tmp->str[++i])
 			{
 				is_quote(tmp->str, i, &quote);
-				if (tmp->str[i] == '\'' && (quote == SQ || quote == OQ))
+				if ((tmp->str[i] == '\'' && (quote == SQ || quote == OQ)) \
+					|| (tmp->str[i] == '\"' && (quote == DQ || quote == OQ)))
 					continue ;
-				else if (tmp->str[i] == '\"' && (quote == DQ || quote == OQ))
-					continue ;
-				else
-					tmp->str[j++] = tmp->str[i];
+				tmp->str[j++] = tmp->str[i];
 			}
 			tmp->str[j] = '\0';
 		}
@@ -327,17 +347,21 @@ char	*replace_space(char *str)
 	int		j;
 	char	*new;
 
-	new = (char *)ft_calloc(ft_strlen(str) + 1, 1);
+	new = ft_calloc(ft_strlen(str) + 1, 1);
+	if (!new)
+	{
+		free(str);
+		exit(1);
+	}
 	i = -1;
 	j = 0;
 	while (str[++i])
 	{
-		if (str[i] == ' ')
+		if (is_whitespace(str[i]))
 			new[j++] = '\n';
 		else
 			new[j++] = str[i];
 	}
-	free(str);
 	return (new);
 }
 
@@ -351,19 +375,12 @@ char	*get_val(char *var, t_env *env, int quote)
 		if (!ft_strcmp(tmp->var, var))
 		{
 			if (quote == OQ)
-			{
-				free(var);
 				return (replace_space(tmp->val));
-			}
 			else
-			{
-				free(var);
 				return (ft_strdup(tmp->val));
-			}
 		}
 		tmp = tmp->next;
 	}
-	free(var);
 	return (NULL);
 }
 
@@ -377,21 +394,34 @@ int	count_j(char *str, int i)
 	return (j);
 }
 
-int	expand_env_halper(char *str, int *i, t_expvar *exp, t_env *env)
+int	expand_env_halper_2(int *i, char *str, t_expvar *exp)
 {
-	exp->backup[exp->k - 1] = '\0';
-	exp->k = 0;
-	exp->final = ft_strjoin(exp->final, exp->backup);
-	if ((str[*i + 1] == '\"' && exp->quote != DQ) || \
-		str[*i + 1] == '\'' || str[*i + 1] == '?')
+	char	*ex_s;
+
+	if ((str[*i + 1] == '\"' && exp->quote != DQ) \
+		|| str[*i + 1] == '\'' || str[*i + 1] == '?')
 	{
 		if (str[*i + 1] == '?')
-			exp->final = ft_strjoin(exp->final, ft_itoa(9999));
+		{
+			ex_s = ft_itoa(9999);
+			exp->final = ft_strjoin(exp->final, ex_s);
+			free(ex_s);
+		}
 		if (str[*i + 1] != '\"' && str[*i + 1] != '\'')
 			*i = *i + 1;
 		is_quote(str, *i, &exp->quote);
 		return (1);
 	}
+	return (0);
+}
+
+int	expand_env_halper(char *str, int *i, t_expvar *exp, t_env *env)
+{
+	exp->backup[exp->k - 1] = '\0';
+	exp->k = 0;
+	exp->final = ft_strjoin(exp->final, exp->backup);
+	if (expand_env_halper_2(i, str, exp))
+		return (1);
 	exp->j = count_j(str, *i);
 	if (exp->j == 1)
 	{
@@ -400,7 +430,7 @@ int	expand_env_halper(char *str, int *i, t_expvar *exp, t_env *env)
 	}
 	exp->var = ft_substr(str, *i + 1, exp->j - 1);
 	exp->val = get_val(exp->var, env, exp->quote);
-	// free(exp->var);
+	free(exp->var);
 	if (exp->val)
 	{
 		exp->final = ft_strjoin(exp->final, exp->val);
@@ -410,30 +440,41 @@ int	expand_env_halper(char *str, int *i, t_expvar *exp, t_env *env)
 	return (0);
 }
 
+void	exit_calloc_2(char *str)
+{
+	free(str);
+	exit(1);
+}
+
+int	the_big_check(char *str, int i, int state, t_expvar exp)
+{
+	if ((state && ((str[i] == '$' && exp.quote != SQ) && ((ft_isalpha \
+		(str[i + 1])) || str[i + 1] == '_' || str[i + 1] == '?' || \
+		str[i + 1] == '\'' || str[i + 1] == '\"'))) || \
+		((!state && (str[i] == '$' && ((ft_isalpha(str[i + 1])) \
+		|| str[i + 1] == '_' || str[i + 1] == '?' || str[i + 1] == '\'' \
+		|| str[i + 1] == '\"')))))
+		return (1);
+	return (0);
+}
+
 char	*expand_env(char *str, t_env *env, int state)
 {
 	int			i;
 	t_expvar	exp;
 
-	exp.final = ft_strdup("");
-	i = -1;
 	exp.quote = OQ;
 	exp.backup = ft_calloc(ft_strlen(str) + 1, 1);
+	if (!exp.backup)
+		exit_calloc_2(str);
+	exp.final = ft_strdup("");
+	i = -1;
 	exp.k = 0;
 	while (str[++i])
 	{
 		exp.backup[exp.k++] = str[i];
 		is_quote(str, i, &exp.quote);
-		if (state && ((str[i] == '$' && exp.quote != SQ) && ((ft_isalpha(str[i + 1])) \
-			|| str[i + 1] == '_' || str[i + 1] == '?' || str[i + 1] == '\'' \
-			|| str[i + 1] == '\"')))
-		{
-			if (expand_env_halper(str, &i, &exp, env))
-				continue ;
-		}
-		else if (!state && (str[i] == '$' && ((ft_isalpha(str[i + 1])) \
-			|| str[i + 1] == '_' || str[i + 1] == '?' || str[i + 1] == '\'' \
-			|| str[i + 1] == '\"')))
+		if (the_big_check(str, i, state, exp))
 		{
 			if (expand_env_halper(str, &i, &exp, env))
 				continue ;
@@ -455,7 +496,7 @@ void	expanding(t_tokens **tokens, t_env *env)
 	prv = tmp;
 	while (tmp)
 	{
-		if (tmp->type == WORD && check_dollar(tmp->str) && prv->type != HDOC)
+		if (tmp->type == WORD && check_char(tmp->str, '$') && prv->type != HDOC)
 		{
 			str = expand_env(tmp->str, env, 1);
 			free(tmp->str);
@@ -467,30 +508,28 @@ void	expanding(t_tokens **tokens, t_env *env)
 	}
 }
 
-int	check_newline(char *str)
+void	add_tok_split(char **split, t_tokens **tmp, t_tokens **tokens)
 {
 	int	i;
 
-	i = -1;
-	while (str[++i])
+	i = 0;
+	while (split[++i])
 	{
-		if (str[i] == '\n')
-			return (1);
+		add_token(tokens, ft_strdup(split[i]), WORD);
+		*tmp = (*tmp)->next;
 	}
-	return (0);
 }
 
 void	split_var_no_quote(t_tokens **tokens)
 {
 	t_tokens	*tmp;
 	t_tokens	*next;
-	int			i;
 	char		**split;
 
 	tmp = *tokens;
 	while (tmp)
 	{
-		if (tmp->type == WORD && check_newline(tmp->str))
+		if (tmp->type == WORD && check_char(tmp->str, '\n'))
 		{
 			next = tmp->next;
 			split = ft_split(tmp->str, '\n');
@@ -499,12 +538,7 @@ void	split_var_no_quote(t_tokens **tokens)
 			tmp->next = NULL;
 			free(tmp->str);
 			tmp->str = ft_strdup(split[0]);
-			i = 0;
-			while (split[++i])
-			{
-				add_token(tokens, ft_strdup(split[i]), WORD);
-				tmp = tmp->next;
-			}
+			add_tok_split(split, &tmp, tokens);
 			free_str(split);
 			tmp->next = next;
 		}
@@ -524,7 +558,8 @@ void	remove_null_tokens(t_tokens **tokens)
 		if (tmp->type == WORD && tmp->is_d == 1 && !ft_strlen(tmp->str))
 		{
 			prv->next = tmp->next;
-			free(tmp->str);
+			if (tmp->str)
+				free(tmp->str);
 			free(tmp);
 			tmp = prv->next;
 		}
@@ -579,54 +614,73 @@ int	count_n_tokens(t_tokens *tokens)
 	return (c);
 }
 
-void	creat_nodes(t_data **data, t_tokens *tokens)
+void	exit_calloc(t_data **data, t_tokens **tokens)
+{
+	free_data(data);
+	free_tokens(tokens);
+	exit(1);
+}
+
+void	ft_lstadddd_back(t_data **data, t_data *new)
+{
+	t_data	*tmp;
+
+	if (!*data)
+	{
+		*data = new;
+		return ;
+	}
+	tmp = *data;
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = new;
+}
+
+void	ft_lstnewnode(t_data *new, t_tokens **tokens)
+{
+	int	j;
+
+	j = 0;
+	while ((*tokens))
+	{
+		if ((*tokens)->type == WORD)
+			new->args[j++] = ft_strdup((*tokens)->str);
+		else if ((*tokens)->type == IN || (*tokens)->type == OUT \
+			|| (*tokens)->type == APP \
+			|| (*tokens)->type == HDOC)
+			(*tokens) = (*tokens)->next;
+		else if ((*tokens)->type == PIPE)
+			break ;
+		(*tokens) = (*tokens)->next;
+	}
+	new->in = 0;
+	new->out = 1;
+	new->next = NULL;
+}
+
+void	creat_nodes(t_data **data, t_tokens **tokens)
 {
 	t_tokens	*tmp;
 	t_data		*new;
-	t_data		*tmp_data;
-	int			i;
-	int			j;
 
-	tmp = tokens;
-	i = 0;
+	tmp = *tokens;
 	while (tmp)
 	{
-		new = (t_data *)malloc(sizeof(t_data));
+		new = ft_calloc(1, sizeof(t_data));
 		if (!new)
-			exit(1);
-		new->args = ft_calloc(count_n_tokens(tokens) + 1, sizeof(char *));
-		j = 0;
-		while (tmp)
-		{
-			if (tmp->type == WORD)
-				new->args[j++] = ft_strdup(tmp->str);
-			else if (tmp->type == IN || tmp->type == OUT || \
-				tmp->type == APP || tmp->type == HDOC)
-				tmp = tmp->next;
-			else if (tmp->type == PIPE)
-				break ;
-			tmp = tmp->next;
-		}
-		new->in = 0;
-		new->out = 1;
-		new->next = NULL;
-		tmp_data = *data;
-		if (!*data)
-			*data = new;
-		else
-		{
-			while (tmp_data->next)
-				tmp_data = tmp_data->next;
-			tmp_data->next = new;
-		}
+			exit_calloc(data, tokens);
+		new->args = ft_calloc(count_n_tokens(tmp) + 1, sizeof(char *));
+		if (!new->args)
+			exit_calloc(data, tokens);
+		ft_lstnewnode(new, &tmp);
+		ft_lstadddd_back(data, new);
 		if (tmp)
 			tmp = tmp->next;
 	}
 }
 
-void go_to_pipe(t_tokens **tokens)
+void	go_to_pipe(t_tokens **tokens)
 {
-
 	while (*tokens)
 	{
 		if ((*tokens)->type == PIPE)
@@ -635,60 +689,90 @@ void go_to_pipe(t_tokens **tokens)
 	}
 }
 
-void	open_hdoc(t_data **data, t_tokens *tokens, t_env *env)
+void	open_files_error(t_tokens *tmp)
+{
+	write(2, "minishell: ", 11);
+	write(2, tmp->next->str, ft_strlen(tmp->next->str));
+	write(2, ": ", 2);
+	perror("");
+	go_to_pipe(&tmp);
+}
+
+void	open_hdoc_helper(t_data *tmp_data, t_tokens *tmp, \
+	t_env *env, char *name)
+{
+	char		*line;
+	char		*exp;
+
+	while (1)
+	{
+		line = readline("> ");
+		if (!line)
+			break ;
+		if (!ft_strcmp(line, tmp->next->str))
+			break ;
+		if (tmp->next->is_d == 3)
+		{
+			exp = expand_env(line, env, 0);
+			free(line);
+			line = ft_strdup(exp);
+			free(exp);
+		}
+		write(tmp_data->in, line, ft_strlen(line));
+		write(tmp_data->in, "\n", 1);
+		free(line);
+	}
+	close(tmp_data->in);
+	tmp_data->in = open(name, O_RDONLY);
+	free(name);
+	free(line);
+}
+
+char	*ft_strjoin_free_2(char *s1, char *s2)
+{
+	char	*str;
+	size_t	i;
+	size_t	j;
+
+	if (!s1 || !s2)
+		return (NULL);
+	str = (char *)ft_calloc(ft_strlen(s1) + ft_strlen(s2) + 1, sizeof(char));
+	if (!str)
+		return (NULL);
+	i = -1;
+	j = -1;
+	while (++i < ft_strlen(s1))
+		str[i] = s1[i];
+	while (++j < ft_strlen(s2))
+	{
+		str[i] = s2[j];
+		i++;
+	}
+	free(s2);
+	return (str);
+}
+
+void	open_hdoc(t_data **data, t_tokens **tokens, t_env *env)
 {
 	t_tokens	*tmp;
 	t_data		*tmp_data;
-	char		*line;
-	char		*exp;
-	int			i;
+	int			n;
+	char		*name;
 
-	tmp = tokens;
-	i = 0;
+	tmp = *tokens;
 	tmp_data = *data;
+	n = 0;
 	while (tmp)
 	{
 		if (tmp->type == PIPE)
 			tmp_data = tmp_data->next;
 		if (tmp->type == HDOC)
 		{
-			unlink("/tmp/hdoc");
-			tmp_data->in = open("/tmp/hdoc", O_RDWR | O_CREAT | O_TRUNC, 0644);
+			name = ft_strjoin_free_2("/tmp/hdoc", ft_itoa(n++));
+			tmp_data->in = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 			if (tmp_data->in == -1)
-			{
-				write(2, "minishell: ", 11);
-				write(2, tmp->next->str, ft_strlen(tmp->next->str));
-				write(2, ": ", 2);
-				perror("");
-				go_to_pipe(&tmp);
-			}
-			while (1)
-			{
-				line = readline("> ");
-				if (!line)
-				{
-					close(tmp_data->in);
-					tmp_data->in = open("/tmp/hdoc", O_RDONLY);
-					break ;
-				}
-				if (!ft_strcmp(line, tmp->next->str))
-				{
-					close(tmp_data->in);
-					tmp_data->in = open("/tmp/hdoc", O_RDONLY);
-					break ;
-				}
-				if (tmp->next->is_d == 3)
-				{
-					exp = expand_env(line, env, 0);
-					free(line);
-					line = ft_strdup(exp);
-					free(exp);
-				}
-				write(tmp_data->in, line, ft_strlen(line));
-				write(tmp_data->in, "\n", 1);
-				free(line);
-			}
-			free(line);
+				open_files_error(tmp);
+			open_hdoc_helper(tmp_data, tmp, env, name);
 			tmp = tmp->next;
 		}
 		if (tmp)
@@ -696,77 +780,62 @@ void	open_hdoc(t_data **data, t_tokens *tokens, t_env *env)
 	}
 }
 
+void	open_files_helper(t_data *tmp_data, t_tokens *tmp)
+{
+	if (tmp->type == IN)
+	{
+		tmp_data->in = open(tmp->next->str, O_RDONLY);
+		if (tmp_data->in == -1)
+			open_files_error(tmp);
+	}
+	else if (tmp->type == OUT)
+	{
+		tmp_data->out = open(tmp->next->str, \
+			O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (tmp_data->out == -1)
+			open_files_error(tmp);
+	}
+	else if (tmp->type == APP)
+	{
+		tmp_data->out = open(tmp->next->str, \
+			O_WRONLY | O_CREAT | O_APPEND, 0644);
+		if (tmp_data->out == -1)
+			open_files_error(tmp);
+	}
+	if (tmp)
+		tmp = tmp->next;
+}
 
-void	open_files(t_data **data, t_tokens *tokens)
+void	open_files(t_data **data, t_tokens **tokens)
 {
 	t_tokens	*tmp;
 	t_data		*tmp_data;
 
-	tmp = tokens;
+	tmp = *tokens;
 	tmp_data = *data;
 	while (tmp)
 	{
 		if (tmp->type == PIPE)
 			tmp_data = tmp_data->next;
-		if (tmp->type == IN || tmp->type == OUT \
-			|| tmp->type == APP)
+		if (tmp->type == IN || tmp->type == OUT || tmp->type == APP)
 		{
 			if (tmp->next->is_d == 2)
 			{
 				write(2, "minishell: ", 11);
 				write(2, tmp->next->var, ft_strlen(tmp->next->var));
 				write(2, ": ambiguous redirect\n", 21);
-				tmp_data->in = -1;
 				go_to_pipe(&tmp);
+				tmp_data->in = -1;
 				continue ;
 			}
-			else if (tmp->type == IN)
-			{
-				tmp_data->in = open(tmp->next->str, O_RDONLY);
-				if (tmp_data->in == -1)
-				{
-					write(2, "minishell: ", 11);
-					write(2, tmp->next->str, ft_strlen(tmp->next->str));
-					write(2, ": ", 2);
-					perror("");
-					go_to_pipe(&tmp);
-				}
-			}
-			else if (tmp->type == OUT)
-			{
-				tmp_data->out = open(tmp->next->str, \
-					O_WRONLY | O_CREAT | O_TRUNC, 0644);
-				if (tmp_data->out == -1)
-				{
-					write(2, "minishell: ", 11);
-					write(2, tmp->next->str, ft_strlen(tmp->next->str));
-					write(2, ": ", 2);
-					perror("");
-					go_to_pipe(&tmp);
-				}
-			}
-			else if (tmp->type == APP)
-			{
-				tmp_data->out = open(tmp->next->str, O_WRONLY \
-					| O_CREAT | O_APPEND, 0644);
-				if (tmp_data->out == -1)
-				{
-					write(2, "minishell: ", 11);
-					write(2, tmp->next->str, ft_strlen(tmp->next->str));
-					write(2, ": ", 2);
-					perror("");
-					go_to_pipe(&tmp);
-				}
-			}
-			if (tmp)
-				tmp = tmp->next;
+			open_files_helper(tmp_data, tmp);
 		}
 		if (tmp)
 			tmp = tmp->next;
 	}
 }
 
-void	create_data(t_data **data, t_tokens *tokens, t_env *env)
+void	create_data(t_data **data, t_tokens **tokens, t_env *env)
 {
 	creat_nodes(data, tokens);
 	open_hdoc(data, tokens, env);
@@ -786,7 +855,8 @@ void	free_data(t_data **data)
 		i = -1;
 		while (tmp->args[++i])
 			free(tmp->args[i]);
-		free(tmp->args);
+		if (tmp->args)
+			free(tmp->args);
 		tmp = tmp->next;
 		free(prev);
 	}
@@ -820,4 +890,3 @@ void	close_files(t_data *data)
 		tmp = tmp->next;
 	}
 }
-
