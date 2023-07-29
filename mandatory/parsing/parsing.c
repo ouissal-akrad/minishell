@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/29 06:09:08 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/29 06:14:36 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char	*add_spaces(char *str)
 	int		i;
 	int		j;
 
-	new = ft_calloc((int)ft_strlen(str) + count_tok(str) + 1, 1);
+	new = ft_calloc(ft_strlen(str) + count_tok(str) + 1, sizeof(char));
 	if (!new)
 	{
 		free(str);
@@ -623,7 +623,7 @@ void	creat_nodes(t_data **data, t_tokens **tokens)
 			free_tokens(tokens);
 			exit(1);
 		}
-		new->args = ft_calloc(count_n_tokens(tokens) + 1, sizeof(char *));
+		new->args = ft_calloc(count_n_tokens(tmp) + 1, sizeof(char *));
 		if (!new->args)
 		{
 			free_data(data);
@@ -669,7 +669,7 @@ void	go_to_pipe(t_tokens **tokens)
 	}
 }
 
-void	open_hdoc(t_data **data, t_tokens *tokens, t_env *env)
+void	open_hdoc(t_data **data, t_tokens **tokens, t_env *env)
 {
 	t_tokens	*tmp;
 	t_data		*tmp_data;
@@ -677,7 +677,7 @@ void	open_hdoc(t_data **data, t_tokens *tokens, t_env *env)
 	char		*exp;
 	int			i;
 
-	tmp = tokens;
+	tmp = *tokens;
 	i = 0;
 	tmp_data = *data;
 	while (tmp)
@@ -730,12 +730,12 @@ void	open_hdoc(t_data **data, t_tokens *tokens, t_env *env)
 	}
 }
 
-void	open_files(t_data **data, t_tokens *tokens)
+void	open_files(t_data **data, t_tokens **tokens)
 {
 	t_tokens	*tmp;
 	t_data		*tmp_data;
 
-	tmp = tokens;
+	tmp = *tokens;
 	tmp_data = *data;
 	while (tmp)
 	{
@@ -798,7 +798,7 @@ void	open_files(t_data **data, t_tokens *tokens)
 	}
 }
 
-void	create_data(t_data **data, t_tokens *tokens, t_env *env)
+void	create_data(t_data **data, t_tokens **tokens, t_env *env)
 {
 	creat_nodes(data, tokens);
 	open_hdoc(data, tokens, env);

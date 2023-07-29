@@ -11,8 +11,14 @@
 // 	}
 // }
 
+void ff(void)
+{
+	system("leaks minishell");
+}
+
 int	main(int argc, char *argv[], char *env[])
 {
+	atexit(ff);
 	char		*line;
 	t_tokens	*tokens;
 	t_data		*data;
@@ -50,25 +56,22 @@ int	main(int argc, char *argv[], char *env[])
 		}
 		add_history(line);
 		lexar(line, &tokens);
+		free(line);
 		add_is_d(&tokens);
 		if (syntax_error(tokens))
 		{
 			free_tokens(&tokens);
 			tokens = NULL;
-			free(line);
 			continue ;
 		}
 		expanding(&tokens, new_env);
 		if (!tokens)
-		{
-			free(line);
 			continue ;
-		}
 		split_var_no_quote(&tokens);
 		ambiguous_redirect(&tokens);
 		remove_quotes(tokens);
 		remove_null_tokens(&tokens);
-		create_data(&data, tokens, new_env);
+		create_data(&data, &tokens, new_env);
 
 		if (!data)
 		{
@@ -110,7 +113,6 @@ int	main(int argc, char *argv[], char *env[])
 		// ME
 		// direction(data,&new_env);
 
-		free(line);
 		free_tokens(&tokens);
 		free_data(&data);
 		tokens = NULL;
