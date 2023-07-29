@@ -64,8 +64,6 @@ int	main(int argc, char *argv[], char *env[])
 		remove_null_tokens(&tokens);
 		create_data(&data, tokens, new_env);
 
-
-
 		tmp_t = tokens;
 
 		// while (tmp_t)
