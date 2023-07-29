@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/29 08:08:06 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/29 09:13:22 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -433,20 +433,35 @@ int	expand_env_halper(char *str, int *i, t_expvar *exp, t_env *env)
 	return (0);
 }
 
+void	exit_calloc_2(char *str)
+{
+	free(str);
+	exit(1);
+}
+
+// int	the_big_check(char *str, int i, int state, t_expvar exp)
+// {
+// 	if ((state && ((str[i] == '$' && exp.quote != SQ) && ((ft_isalpha \
+// 		(str[i + 1])) || str[i + 1] == '_' || str[i + 1] == '?' || \
+// 		str[i + 1] == '\'' || str[i + 1] == '\"'))) ||
+// 		((!state && (str[i] == '$' && ((ft_isalpha(str[i + 1])) \
+// 		|| str[i + 1] == '_' || str[i + 1] == '?' || str[i + 1] == '\'' \
+// 		|| str[i + 1] == '\"')))))
+// 		return (1);
+// 	return (0);
+// }
+
 char	*expand_env(char *str, t_env *env, int state)
 {
 	int			i;
 	t_expvar	exp;
 
-	exp.final = ft_strdup("");
-	i = -1;
 	exp.quote = OQ;
 	exp.backup = ft_calloc(ft_strlen(str) + 1, 1);
 	if (!exp.backup)
-	{
-		free(str);
-		exit(1);
-	}
+		exit_calloc_2(str);
+	exp.final = ft_strdup("");
+	i = -1;
 	exp.k = 0;
 	while (str[++i])
 	{
@@ -460,8 +475,8 @@ char	*expand_env(char *str, t_env *env, int state)
 				continue ;
 		}
 		else if (!state && (str[i] == '$' && ((ft_isalpha(str[i + 1])) \
-			|| str[i + 1] == '_' || str[i + 1] == '?' || str[i + 1] == \
-			'\''|| str[i + 1] == '\"')))
+			|| str[i + 1] == '_' || str[i + 1] == '?' || str[i + 1] == '\'' \
+			|| str[i + 1] == '\"')))
 		{
 			if (expand_env_halper(str, &i, &exp, env))
 				continue ;
@@ -495,11 +510,22 @@ void	expanding(t_tokens **tokens, t_env *env)
 	}
 }
 
+void	add_tok_split(char **split, t_tokens **tmp, t_tokens **tokens)
+{
+	int	i;
+
+	i = 0;
+	while (split[++i])
+	{
+		add_token(tokens, ft_strdup(split[i]), WORD);
+		*tmp = (*tmp)->next;
+	}
+}
+
 void	split_var_no_quote(t_tokens **tokens)
 {
 	t_tokens	*tmp;
 	t_tokens	*next;
-	int			i;
 	char		**split;
 
 	tmp = *tokens;
@@ -514,12 +540,7 @@ void	split_var_no_quote(t_tokens **tokens)
 			tmp->next = NULL;
 			free(tmp->str);
 			tmp->str = ft_strdup(split[0]);
-			i = 0;
-			while (split[++i])
-			{
-				add_token(tokens, ft_strdup(split[i]), WORD);
-				tmp = tmp->next;
-			}
+			add_tok_split(split, &tmp, tokens);
 			free_str(split);
 			tmp->next = next;
 		}
@@ -539,7 +560,8 @@ void	remove_null_tokens(t_tokens **tokens)
 		if (tmp->type == WORD && tmp->is_d == 1 && !ft_strlen(tmp->str))
 		{
 			prv->next = tmp->next;
-			free(tmp->str);
+			if (tmp->str)
+				free(tmp->str);
 			free(tmp);
 			tmp = prv->next;
 		}
@@ -594,56 +616,66 @@ int	count_n_tokens(t_tokens *tokens)
 	return (c);
 }
 
+void	exit_calloc(t_data **data, t_tokens **tokens)
+{
+	free_data(data);
+	free_tokens(tokens);
+	exit(1);
+}
+
+void	ft_lstadddd_back(t_data **data, t_data *new)
+{
+	t_data	*tmp;
+
+	if (!*data)
+	{
+		*data = new;
+		return ;
+	}
+	tmp = *data;
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = new;
+}
+
+void	ft_lstnewnode(t_data *new, t_tokens **tokens)
+{
+	int	j;
+
+	j = 0;
+	while ((*tokens))
+	{
+		if ((*tokens)->type == WORD)
+			new->args[j++] = ft_strdup((*tokens)->str);
+		else if ((*tokens)->type == IN || (*tokens)->type == OUT \
+			|| (*tokens)->type == APP \
+			|| (*tokens)->type == HDOC)
+			(*tokens) = (*tokens)->next;
+		else if ((*tokens)->type == PIPE)
+			break ;
+		(*tokens) = (*tokens)->next;
+	}
+	new->in = 0;
+	new->out = 1;
+	new->next = NULL;
+}
+
 void	creat_nodes(t_data **data, t_tokens **tokens)
 {
 	t_tokens	*tmp;
 	t_data		*new;
-	t_data		*tmp_data;
-	int			i;
-	int			j;
 
 	tmp = *tokens;
-	i = 0;
 	while (tmp)
 	{
 		new = ft_calloc(1, sizeof(t_data));
 		if (!new)
-		{
-			free_data(data);
-			free_tokens(tokens);
-			exit(1);
-		}
+			exit_calloc(data, tokens);
 		new->args = ft_calloc(count_n_tokens(tmp) + 1, sizeof(char *));
 		if (!new->args)
-		{
-			free_data(data);
-			free_tokens(tokens);
-			exit(1);
-		}
-		j = 0;
-		while (tmp)
-		{
-			if (tmp->type == WORD)
-				new->args[j++] = ft_strdup(tmp->str);
-			else if (tmp->type == IN || tmp->type == OUT || tmp->type == APP \
-				|| tmp->type == HDOC)
-				tmp = tmp->next;
-			else if (tmp->type == PIPE)
-				break ;
-			tmp = tmp->next;
-		}
-		new->in = 0;
-		new->out = 1;
-		new->next = NULL;
-		tmp_data = *data;
-		if (!*data)
-			*data = new;
-		else
-		{
-			while (tmp_data->next)
-				tmp_data = tmp_data->next;
-			tmp_data->next = new;
-		}
+			exit_calloc(data, tokens);
+		ft_lstnewnode(new, &tmp);
+		ft_lstadddd_back(data, new);
 		if (tmp)
 			tmp = tmp->next;
 	}
