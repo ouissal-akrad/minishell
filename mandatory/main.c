@@ -1,24 +1,7 @@
 #include "minishell.h"
 
-// void	sig(int sig)
-// {
-// 	if (sig == SIGINT)
-// 	{
-// 		printf("\n");
-// 		rl_on_new_line();
-// 		rl_replace_line("", 0);
-// 		rl_redisplay();
-// 	}
-// }
-
-void ff(void)
-{
-	system("leaks minishell");
-}
-
 int	main(int argc, char *argv[], char *env[])
 {
-	atexit(ff);
 	char		*line;
 	t_tokens	*tokens;
 	t_data		*data;
@@ -28,6 +11,8 @@ int	main(int argc, char *argv[], char *env[])
 	t_data		*tmp;
 	(void)argc;
 	(void)argv;
+	sig();
+
 	if (!*env)
 	{
 		new_env = no_env();
@@ -42,7 +27,6 @@ int	main(int argc, char *argv[], char *env[])
 	data = NULL;
 	while (1)
 	{
-		// signal(SIGINT, &sig);
 		line = readline("minishell$ ");
 		if (!line)
 		{
