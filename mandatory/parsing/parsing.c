@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/29 09:21:07 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/29 20:12:32 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -698,7 +698,8 @@ void	open_files_error(t_tokens *tmp)
 	go_to_pipe(&tmp);
 }
 
-void	open_hdoc_helper(t_data *tmp_data, t_tokens *tmp, t_env *env)
+void	open_hdoc_helper(t_data *tmp_data, t_tokens *tmp, \
+	t_env *env, char *name)
 {
 	char		*line;
 	char		*exp;
@@ -721,28 +722,56 @@ void	open_hdoc_helper(t_data *tmp_data, t_tokens *tmp, t_env *env)
 		free(line);
 	}
 	close(tmp_data->in);
-	tmp_data->in = open("/tmp/hdoc", O_RDONLY);
+	tmp_data->in = open(name, O_RDONLY);
+	free(name);
 	free(line);
+}
+
+char	*ft_strjoin_free_2(char *s1, char *s2)
+{
+	char	*str;
+	size_t	i;
+	size_t	j;
+
+	if (!s1 || !s2)
+		return (NULL);
+	str = (char *)ft_calloc(ft_strlen(s1) + ft_strlen(s2) + 1, sizeof(char));
+	if (!str)
+		return (NULL);
+	i = -1;
+	j = -1;
+	while (++i < ft_strlen(s1))
+		str[i] = s1[i];
+	while (++j < ft_strlen(s2))
+	{
+		str[i] = s2[j];
+		i++;
+	}
+	free(s2);
+	return (str);
 }
 
 void	open_hdoc(t_data **data, t_tokens **tokens, t_env *env)
 {
 	t_tokens	*tmp;
 	t_data		*tmp_data;
+	int			n;
+	char		*name;
 
 	tmp = *tokens;
 	tmp_data = *data;
+	n = 0;
 	while (tmp)
 	{
 		if (tmp->type == PIPE)
 			tmp_data = tmp_data->next;
 		if (tmp->type == HDOC)
 		{
-			unlink("/tmp/hdoc");
-			tmp_data->in = open("/tmp/hdoc", O_RDWR | O_CREAT | O_TRUNC, 0644);
+			name = ft_strjoin_free_2("/tmp/hdoc", ft_itoa(n++));
+			tmp_data->in = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 			if (tmp_data->in == -1)
 				open_files_error(tmp);
-			open_hdoc_helper(tmp_data, tmp, env);
+			open_hdoc_helper(tmp_data, tmp, env, name);
 			tmp = tmp->next;
 		}
 		if (tmp)
