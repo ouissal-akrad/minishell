@@ -6,10 +6,10 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/29 19:21:11 by ouakrad          ###   ########.fr       */
-/*   Updated: 2023/07/29 20:34:56 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/29 22:31:29 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "minishell_parsing.h"
 
@@ -23,6 +23,30 @@ void	is_quote(char *str, int i, int *quote)
 		*quote = DQ;
 	else if (str[i] == '\"' && *quote == DQ)
 		*quote = OQ;
+}
+
+char	*my_ft_strjoin_1(char *s1, char *s2)
+{
+	char	*str;
+	size_t	i;
+	size_t	j;
+
+	if (!s1 || !s2)
+		return (NULL);
+	str = (char *)ft_calloc(ft_strlen(s1) + ft_strlen(s2) + 1, sizeof(char));
+	if (!str)
+		return (NULL);
+	i = -1;
+	j = -1;
+	while (++i < ft_strlen(s1))
+		str[i] = s1[i];
+	while (++j < ft_strlen(s2))
+	{
+		str[i] = s2[j];
+		i++;
+	}
+	free(s1);
+	return (str);
 }
 
 int	is_whitespace(char c)
@@ -405,7 +429,7 @@ int	expand_env_halper_2(int *i, char *str, t_expvar *exp)
 		if (str[*i + 1] == '?')
 		{
 			ex_s = ft_itoa(9999);
-			exp->final = ft_strjoin(exp->final, ex_s);
+			exp->final = my_ft_strjoin_1(exp->final, ex_s);
 			free(ex_s);
 		}
 		if (str[*i + 1] != '\"' && str[*i + 1] != '\'')
@@ -420,13 +444,13 @@ int	expand_env_halper(char *str, int *i, t_expvar *exp, t_env *env)
 {
 	exp->backup[exp->k - 1] = '\0';
 	exp->k = 0;
-	exp->final = ft_strjoin(exp->final, exp->backup);
+	exp->final = my_ft_strjoin_1(exp->final, exp->backup);
 	if (expand_env_halper_2(i, str, exp))
 		return (1);
 	exp->j = count_j(str, *i);
 	if (exp->j == 1)
 	{
-		exp->final = ft_strjoin(exp->final, "$");
+		exp->final = my_ft_strjoin_1(exp->final, "$");
 		return (1);
 	}
 	exp->var = ft_substr(str, *i + 1, exp->j - 1);
@@ -434,7 +458,7 @@ int	expand_env_halper(char *str, int *i, t_expvar *exp, t_env *env)
 	free(exp->var);
 	if (exp->val)
 	{
-		exp->final = ft_strjoin(exp->final, exp->val);
+		exp->final = my_ft_strjoin_1(exp->final, exp->val);
 		free(exp->val);
 	}
 	*i = *i + exp->j - 1;
@@ -482,7 +506,7 @@ char	*expand_env(char *str, t_env *env, int state)
 		}
 	}
 	exp.backup[exp.k] = '\0';
-	exp.final = ft_strjoin(exp.final, exp.backup);
+	exp.final = my_ft_strjoin_1(exp.final, exp.backup);
 	free(exp.backup);
 	return (exp.final);
 }
@@ -550,23 +574,25 @@ void	split_var_no_quote(t_tokens **tokens)
 void	remove_null_tokens(t_tokens **tokens)
 {
 	t_tokens	*tmp;
-	t_tokens	*prv;
+	t_tokens	*n;
 
 	tmp = *tokens;
-	prv = tmp;
+	n = tmp;
 	while (tmp)
 	{
 		if (tmp->type == WORD && tmp->is_d == 1 && !ft_strlen(tmp->str))
 		{
-			prv->next = tmp->next;
+			n->next = tmp->next;
 			if (tmp->str)
 				free(tmp->str);
+			if (tmp->var)
+				free(tmp->var);
 			free(tmp);
-			tmp = prv->next;
+			tmp = n->next;
 		}
 		else
 		{
-			prv = tmp;
+			n = tmp;
 			tmp = tmp->next;
 		}
 	}
@@ -729,7 +755,7 @@ void	open_hdoc_helper(t_data *tmp_data, t_tokens *tmp, \
 	free(line);
 }
 
-char	*ft_strjoin_free_2(char *s1, char *s2)
+char	*my_ft_strjoin_2(char *s1, char *s2)
 {
 	char	*str;
 	size_t	i;
@@ -769,7 +795,7 @@ void	open_hdoc(t_data **data, t_tokens **tokens, t_env *env)
 			tmp_data = tmp_data->next;
 		if (tmp->type == HDOC)
 		{
-			name = ft_strjoin_free_2("/tmp/hdoc", ft_itoa(n++));
+			name = my_ft_strjoin_2("/tmp/hdoc", ft_itoa(n++));
 			tmp_data->in = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 			if (tmp_data->in == -1)
 				open_files_error(tmp);

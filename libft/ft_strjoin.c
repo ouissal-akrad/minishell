@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 11:42:12 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/29 01:51:20 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/29 21:06:29 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,5 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		str[i] = s2[j];
 		i++;
 	}
-	free((char *)s1);
 	return (str);
 }
