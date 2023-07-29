@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/29 23:28:25 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/29 23:52:11 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -571,7 +571,16 @@ void	split_var_no_quote(t_tokens **tokens)
 	}
 }
 
-void 	remove_null_tokens(t_tokens **tokens)
+void	free_remove(t_tokens *tmp)
+{
+	if (tmp->str)
+		free(tmp->str);
+	if (tmp->var)
+		free(tmp->var);
+	free(tmp);
+}
+
+void	remove_null_tokens(t_tokens **tokens)
 {
 	t_tokens	*tmp;
 	t_tokens	*prv;
@@ -581,11 +590,7 @@ void 	remove_null_tokens(t_tokens **tokens)
 	while (tmp && tmp->type == WORD && tmp->is_d == 1 && !ft_strlen(tmp->str))
 	{
 		*tokens = tmp->next;
-		if (tmp->str)
-			free(tmp->str);
-		if (tmp->var)
-			free(tmp->var);
-		free(tmp);
+		free_remove(tmp);
 		tmp = *tokens;
 	}
 	while (tmp)
@@ -593,11 +598,7 @@ void 	remove_null_tokens(t_tokens **tokens)
 		if (tmp->type == WORD && tmp->is_d == 1 && !ft_strlen(tmp->str))
 		{
 			prv->next = tmp->next;
-			if (tmp->str)
-				free(tmp->str);
-			if (tmp->var)
-				free(tmp->var);
-			free(tmp);
+			free_remove(tmp);
 			tmp = prv->next;
 		}
 		else
@@ -925,5 +926,5 @@ void	close_files(t_data *data)
 		if (tmp->out != 1)
 			close(tmp->out);
 		tmp = tmp->next;
-  }
+	}
 }
