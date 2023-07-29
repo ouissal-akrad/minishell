@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/28 21:59:53 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/29 01:48:52 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -337,7 +337,7 @@ char	*replace_space(char *str)
 		else
 			new[j++] = str[i];
 	}
-	free(str);
+	// free(str);
 	return (new);
 }
 
@@ -351,19 +351,12 @@ char	*get_val(char *var, t_env *env, int quote)
 		if (!ft_strcmp(tmp->var, var))
 		{
 			if (quote == OQ)
-			{
-				free(var);
 				return (replace_space(tmp->val));
-			}
 			else
-			{
-				free(var);
 				return (ft_strdup(tmp->val));
-			}
 		}
 		tmp = tmp->next;
 	}
-	free(var);
 	return (NULL);
 }
 
@@ -400,7 +393,7 @@ int	expand_env_halper(char *str, int *i, t_expvar *exp, t_env *env)
 	}
 	exp->var = ft_substr(str, *i + 1, exp->j - 1);
 	exp->val = get_val(exp->var, env, exp->quote);
-	// free(exp->var);
+	free(exp->var);
 	if (exp->val)
 	{
 		exp->final = ft_strjoin(exp->final, exp->val);

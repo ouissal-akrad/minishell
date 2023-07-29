@@ -19,7 +19,7 @@ int	main(int argc, char *argv[], char *env[])
 	t_env		*new_env;
 
 	// t_tokens	*tmp_t;
-	t_data		*tmp;
+	// t_data		*tmp;
 	(void)argc;
 	(void)argv;
 
@@ -72,8 +72,9 @@ int	main(int argc, char *argv[], char *env[])
 		create_data(&data, tokens, new_env);
 
 
-		// tmp_t = tokens;
 
+
+		// tmp_t = tokens;
 		// while (tmp_t)
 		// {
 		// 	printf("str = %s\n", tmp_t->str);
@@ -84,22 +85,22 @@ int	main(int argc, char *argv[], char *env[])
 		// 	tmp_t = tmp_t->next;
 		// }
 
-		tmp = data;
-		int i = 0;
 
-		while (tmp)
-		{
-			i = 0;
-			while (tmp->args[i])
-			{
-				printf("args[%d] = %s\n", i, tmp->args[i]);
-				i++;
-			}
-			printf("in = %d\n", tmp->in);
-			printf("out = %d\n", tmp->out);
-			printf("-------------------\n");
-			tmp = tmp->next;
-		}
+		// tmp = data;
+		// int i = 0;
+		// while (tmp)
+		// {
+		// 	i = 0;
+		// 	while (tmp->args[i])
+		// 	{
+		// 		printf("args[%d] = %s\n", i, tmp->args[i]);
+		// 		i++;
+		// 	}
+		// 	printf("in = %d\n", tmp->in);
+		// 	printf("out = %d\n", tmp->out);
+		// 	printf("-------------------\n");
+		// 	tmp = tmp->next;
+		// }
 
 		// ME
 		// direction(data,&new_env);
