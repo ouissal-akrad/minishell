@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/29 09:13:22 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/29 09:21:07 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -394,13 +394,10 @@ int	count_j(char *str, int i)
 	return (j);
 }
 
-int	expand_env_halper(char *str, int *i, t_expvar *exp, t_env *env)
+int	expand_env_halper_2(int *i, char *str, t_expvar *exp)
 {
 	char	*ex_s;
 
-	exp->backup[exp->k - 1] = '\0';
-	exp->k = 0;
-	exp->final = ft_strjoin(exp->final, exp->backup);
 	if ((str[*i + 1] == '\"' && exp->quote != DQ) \
 		|| str[*i + 1] == '\'' || str[*i + 1] == '?')
 	{
@@ -415,6 +412,16 @@ int	expand_env_halper(char *str, int *i, t_expvar *exp, t_env *env)
 		is_quote(str, *i, &exp->quote);
 		return (1);
 	}
+	return (0);
+}
+
+int	expand_env_halper(char *str, int *i, t_expvar *exp, t_env *env)
+{
+	exp->backup[exp->k - 1] = '\0';
+	exp->k = 0;
+	exp->final = ft_strjoin(exp->final, exp->backup);
+	if (expand_env_halper_2(i, str, exp))
+		return (1);
 	exp->j = count_j(str, *i);
 	if (exp->j == 1)
 	{
@@ -439,17 +446,17 @@ void	exit_calloc_2(char *str)
 	exit(1);
 }
 
-// int	the_big_check(char *str, int i, int state, t_expvar exp)
-// {
-// 	if ((state && ((str[i] == '$' && exp.quote != SQ) && ((ft_isalpha \
-// 		(str[i + 1])) || str[i + 1] == '_' || str[i + 1] == '?' || \
-// 		str[i + 1] == '\'' || str[i + 1] == '\"'))) ||
-// 		((!state && (str[i] == '$' && ((ft_isalpha(str[i + 1])) \
-// 		|| str[i + 1] == '_' || str[i + 1] == '?' || str[i + 1] == '\'' \
-// 		|| str[i + 1] == '\"')))))
-// 		return (1);
-// 	return (0);
-// }
+int	the_big_check(char *str, int i, int state, t_expvar exp)
+{
+	if ((state && ((str[i] == '$' && exp.quote != SQ) && ((ft_isalpha \
+		(str[i + 1])) || str[i + 1] == '_' || str[i + 1] == '?' || \
+		str[i + 1] == '\'' || str[i + 1] == '\"'))) || \
+		((!state && (str[i] == '$' && ((ft_isalpha(str[i + 1])) \
+		|| str[i + 1] == '_' || str[i + 1] == '?' || str[i + 1] == '\'' \
+		|| str[i + 1] == '\"')))))
+		return (1);
+	return (0);
+}
 
 char	*expand_env(char *str, t_env *env, int state)
 {
@@ -467,16 +474,7 @@ char	*expand_env(char *str, t_env *env, int state)
 	{
 		exp.backup[exp.k++] = str[i];
 		is_quote(str, i, &exp.quote);
-		if (state && ((str[i] == '$' && exp.quote != SQ) && ((ft_isalpha \
-			(str[i + 1])) || str[i + 1] == '_' || str[i + 1] == '?' || \
-			str[i + 1] == '\'' || str[i + 1] == '\"')))
-		{
-			if (expand_env_halper(str, &i, &exp, env))
-				continue ;
-		}
-		else if (!state && (str[i] == '$' && ((ft_isalpha(str[i + 1])) \
-			|| str[i + 1] == '_' || str[i + 1] == '?' || str[i + 1] == '\'' \
-			|| str[i + 1] == '\"')))
+		if (the_big_check(str, i, state, exp))
 		{
 			if (expand_env_halper(str, &i, &exp, env))
 				continue ;
