@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/29 03:04:58 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/29 06:09:08 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,12 @@ void	is_quote(char *str, int i, int *quote)
 		*quote = DQ;
 	else if (str[i] == '\"' && *quote == DQ)
 		*quote = OQ;
+}
+
+int is_whitespace(char c)
+{
+	return (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' \
+		|| c == '\r');
 }
 
 int	count_tok(char *str)
@@ -54,7 +60,12 @@ char	*add_spaces(char *str)
 	int		i;
 	int		j;
 
-	new = (char *)ft_calloc((int)ft_strlen(str) + count_tok(str) + 1, 1);
+	new = ft_calloc((int)ft_strlen(str) + count_tok(str) + 1, 1);
+	if (!new)
+	{
+		free(str);
+		exit(1);
+	}
 	quote = OQ;
 	i = -1;
 	j = 0;
@@ -82,6 +93,11 @@ void	add_token(t_tokens **tokens, char *str, t_token type)
 	t_tokens	*tmp;
 
 	new = ft_calloc(1, sizeof(t_tokens));
+	if (!new)
+	{
+		free_tokens(tokens);
+		exit(1);
+	}
 	new->str = str;
 	new->type = type;
 	new->is_d = 0;
@@ -111,7 +127,7 @@ char	**split_tokens(char *str)
 	while (str_spaces[++i])
 	{
 		is_quote(str_spaces, i, &quote);
-		if (!quote && (str_spaces[i] == ' ' || str_spaces[i + 1] == '\t'))
+		if (!quote && is_whitespace(str_spaces[i]))
 			str_spaces[i] = '\n';
 	}
 	tokens = ft_split(str_spaces, '\n');
@@ -127,8 +143,10 @@ void	free_tokens(t_tokens **tokens)
 	{
 		tmp = *tokens;
 		*tokens = (*tokens)->next;
-		free(tmp->str);
-		free(tmp->var);
+		if (tmp->str)
+			free(tmp->str);
+		if (tmp->var)
+			free(tmp->var);
 		free(tmp);
 	}
 }
@@ -325,12 +343,17 @@ char	*replace_space(char *str)
 	int		j;
 	char	*new;
 
-	new = (char *)ft_calloc(ft_strlen(str) + 1, 1);
+	new = ft_calloc(ft_strlen(str) + 1, 1);
+	if (!new)
+	{
+		free(str);
+		exit(1);
+	}
 	i = -1;
 	j = 0;
 	while (str[++i])
 	{
-		if (str[i] == ' ')
+		if (is_whitespace(str[i]))
 			new[j++] = '\n';
 		else
 			new[j++] = str[i];
@@ -416,6 +439,11 @@ char	*expand_env(char *str, t_env *env, int state)
 	i = -1;
 	exp.quote = OQ;
 	exp.backup = ft_calloc(ft_strlen(str) + 1, 1);
+	if (!exp.backup)
+	{
+		free(str);
+		exit(1);
+	}
 	exp.k = 0;
 	while (str[++i])
 	{
@@ -576,7 +604,7 @@ int	count_n_tokens(t_tokens *tokens)
 	return (c);
 }
 
-void	creat_nodes(t_data **data, t_tokens *tokens)
+void	creat_nodes(t_data **data, t_tokens **tokens)
 {
 	t_tokens	*tmp;
 	t_data		*new;
@@ -584,14 +612,24 @@ void	creat_nodes(t_data **data, t_tokens *tokens)
 	int			i;
 	int			j;
 
-	tmp = tokens;
+	tmp = *tokens;
 	i = 0;
 	while (tmp)
 	{
-		new = (t_data *)malloc(sizeof(t_data));
+		new = ft_calloc(1, sizeof(t_data));
 		if (!new)
+		{
+			free_data(data);
+			free_tokens(tokens);
 			exit(1);
+		}
 		new->args = ft_calloc(count_n_tokens(tokens) + 1, sizeof(char *));
+		if (!new->args)
+		{
+			free_data(data);
+			free_tokens(tokens);
+			exit(1);
+		}
 		j = 0;
 		while (tmp)
 		{
@@ -780,7 +818,8 @@ void	free_data(t_data **data)
 		i = -1;
 		while (tmp->args[++i])
 			free(tmp->args[i]);
-		free(tmp->args);
+		if (tmp->args)
+			free(tmp->args);
 		tmp = tmp->next;
 		free(prev);
 	}

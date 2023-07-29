@@ -18,8 +18,8 @@ int	main(int argc, char *argv[], char *env[])
 	t_data		*data;
 	t_env		*new_env;
 
-	// t_tokens	*tmp_t;
-	// t_data		*tmp;
+	t_tokens	*tmp_t;
+	t_data		*tmp;
 	(void)argc;
 	(void)argv;
 	if (!*env)
@@ -59,13 +59,26 @@ int	main(int argc, char *argv[], char *env[])
 			continue ;
 		}
 		expanding(&tokens, new_env);
+		if (!tokens)
+		{
+			free(line);
+			continue ;
+		}
 		split_var_no_quote(&tokens);
 		ambiguous_redirect(&tokens);
 		remove_quotes(tokens);
 		remove_null_tokens(&tokens);
 		create_data(&data, tokens, new_env);
 
-		// tmp_t = tokens;
+		if (!data)
+		{
+			free_tokens(&tokens);
+			tokens = NULL;
+			free(line);
+			continue ;
+		}
+
+		tmp_t = tokens;
 		// while (tmp_t)
 		// {
 		// 	printf("str = %s\n", tmp_t->str);
@@ -75,21 +88,25 @@ int	main(int argc, char *argv[], char *env[])
 		// 	printf("-------------------\n");
 		// 	tmp_t = tmp_t->next;
 		// }
-		// tmp = data;
-		// int i = 0;
-		// while (tmp)
-		// {
-		// 	i = 0;
-		// 	while (tmp->args[i])
-		// 	{
-		// 		printf("args[%d] = %s\n", i, tmp->args[i]);
-		// 		i++;
-		// 	}
-		// 	printf("in = %d\n", tmp->in);
-		// 	printf("out = %d\n", tmp->out);
-		// 	printf("-------------------\n");
-		// 	tmp = tmp->next;
-		// }
+
+
+		tmp = data;
+		int i = 0;
+		while (tmp)
+		{
+			i = 0;
+			while (tmp->args[i])
+			{
+				printf("args[%d] = %s\n", i, tmp->args[i]);
+				i++;
+			}
+			printf("in = %d\n", tmp->in);
+			printf("out = %d\n", tmp->out);
+			printf("-------------------\n");
+			tmp = tmp->next;
+		}
+
+
 		// ME
 		// direction(data,&new_env);
 
