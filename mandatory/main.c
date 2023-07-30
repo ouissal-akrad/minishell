@@ -101,7 +101,7 @@ int	main(int argc, char *argv[], char *env[])
 		// }
 		///////////
 
-		// direction(data,&new_env);
+		direction(data,&new_env);
 		free_data(&data);
 		tokens = NULL;
 		data = NULL;

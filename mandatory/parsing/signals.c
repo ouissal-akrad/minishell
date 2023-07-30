@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 06:54:00 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/30 10:29:41 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/30 10:58:35 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,12 @@ void	sigg(int sig)
 {
 	if (sig == SIGINT)
 		new_line();
+	if (sig == SIGQUIT && isatty(STDIN_FILENO))
+	{
+		printf("Quit: 3\n");
+		rl_on_new_line();
+		rl_redisplay();
+	}
 }
 
 void	sig(void)
