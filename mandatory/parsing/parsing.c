@@ -6,10 +6,9 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/29 23:52:11 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/30 10:14:09 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "minishell_parsing.h"
 
@@ -263,26 +262,62 @@ void	add_is_d(t_tokens **tokens)
 
 int	syntax_error_msg(char *str)
 {
-	write(2, "minishell: syntax error near unexpected token `", 2);
+	write(2, "minishell: syntax error near unexpected token `", 47);
 	write(2, str, ft_strlen(str));
 	write(2, "'\n", 2);
 	return (1);
 }
 
-int	syntax_error_halper(t_tokens *tmp)
+void	syntax_error_hdoc_helper(char *str)
+{
+	char	*line;
+
+	line = NULL;
+	while (1)
+	{
+		line = readline("> ");
+		if (!line)
+		{
+			new_line_no_display();
+			break ;
+		}
+		if (!ft_strcmp(line, str))
+		{
+			free(line);
+			break ;
+		}
+		free(line);
+	}
+}
+
+int	syntax_error_hdoc(char *str, t_tokens *tokens, int i)
+{
+	t_tokens	*tmp;
+
+	tmp = tokens;
+	while (i--)
+	{
+		if (tmp->type == HDOC && tmp->next && tmp->next->type == WORD)
+			syntax_error_hdoc_helper(str);
+		tmp = tmp->next;
+	}
+	return (syntax_error_msg(str));
+}
+
+int	syntax_error_halper(t_tokens *tmp, t_tokens *tokens, int i)
 {
 	if (!tmp->next)
-		return (syntax_error_msg("newline"));
+		return (syntax_error_hdoc("newline", tokens, i));
 	else if (tmp->next->type == PIPE)
-		return (syntax_error_msg("|"));
+		return (syntax_error_hdoc("|", tokens, i));
 	else if (tmp->next->type == IN)
-		return (syntax_error_msg("<"));
+		return (syntax_error_hdoc("<", tokens, i));
 	else if (tmp->next->type == OUT)
-		return (syntax_error_msg(">"));
+		return (syntax_error_hdoc(">", tokens, i));
 	else if (tmp->next->type == APP)
-		return (syntax_error_msg(">>"));
+		return (syntax_error_hdoc(">>", tokens, i));
 	else if (tmp->next->type == HDOC)
-		return (syntax_error_msg("<<"));
+		return (syntax_error_hdoc("<<", tokens, i));
 	return (0);
 }
 
@@ -324,14 +359,14 @@ int	syntax_error(t_tokens *tokens)
 	{
 		i++;
 		if (tmp->type == PIPE && !tmp->next)
-			return (syntax_error_msg("newline"));
+			return (syntax_error_hdoc("newline", tokens, i));
 		else if (tmp->type == PIPE && (tmp->next->type == PIPE || i == 1))
-			return (syntax_error_msg("|"));
+			return (syntax_error_hdoc("|", tokens, i));
 		else if ((tmp->type == IN || tmp->type == OUT || tmp->type == HDOC \
 				|| tmp->type == APP) && (!tmp->next || tmp->next->type == PIPE \
 				|| tmp->next->type == IN || tmp->next->type == OUT \
 				|| tmp->next->type == HDOC || tmp->next->type == APP))
-			return (syntax_error_halper(tmp), 1);
+			return (syntax_error_halper(tmp, tokens, i), 1);
 		tmp = tmp->next;
 	}
 	return (0);
@@ -736,34 +771,50 @@ void	open_files_error(t_tokens *tmp)
 	go_to_pipe(&tmp);
 }
 
+void	free_2_str(char *str1, char *str2)
+{
+	if (str1)
+		free(str1);
+	if (str2)
+		free(str2);
+}
+
+char	*get_line(char *line, char *exp, t_env *env)
+{
+	exp = expand_env(line, env, 0);
+	free(line);
+	line = ft_strdup(exp);
+	free(exp);
+	return (line);
+}
+
 void	open_hdoc_helper(t_data *tmp_data, t_tokens *tmp, \
 	t_env *env, char *name)
 {
 	char		*line;
 	char		*exp;
 
+	line = NULL;
+	exp = NULL;
 	while (1)
 	{
 		line = readline("> ");
 		if (!line)
+		{
+			new_line_no_display();
 			break ;
+		}
 		if (!ft_strcmp(line, tmp->next->str))
 			break ;
 		if (tmp->next->is_d == 3)
-		{
-			exp = expand_env(line, env, 0);
-			free(line);
-			line = ft_strdup(exp);
-			free(exp);
-		}
+			line = get_line(line, exp, env);
 		write(tmp_data->in, line, ft_strlen(line));
 		write(tmp_data->in, "\n", 1);
 		free(line);
 	}
 	close(tmp_data->in);
 	tmp_data->in = open(name, O_RDONLY);
-	free(name);
-	free(line);
+	free_2_str(name, line);
 }
 
 char	*my_ft_strjoin_2(char *s1, char *s2)

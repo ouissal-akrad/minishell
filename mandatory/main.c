@@ -25,6 +25,7 @@ int	main(int argc, char *argv[], char *env[])
 	}
 	tokens = NULL;
 	data = NULL;
+	line = NULL;
 	while (1)
 	{
 		line = readline("minishell$ ");
