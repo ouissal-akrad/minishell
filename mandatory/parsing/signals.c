@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 06:54:00 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/30 10:13:34 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/30 10:29:41 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@ void	new_line(void)
 	rl_redisplay();
 }
 
+// \ cat
 void	sigg(int sig)
 {
 	if (sig == SIGINT)
 		new_line();
 }
-
 
 void	sig(void)
 {
