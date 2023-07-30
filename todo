@@ -1,4 +1,11 @@
 minishell with arguments
 SHLVL
- ls | cat |  cat -e
- ls | < d
+ls | cat |  cat -e
+ls | < d : ==56354==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x602000002d72 at pc 0x0001082065a8 bp 0x7ffee7a05220 sp 0x7ffee7a05218
+READ of size 1 at 0x602000002d72 thread T0
+    #0 0x1082065a7 in is_quote+0x67 (minishell:x86_64+0x10000c5a7)
+    #1 0x108208bcb in lexar+0x24b (minishell:x86_64+0x10000ebcb)
+    #2 0x1081fdef2 in main+0x3b2 (minishell:x86_64+0x100003ef2)
+    #3 0x7fff692cbcc8 in start+0x0 (libdyld.dylib:x86_64+0x1acc8)
+exit status
+cd 

@@ -6,7 +6,7 @@
 #    By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/23 03:03:58 by bel-idri          #+#    #+#              #
-#    Updated: 2023/07/30 15:36:32 by ouakrad          ###   ########.fr        #
+#    Updated: 2023/07/30 18:49:23 by ouakrad          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ SRCS = mandatory/main.c \
 		mandatory/execution/builtins/my_exit.c \
 		mandatory/execution/builtins/my_export.c \
 		mandatory/execution/execution.c \
+		mandatory/execution/lib.c \
 		mandatory/parsing/parsing.c \
 		mandatory/parsing/signals.c \
 
