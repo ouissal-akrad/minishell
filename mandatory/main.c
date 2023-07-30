@@ -25,6 +25,7 @@ int	main(int argc, char *argv[], char *env[])
 	}
 	tokens = NULL;
 	data = NULL;
+	line = NULL;
 	while (1)
 	{
 		line = readline("minishell$ ");
@@ -90,7 +91,9 @@ int	main(int argc, char *argv[], char *env[])
 		// 	printf("-------------------\n");
 		// 	tmp = tmp->next;
 		// }
-		// ME
+		///////////
+
+		direction(data,&new_env);
 		direction(data,&new_env);
 		free_tokens(&tokens);
 		free_data(&data);

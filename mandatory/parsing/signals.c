@@ -6,33 +6,40 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 06:54:00 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/29 09:21:31 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/30 10:58:35 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell_parsing.h"
 
-void	sig_c(int sig)
+void	new_line_no_display(void)
 {
-	if (sig == SIGINT)
-	{
-		printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	}
+	printf("\n");
+	rl_on_new_line();
+	rl_replace_line("", 0);
 }
 
-void	sig_d(int sig)
+void	new_line(void)
 {
-	if (sig == SIGQUIT)
+	new_line_no_display();
+	rl_redisplay();
+}
+
+// \ cat
+void	sigg(int sig)
+{
+	if (sig == SIGINT)
+		new_line();
+	if (sig == SIGQUIT && isatty(STDIN_FILENO))
 	{
-		return ;
+		printf("Quit: 3\n");
+		rl_on_new_line();
+		rl_redisplay();
 	}
 }
 
 void	sig(void)
 {
-	signal(SIGINT, sig_c);
-	signal(SIGQUIT, sig_d);
+	signal(SIGINT, sigg);
+	signal(SIGQUIT, sigg);
 }

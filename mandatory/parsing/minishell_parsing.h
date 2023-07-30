@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 13:35:14 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/29 06:59:03 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/30 09:53:23 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@ char	**split_tokens(char *str);
 void	free_tokens(t_tokens **tokens);
 void	free_str(char **str);
 void	lexar(char *str, t_tokens **tokens);
-int		syntax_error_msg(char *str);
-int		syntax_error_halper(t_tokens *tmp);
 int		syntax_error_quote(t_tokens *tokens);
 int		syntax_error(t_tokens *tokens);
 void	remove_quotes(t_tokens *tokens);
@@ -39,6 +37,9 @@ void create_data(t_data **data, t_tokens **tokens, t_env *env);
 void free_data(t_data **data);
 void free_env(t_env **env);
 void close_files(t_data *data);
+
+void	new_line(void);
+void	new_line_no_display(void);
 
 void	sig(void);
 
