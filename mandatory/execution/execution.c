@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 09:48:12 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/29 19:44:05 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/30 10:22:29 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ void	exec_pipe(t_data *data, t_env *env_list)
 	char	*path;
 	int		pipefd[2];
 	pid_t	pid;
-			int status;
+	int status;
 
 	env = env_list_to_char_array(env_list);
 	if (!env)
@@ -174,7 +174,10 @@ void	exec_pipe(t_data *data, t_env *env_list)
 		{
 			if (data->in > 2)
 				dup2(data->in, STDIN_FILENO);
-			dup2(pipefd[1], STDOUT_FILENO);
+			if(data->out > 2)
+				dup2(data->out, STDOUT_FILENO);
+			if(data->out == 1)
+				dup2(pipefd[1], STDOUT_FILENO);
 			close(pipefd[0]);
 			close(pipefd[1]);
 			if (!is_builtins(path))
