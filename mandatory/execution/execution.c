@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 09:48:12 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/30 10:22:29 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/30 18:16:48 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,17 +121,18 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 			exec_builtin(data, env_list);
 		else
 		{
-			execve(path, data->args, env);
-			perror(data->args[0]);
-			exit(0);
+			if (execve(path, data->args, env) < 0)
+			{
+				write(2, "minishell : ", 13);
+				perror(data->args[0]);
+			}
+			// exit(127);
 		}
 	}
 	else
 	{
 		waitpid(pid, &status, 0);
 	}
-	free(path);
-	free_leaks(env);
 }
 
 void	exec_pipe(t_data *data, t_env *env_list)
@@ -176,22 +177,28 @@ void	exec_pipe(t_data *data, t_env *env_list)
 				dup2(data->in, STDIN_FILENO);
 			if(data->out > 2)
 				dup2(data->out, STDOUT_FILENO);
-			if(data->out == 1)
+			else if(data->out == 1)
 				dup2(pipefd[1], STDOUT_FILENO);
+				
 			close(pipefd[0]);
 			close(pipefd[1]);
 			if (!is_builtins(path))
 				exec_builtin(data, &env_list);
-			execve(path, data->args, env);
-			perror(data->args[0]);
-			exit(0);
+				
+			if (execve(path, data->args, env) < 0)
+			{
+				write(2, "minishell : ", 13);
+				perror(data->args[0]);
+				// exit(127);
+			}
 		}
 		else
 		{
 			free(path);
 			free_leaks(env);
 			close(pipefd[1]);
-			data->next->in = pipefd[0];
+			if (data->next->in == 0)
+				data->next->in = pipefd[0];
 			exec_pipe(data->next, env_list);
 			waitpid(pid, &status, 0);
 			g_exit = status;

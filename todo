@@ -1,2 +1,4 @@
 minishell with arguments
 SHLVL
+ ls | cat |  cat -e
+ ls | < d
