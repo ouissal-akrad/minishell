@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/30 10:14:09 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/30 10:39:47 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -298,7 +298,7 @@ int	syntax_error_hdoc(char *str, t_tokens *tokens, int i)
 	while (i--)
 	{
 		if (tmp->type == HDOC && tmp->next && tmp->next->type == WORD)
-			syntax_error_hdoc_helper(str);
+			syntax_error_hdoc_helper(tmp->next->str);
 		tmp = tmp->next;
 	}
 	return (syntax_error_msg(str));
