@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:46:00 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/27 21:22:01 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/30 21:28:55 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,7 +264,8 @@ void	ft_csp(t_env *env, t_data *data, int c)
 		cmd++;
 	}
 	//resort env
-	// sort_env(&env);
+	sort_env(&env);
+	g_exit = 0;
 	// print_env_ex(env);
 	// puts("-----------------------------");
 	// print_env(env);

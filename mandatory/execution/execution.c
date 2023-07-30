@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 09:48:12 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/30 20:40:01 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/30 21:08:48 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,11 @@ char	*join_path(char *path, char *cmd)
 		free(tmp);
 		if (access(new_path, X_OK) == 0)
 			return (free_leaks(paths), new_path);
+		else if (errno == EACCES)
+		{
+            fprintf(stderr, "minishell: %s: Permission denied\n", new_path);
+            g_exit = 126; 
+        }
 		free(new_path);
 	}
 	return (free_leaks(paths), NULL);
@@ -43,6 +48,11 @@ char	*find_path(char *cmd, char *envp[])
 {
 	int	i;
 
+	   if (cmd[0] == '\0') 
+	{
+        g_exit = 127;
+        return NULL;
+    }
 	if ((ft_strchr(cmd, '/')) || !is_builtins(cmd))
 		return (cmd);
 	i = -1;
@@ -131,24 +141,15 @@ void	exec_pipe(t_data *data, t_env *env_list)
 	int		pipefd[2];
 	pid_t	pid;
 	int		status;
-	char	*path;
 
 	env = env_list_to_char_array(env_list);
 	if (!env)
 		return ;
 	path = find_path(data->args[0], env);
-	if (!path || access(path, X_OK) == -1)
+	if (!path)
 	{
-		if (path)
-		{
-			fprintf(stderr, "minishell: %s: permission denied\n",	data->args[0]);
-			// free(path);
-		}
-		else
-			fprintf(stderr, "minishell: %s: command not found\n",data->args[0]);
+		printf("minishell: %s: command not found\n", data->args[0]);
 		g_exit = 127;
-		free_leaks(env);
-		return ;
 	}
 	if (pipe(pipefd) == -1)
 	{

@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:55:55 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/25 07:46:29 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/30 21:25:43 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,5 +96,6 @@ void	my_cd(t_env **env, t_data *data)
 		printf("%s\n",pwd);
 	// update env
 	update_env(*env, oldpwd, pwd);
+	g_exit = 0;
 	//unset pwd 
 }

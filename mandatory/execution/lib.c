@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/30 18:47:33 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/30 18:52:48 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/30 21:32:58 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,7 @@ char	*ft_strcat(char *dest, char *src)
 	i = 0;
 	j = 0;
 	while (dest[i] != '\0')
-	{
 		i++;
-	}
 	while (src[j] != '\0')
 	{
 		dest[i] = src[j];
@@ -49,7 +47,7 @@ char	*ft_strcpy(char *dest, char *src)
 
 int	ft_lstsizee(t_env *lst)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	while (lst)
@@ -59,4 +57,3 @@ int	ft_lstsizee(t_env *lst)
 	}
 	return (i);
 }
-
