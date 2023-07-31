@@ -9,3 +9,7 @@ READ of size 1 at 0x602000002d72 thread T0
     #3 0x7fff692cbcc8 in start+0x0 (libdyld.dylib:x86_64+0x1acc8)
 exit status
 cd 
+cat << l < Makefile << kk // shoud take the last input close_file
+signals inside the heredoc
+in case of error in line dont execute the hole line . echo hh > l < j | ls should not exec echo 
+exit 

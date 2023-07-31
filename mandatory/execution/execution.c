@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 09:48:12 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/30 21:08:48 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/31 16:15:30 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,7 @@ char	*find_path(char *cmd, char *envp[])
 	while (envp[++i])
 	{
 		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
-		{
 			return (join_path(envp[i] + 5, cmd));
-		}
 	}
 	return (cmd);
 }
@@ -111,6 +109,8 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 	}
 	else if (pid == 0)
 	{
+		if (!data->args[0] || data->in < 0 || data->out < 0)
+			exit(0);
 		if (data->in > 2)
 			dup2(data->in, STDIN_FILENO);
 		if (data->out > 2)
@@ -137,15 +137,16 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 void	exec_pipe(t_data *data, t_env *env_list)
 {
 	char	**env;
-	char	*path;
+	char	*path = ft_strdup("");
 	int		pipefd[2];
 	pid_t	pid;
 	int		status;
-
+	
 	env = env_list_to_char_array(env_list);
 	if (!env)
 		return ;
-	path = find_path(data->args[0], env);
+	if (data->args[0])
+		path = find_path(data->args[0], env);
 	if (!path)
 	{
 		printf("minishell: %s: command not found\n", data->args[0]);
@@ -172,6 +173,8 @@ void	exec_pipe(t_data *data, t_env *env_list)
 		}
 		if (pid == 0)
 		{
+			if (!data->args[0] || data->in < 0 || data->out < 0)
+				exit(0);
 			if (data->in > 2)
 				dup2(data->in, STDIN_FILENO);
 			if (data->out > 2)
@@ -201,6 +204,9 @@ void	exec_pipe(t_data *data, t_env *env_list)
 		}
 	}
 	else
+	{
+		
 		exec_cmd(data, path, env, &env_list, pipefd);
+	}
 	close_files(data);
 }
