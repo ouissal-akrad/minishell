@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:55:55 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/31 15:23:16 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/31 20:43:35 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,9 @@ void	update_env(t_env *env, char *oldpwd, char *pwd)
 
 void	my_cd(t_env **env, t_data *data)
 {
-	char oldpwd[PATH_MAX];
-	char pwd[PATH_MAX];
-	char *path;
+	char	oldpwd[PATH_MAX];
+	char	pwd[PATH_MAX];
+	char	*path;
 	// cd without args
 	if (data->args[1] == NULL)
 	{
@@ -92,10 +92,10 @@ void	my_cd(t_env **env, t_data *data)
 		g_exit = 1;
 		return ;
 	}
-	if(data->args[1] != NULL && ft_strcmp(data->args[1],"-") == 0)
-		printf("%s\n",pwd);
+	if (data->args[1] != NULL && ft_strcmp(data->args[1], "-") == 0)
+		printf("%s\n", pwd);
 	// update env
 	update_env(*env, oldpwd, pwd);
 	g_exit = 0;
-	//unset pwd 
+	//unset pwd
 }

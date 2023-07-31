@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 09:48:12 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/31 16:15:30 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/31 20:34:36 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,9 +129,7 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 		}
 	}
 	else
-	{
 		waitpid(pid, &status, 0);
-	}
 }
 
 void	exec_pipe(t_data *data, t_env *env_list)
@@ -194,7 +192,7 @@ void	exec_pipe(t_data *data, t_env *env_list)
 		else
 		{
 			free(path);
-			free_leaks(env);
+			// free_leaks(env);
 			close(pipefd[1]);
 			if (data->next->in == 0)
 				data->next->in = pipefd[0];
