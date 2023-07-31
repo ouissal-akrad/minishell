@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+         #
+#    By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/23 03:03:58 by bel-idri          #+#    #+#              #
-#    Updated: 2023/07/30 10:33:41 by ouakrad          ###   ########.fr        #
+#    Updated: 2023/07/31 18:47:45 by bel-idri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ SRCS = mandatory/main.c \
 		mandatory/execution/builtins/my_export.c \
 		mandatory/execution/execution.c \
 		mandatory/parsing/parsing.c \
-		# mandatory/parsing/signals.c \
+		mandatory/parsing/signals.c \
 
 SRCS_BONUS = bonus/main_bonus.c \
 	# bonus/execution/tttttt.c \
@@ -84,11 +84,11 @@ OBJS_LIBFT = $(SRCS_LIBFT:.c=.o)
 
 CC = cc
 
-# CFLAGS = -Wall -Wextra -Werror -I/Users/bel-idri/.brew/opt/readline/include #-g -fsanitize=address		#---On Bilal Mac---#
-CFLAGS = -Wall -Wextra -Werror -I/readline/include  -g -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -I/Users/bel-idri/.brew/opt/readline/include -g -fsanitize=address		#---On Bilal Mac---#
+# CFLAGS = -Wall -Wextra -Werror -I/readline/include  -g -fsanitize=address
 
-# RLFLAGES = -lreadline -lhistory -L/Users/bel-idri/.brew/opt/readline/lib		#---On Bilal Mac---#
-RLFLAGES = -lreadline
+RLFLAGES = -lreadline -lhistory -L/Users/bel-idri/.brew/opt/readline/lib		#---On Bilal Mac---#
+# RLFLAGES = -lreadline
 
 RM = rm -f
 

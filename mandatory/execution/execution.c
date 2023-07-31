@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 09:48:12 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/30 10:22:29 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/31 18:48:50 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,8 +130,8 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 	{
 		waitpid(pid, &status, 0);
 	}
-	free(path);
-	free_leaks(env);
+	// free(path);
+	// free_leaks(env);
 }
 
 void	exec_pipe(t_data *data, t_env *env_list)

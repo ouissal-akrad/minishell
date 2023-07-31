@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 13:35:14 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/30 09:53:23 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/31 18:23:09 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,6 @@ void create_data(t_data **data, t_tokens **tokens, t_env *env);
 void free_data(t_data **data);
 void free_env(t_env **env);
 void close_files(t_data *data);
-
-void	new_line(void);
-void	new_line_no_display(void);
 
 void	sig(void);
 

@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/30 10:39:47 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/31 19:23:52 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -278,7 +278,8 @@ void	syntax_error_hdoc_helper(char *str)
 		line = readline("> ");
 		if (!line)
 		{
-			new_line_no_display();
+			rl_on_new_line();
+			rl_replace_line("", 0);
 			break ;
 		}
 		if (!ft_strcmp(line, str))
@@ -728,6 +729,8 @@ void	ft_lstnewnode(t_data *new, t_tokens **tokens)
 	}
 	new->in = 0;
 	new->out = 1;
+	new->hdoc = 0;
+	new->buff = NULL;
 	new->next = NULL;
 }
 
@@ -801,7 +804,8 @@ void	open_hdoc_helper(t_data *tmp_data, t_tokens *tmp, \
 		line = readline("> ");
 		if (!line)
 		{
-			new_line_no_display();
+			rl_on_new_line();
+			rl_replace_line("", 0);
 			break ;
 		}
 		if (!ft_strcmp(line, tmp->next->str))
@@ -946,6 +950,8 @@ void	free_data(t_data **data)
 			free(tmp->args[i]);
 		if (tmp->args)
 			free(tmp->args);
+		if (tmp->buff)
+			free(tmp->buff);
 		tmp = tmp->next;
 		free(prev);
 	}

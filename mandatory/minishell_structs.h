@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_structs.h                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 22:06:09 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/25 15:11:02 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/31 19:21:54 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,11 @@ typedef struct s_env
 
 typedef struct s_data
 {
-	char **args; // args[0] = cmd
+	char			**args; // args[0] = cmd
 	int				in;
 	int				out;
+	int				hdoc;
+	char			*buff;
 	struct s_data	*next;
 }					t_data;
 
