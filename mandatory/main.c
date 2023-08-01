@@ -65,6 +65,7 @@ int	main(int argc, char *argv[], char *env[])
 		}
 		if (exitt == 1)
 		{
+			// unlink_file(tokens, data);
 			free_tokens(&tokens);
 			if (data)
 				free_data(&data);

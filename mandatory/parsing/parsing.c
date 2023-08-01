@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/01 02:46:55 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/01 05:34:19 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -265,6 +265,12 @@ int	syntax_error_msg(char *str)
 	return (1);
 }
 
+void	rl_hdoc(void)
+{
+	rl_on_new_line();
+	rl_replace_line("", 0);
+}
+
 void	syntax_error_hdoc_helper(char *str)
 {
 	char	*line;
@@ -276,8 +282,7 @@ void	syntax_error_hdoc_helper(char *str)
 		line = readline("> ");
 		if (!line)
 		{
-			rl_on_new_line();
-			rl_replace_line("", 0);
+			rl_hdoc();
 			break ;
 		}
 		if (!ft_strcmp(line, str))
@@ -801,36 +806,6 @@ char	*get_line(char *line, t_env *env)
 	return (line);
 }
 
-// void	open_hdoc_helper(t_data *tmp_data, t_tokens *tmp, \
-// 	t_env *env, char *name)
-// {
-// 	char		*line;
-// 	char		*exp;
-
-// 	line = NULL;
-// 	exp = NULL;
-// 	while (1)
-// 	{
-// 		line = readline("> ");
-// 		if (!line)
-// 		{
-// 			rl_on_new_line();
-// 			rl_replace_line("", 0);
-// 			break ;
-// 		}
-// 		if (!ft_strcmp(line, tmp->next->str))
-// 			break ;
-// 		if (tmp->next->is_d == 3)
-// 			line = get_line(line, exp, env);
-// 		write(tmp_data->in, line, ft_strlen(line));
-// 		write(tmp_data->in, "\n", 1);
-// 		free(line);
-// 	}
-// 	close(tmp_data->in);
-// 	tmp_data->in = open(name, O_RDONLY);
-// 	free_2_str(name, line);
-// }
-
 char	*my_ft_strjoin_2(char *s1, char *s2)
 {
 	char	*str;
@@ -855,39 +830,8 @@ char	*my_ft_strjoin_2(char *s1, char *s2)
 	return (str);
 }
 
-// void	open_hdoc(t_data **data, t_tokens **tokens, t_env *env)
-// {
-// 	t_tokens	*tmp;
-// 	t_data		*tmp_data;
-// 	int			n;
-// 	char		*name;
-
-// 	tmp = *tokens;
-// 	tmp_data = *data;
-// 	n = 0;
-// 	while (tmp)
-// 	{
-// 		if (tmp->type == PIPE)
-// 			tmp_data = tmp_data->next;
-// 		if (tmp->type == HDOC)
-// 		{
-// 			name = my_ft_strjoin_2("/tmp/hdoc", ft_itoa(n++));
-// 			tmp_data->in = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-// 			if (tmp_data->in == -1)
-// 				open_files_error(tmp);
-// 			open_hdoc_helper(tmp_data, tmp, env, name);
-// 			tmp = tmp->next;
-// 		}
-// 		if (tmp)
-// 			tmp = tmp->next;
-// 	}
-// }
-
-void	open_files_helper(t_data *tmp_data, t_tokens *tmp, t_env *env)
+void	open_files_helper(t_data *tmp_data, t_tokens *tmp)
 {
-	char *line;
-
-	line = NULL;
 	if (tmp->type == IN)
 	{
 		tmp_data->hdoc = 0;
@@ -912,46 +856,10 @@ void	open_files_helper(t_data *tmp_data, t_tokens *tmp, t_env *env)
 			open_files_error(tmp);
 	}
 	else if (tmp->type == HDOC)
-	{
 		tmp_data->hdoc = 1;
-		free(tmp_data->buff);
-		tmp_data->buff = NULL;
-		while (1)
-		{
-			signal(SIGINT, sig_handler);
-			line = readline("> ");
-			if (!line)
-			{
-				rl_on_new_line();
-				rl_replace_line("", 0);
-				break ;
-			}
-			if (!ft_strcmp(line, tmp->next->str))
-				break ;
-			if (tmp->next->is_d == 3)
-				line = get_line(line, env);
-			if (!tmp_data->buff)
-				tmp_data->buff = ft_strdup(line);
-			else
-				tmp_data->buff = my_ft_strjoin_1(tmp_data->buff, line);
-			tmp_data->buff = my_ft_strjoin_1(tmp_data->buff, "\n");
-			free(line);
-		}
-		if (ttyname(0) == NULL)
-		{
-			dup2(backup_stdin, 0);
-			close(backup_stdin);
-			write(1, "\n", 1);
-		}
-		tmp_data->buff = ft_strtrim(tmp_data->buff, "\n");
-		if (line)
-			free(line);
-	}
-	if (tmp)
-		tmp = tmp->next;
 }
 
-void	open_files(t_data **data, t_tokens **tokens, t_env *env)
+void	open_files(t_data **data, t_tokens **tokens)
 {
 	t_tokens	*tmp;
 	t_data		*tmp_data;
@@ -974,18 +882,74 @@ void	open_files(t_data **data, t_tokens **tokens, t_env *env)
 				tmp_data->in = -1;
 				continue ;
 			}
-			open_files_helper(tmp_data, tmp, env);
+			open_files_helper(tmp_data, tmp);
 		}
-		if (tmp)
-			tmp = tmp->next;
+		tmp = tmp->next;
+	}
+}
+
+void	open_hdoc_helper(t_data **tmp_data, t_tokens *tmp, t_env *env)
+{
+	char	*line;
+
+	while (1)
+	{
+		signal(SIGINT, sig_handler);
+		line = readline("> ");
+		if (!line)
+		{
+			rl_hdoc();
+			break ;
+		}
+		if (!ft_strcmp(line, tmp->next->str))
+			break ;
+		if (tmp->next->is_d == 3)
+			line = get_line(line, env);
+		if (!(*tmp_data)->buff)
+			(*tmp_data)->buff = ft_strdup(line);
+		else
+			(*tmp_data)->buff = my_ft_strjoin_1((*tmp_data)->buff, line);
+		(*tmp_data)->buff = my_ft_strjoin_1((*tmp_data)->buff, "\n");
+		free(line);
+	}
+	if (line)
+		free(line);
+}
+
+void	open_hdoc(t_data **data, t_tokens **tokens, t_env *env)
+{
+	t_tokens	*tmp;
+	t_data		*tmp_data;
+
+	tmp = *tokens;
+	tmp_data = *data;
+	free(tmp_data->buff);
+	tmp_data->buff = NULL;
+	while (tmp)
+	{
+		if (tmp->type == PIPE)
+			tmp_data = tmp_data->next;
+		if (tmp->type == HDOC && !exitt)
+		{
+			open_hdoc_helper(&tmp_data, tmp, env);
+			if (ttyname(0) == NULL)
+			{
+				dup2(backup_stdin, 0);
+				close(backup_stdin);
+				write(1, "\n", 1);
+			}
+			if (tmp_data->buff)
+				tmp_data->buff[ft_strlen(tmp_data->buff) - 1] = '\0';
+		}
+		tmp = tmp->next;
 	}
 }
 
 void	create_data(t_data **data, t_tokens **tokens, t_env *env)
 {
 	creat_nodes(data, tokens);
-	//  open_hdoc(data, tokens, env);
-	open_files(data, tokens, env);
+	open_hdoc(data, tokens, env);
+	open_files(data, tokens);
 }
 
 void	free_data(t_data **data)

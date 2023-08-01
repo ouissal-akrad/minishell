@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/29 12:45:33 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/01 02:35:55 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/01 04:22:01 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,5 @@ char	*ft_strtrim(char const *s1, char const *set)
 	start = ft_start(s1, set);
 	end = ft_end(s1, set);
 	str = ft_substr(s1, start, end - start + 1);
-	free((char *)s1);
 	return (str);
 }
