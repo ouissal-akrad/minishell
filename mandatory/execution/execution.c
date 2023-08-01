@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 09:48:12 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/31 18:48:50 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/01 14:24:47 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,31 +34,38 @@ char	*join_path(char *path, char *cmd)
 		free(tmp);
 		if (access(new_path, X_OK) == 0)
 			return (free_leaks(paths), new_path);
+		else if (errno == EACCES)
+		{
+			fprintf(stderr, "minishell: %s: Permission denied\n", new_path);
+			g_exit = 126;
+		}
 		free(new_path);
 	}
-	return (free_leaks(paths), cmd);
+	return (free_leaks(paths), NULL);
 }
 
 char	*find_path(char *cmd, char *envp[])
 {
 	int	i;
 
+		if (cmd[0] == '\0')
+	{
+		g_exit = 127;
+		return NULL;
+	}
 	if ((ft_strchr(cmd, '/')) || !is_builtins(cmd))
 		return (cmd);
 	i = -1;
 	while (envp[++i])
 	{
 		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
-		{
 			return (join_path(envp[i] + 5, cmd));
-		}
 	}
 	return (cmd);
 }
 
 char	**env_list_to_char_array(t_env *env_list)
 {
-	int		count;
 	t_env	*curr;
 	int		i;
 	int		var_len;
@@ -66,14 +73,7 @@ char	**env_list_to_char_array(t_env *env_list)
 	char	**env_array;
 	char	*var_val_str;
 
-	count = 0;
-	curr = env_list;
-	while (curr != NULL)
-	{
-		count++;
-		curr = curr->next;
-	}
-	env_array = malloc((count + 1) * sizeof(char *));
+	env_array = malloc((ft_lstsizee(env_list) + 1) * sizeof(char *));
 	i = 0;
 	curr = env_list;
 	while (curr != NULL)
@@ -83,16 +83,14 @@ char	**env_list_to_char_array(t_env *env_list)
 		var_val_str = malloc(var_len + val_len + 2);
 		if (!var_val_str)
 			return (NULL);
-		//
-		strcpy(var_val_str, curr->var);
-		strcat(var_val_str, "=");
-		strcat(var_val_str, curr->val);
+		ft_strcpy(var_val_str, curr->var);
+		ft_strcat(var_val_str, "=");
+		ft_strcat(var_val_str, curr->val);
 		env_array[i] = var_val_str;
 		curr = curr->next;
 		i++;
 	}
-	env_array[i] = NULL;
-	return (env_array);
+	return (env_array[i] = NULL, env_array);
 }
 
 void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
@@ -111,6 +109,8 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 	}
 	else if (pid == 0)
 	{
+		if (!data->args[0] || data->in < 0 || data->out < 0)
+			exit(0);
 		if (data->in > 2)
 			dup2(data->in, STDIN_FILENO);
 		if (data->out > 2)
@@ -121,35 +121,34 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 			exec_builtin(data, env_list);
 		else
 		{
-			execve(path, data->args, env);
-			perror(data->args[0]);
-			exit(0);
+			if (execve(path, data->args, env) < 0)
+			{
+				perror("minishell");
+				g_exit = 127;
+			}
 		}
 	}
 	else
-	{
 		waitpid(pid, &status, 0);
-	}
-	// free(path);
-	// free_leaks(env);
 }
 
 void	exec_pipe(t_data *data, t_env *env_list)
 {
 	char	**env;
-	char	*path;
+	char	*path = ft_strdup("");
 	int		pipefd[2];
 	pid_t	pid;
-	int status;
+	int		status;
 
 	env = env_list_to_char_array(env_list);
 	if (!env)
 		return ;
-	path = find_path(data->args[0], env);
+	if (data->args[0])
+		path = find_path(data->args[0], env);
 	if (!path)
 	{
-		free_leaks(env);
-		return ;
+		printf("minishell: %s: command not found\n", data->args[0]);
+		g_exit = 127;
 	}
 	if (pipe(pipefd) == -1)
 	{
@@ -172,26 +171,31 @@ void	exec_pipe(t_data *data, t_env *env_list)
 		}
 		if (pid == 0)
 		{
+			if (!data->args[0] || data->in < 0 || data->out < 0)
+				exit(0);
 			if (data->in > 2)
 				dup2(data->in, STDIN_FILENO);
-			if(data->out > 2)
+			if (data->out > 2)
 				dup2(data->out, STDOUT_FILENO);
-			if(data->out == 1)
+			else if (data->out == 1)
 				dup2(pipefd[1], STDOUT_FILENO);
 			close(pipefd[0]);
 			close(pipefd[1]);
 			if (!is_builtins(path))
 				exec_builtin(data, &env_list);
-			execve(path, data->args, env);
-			perror(data->args[0]);
-			exit(0);
+			if (execve(path, data->args, env) < 0)
+			{
+				perror("minishell");
+				g_exit = 127;
+			}
 		}
 		else
 		{
 			free(path);
-			free_leaks(env);
+			// free_leaks(env);
 			close(pipefd[1]);
-			data->next->in = pipefd[0];
+			if (data->next->in == 0)
+				data->next->in = pipefd[0];
 			exec_pipe(data->next, env_list);
 			waitpid(pid, &status, 0);
 			g_exit = status;
@@ -199,6 +203,7 @@ void	exec_pipe(t_data *data, t_env *env_list)
 	}
 	else
 	{
+
 		exec_cmd(data, path, env, &env_list, pipefd);
 	}
 	close_files(data);

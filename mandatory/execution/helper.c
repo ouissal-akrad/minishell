@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:21:57 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/29 19:44:26 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/31 16:15:12 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	direction(t_data *data, t_env **new_env)
 
 	if (data->args != NULL && data->args[0] != NULL)
 	{
-		cmd = data->args[0];
+			cmd = data->args[0];
 		if (ft_strcmp(cmd, "pwd") == 0 && data->next == NULL)
 			my_pwd();
 		else if (ft_strcmp(cmd, "unset") == 0 && data->next == NULL)

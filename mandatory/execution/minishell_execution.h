@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 13:35:12 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/29 19:44:17 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/31 16:14:44 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@
 
 int		g_exit;
 /*-------------------------builtins-------------------------------*/
-void direction(t_data *data,t_env **new_env);
-int is_builtins(char *cmd);
+void	direction(t_data *data, t_env **new_env);
+int		is_builtins(char *cmd);
 /*----------------cd---------------------*/
 void	my_cd(t_env **env, t_data *data);
 void	update_env(t_env *env, char *oldpwd, char *pwd);
@@ -44,7 +44,7 @@ void	my_pwd(void);
 /*----------------unset---------------------*/
 void	my_unset(t_env **env, t_data *data);
 /*----------------exit---------------------*/
-void	my_exit(t_env **env,t_data *data);
+void	my_exit(t_env **env, t_data *data);
 int		all_digit(char *str);
 /*----------------export---------------------*/
 void	my_export(t_env **env, t_data *data);
@@ -60,9 +60,13 @@ void	sequal(t_env *env, char *prev, char *rest, int plus);
 void	free_leaks(char **paths);
 char	*join_path(char *path, char *cmd);
 char	*find_path(char *cmd, char *envp[]);
-void	exec_cmd(t_data *data,char *path,char **env, t_env **env_list, int *pipefd);
-void exec_pipe(t_data *data, t_env *env_list);
+void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
+			int *pipefd);
+void	exec_pipe(t_data *data, t_env *env_list);
 char	**env_list_to_char_array(t_env *env_list);
 void	exec_builtin(t_data *data, t_env **new_env);
-
+/*----------------LIBFT---------------------*/
+char	*ft_strcat(char *dest, char *src);
+char	*ft_strcpy(char *dest, char *src);
+int	ft_lstsizee(t_env *lst);
 #endif
