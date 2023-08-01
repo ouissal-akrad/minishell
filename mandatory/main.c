@@ -11,7 +11,7 @@ int	main(int argc, char *argv[], char *env[])
 	t_data		*tmp;
 	(void)argc;
 	(void)argv;
-	// sig();
+	sig();
 
 	if (!*env)
 	{
@@ -89,11 +89,9 @@ int	main(int argc, char *argv[], char *env[])
 		// 	printf("in = %d\n", tmp->in);
 		// 	printf("out = %d\n", tmp->out);
 		// 	printf("-------------------\n");
-		// 	tmp = tmp->next;
+		// 	tmp = tmp->next;     
 		// }
-		///////////
-
-		direction(data,&new_env);
+		// ///////////
 		direction(data,&new_env);
 		free_tokens(&tokens);
 		free_data(&data);

@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:55:18 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/28 17:16:18 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/07/30 21:26:05 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,4 +52,5 @@ void	my_echo(t_data *data)
 	}
 	if (new_line)
 		ft_putstr_fd("\n", data->out);
+	g_exit = 0;
 }
