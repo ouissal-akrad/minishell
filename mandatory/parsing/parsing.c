@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/31 19:23:52 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/01 02:46:55 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,24 +194,21 @@ void	free_str(char **str)
 void	lexar(char *str, t_tokens **tokens)
 {
 	int		i;
-	int		quote;
 	char	**str_t;
 
 	str_t = split_tokens(str);
 	i = -1;
 	while (str_t[++i])
 	{
-		quote = OQ;
-		is_quote(str_t[i], i, &quote);
-		if (!ft_strcmp(str_t[i], "|") && !quote)
+		if (!ft_strcmp(str_t[i], "|"))
 			add_token(tokens, ft_strdup("|"), PIPE);
-		else if (!ft_strcmp(str_t[i], "<") && !quote)
+		else if (!ft_strcmp(str_t[i], "<"))
 			add_token(tokens, ft_strdup("<"), IN);
-		else if (!ft_strcmp(str_t[i], ">") && !quote)
+		else if (!ft_strcmp(str_t[i], ">"))
 			add_token(tokens, ft_strdup(">"), OUT);
-		else if (!ft_strcmp(str_t[i], ">>") && !quote)
+		else if (!ft_strcmp(str_t[i], ">>"))
 			add_token(tokens, ft_strdup(">>"), APP);
-		else if (!ft_strcmp(str_t[i], "<<") && !quote)
+		else if (!ft_strcmp(str_t[i], "<<"))
 			add_token(tokens, ft_strdup("<<"), HDOC);
 		else
 			add_token(tokens, ft_strdup(str_t[i]), WORD);
@@ -275,6 +272,7 @@ void	syntax_error_hdoc_helper(char *str)
 	line = NULL;
 	while (1)
 	{
+		signal(SIGINT, sig_handler);
 		line = readline("> ");
 		if (!line)
 		{
@@ -289,6 +287,12 @@ void	syntax_error_hdoc_helper(char *str)
 		}
 		free(line);
 	}
+	if (ttyname(0) == NULL)
+	{
+		dup2(backup_stdin, 0);
+		close(backup_stdin);
+		write(1, "\n", 1);
+	}
 }
 
 int	syntax_error_hdoc(char *str, t_tokens *tokens, int i)
@@ -298,11 +302,15 @@ int	syntax_error_hdoc(char *str, t_tokens *tokens, int i)
 	tmp = tokens;
 	while (i--)
 	{
-		if (tmp->type == HDOC && tmp->next && tmp->next->type == WORD)
+		if ((tmp->type == HDOC && tmp->next && tmp->next->type == WORD) \
+			&& !exitt)
 			syntax_error_hdoc_helper(tmp->next->str);
 		tmp = tmp->next;
 	}
-	return (syntax_error_msg(str));
+	if (exitt)
+		return (1);
+	else
+		return (syntax_error_msg(str));
 }
 
 int	syntax_error_halper(t_tokens *tmp, t_tokens *tokens, int i)
@@ -730,7 +738,7 @@ void	ft_lstnewnode(t_data *new, t_tokens **tokens)
 	new->in = 0;
 	new->out = 1;
 	new->hdoc = 0;
-	new->buff = NULL;
+	new->buff = ft_strdup("");
 	new->next = NULL;
 }
 
@@ -782,8 +790,10 @@ void	free_2_str(char *str1, char *str2)
 		free(str2);
 }
 
-char	*get_line(char *line, char *exp, t_env *env)
+char	*get_line(char *line, t_env *env)
 {
+	char	*exp;
+
 	exp = expand_env(line, env, 0);
 	free(line);
 	line = ft_strdup(exp);
@@ -791,35 +801,35 @@ char	*get_line(char *line, char *exp, t_env *env)
 	return (line);
 }
 
-void	open_hdoc_helper(t_data *tmp_data, t_tokens *tmp, \
-	t_env *env, char *name)
-{
-	char		*line;
-	char		*exp;
+// void	open_hdoc_helper(t_data *tmp_data, t_tokens *tmp, \
+// 	t_env *env, char *name)
+// {
+// 	char		*line;
+// 	char		*exp;
 
-	line = NULL;
-	exp = NULL;
-	while (1)
-	{
-		line = readline("> ");
-		if (!line)
-		{
-			rl_on_new_line();
-			rl_replace_line("", 0);
-			break ;
-		}
-		if (!ft_strcmp(line, tmp->next->str))
-			break ;
-		if (tmp->next->is_d == 3)
-			line = get_line(line, exp, env);
-		write(tmp_data->in, line, ft_strlen(line));
-		write(tmp_data->in, "\n", 1);
-		free(line);
-	}
-	close(tmp_data->in);
-	tmp_data->in = open(name, O_RDONLY);
-	free_2_str(name, line);
-}
+// 	line = NULL;
+// 	exp = NULL;
+// 	while (1)
+// 	{
+// 		line = readline("> ");
+// 		if (!line)
+// 		{
+// 			rl_on_new_line();
+// 			rl_replace_line("", 0);
+// 			break ;
+// 		}
+// 		if (!ft_strcmp(line, tmp->next->str))
+// 			break ;
+// 		if (tmp->next->is_d == 3)
+// 			line = get_line(line, exp, env);
+// 		write(tmp_data->in, line, ft_strlen(line));
+// 		write(tmp_data->in, "\n", 1);
+// 		free(line);
+// 	}
+// 	close(tmp_data->in);
+// 	tmp_data->in = open(name, O_RDONLY);
+// 	free_2_str(name, line);
+// }
 
 char	*my_ft_strjoin_2(char *s1, char *s2)
 {
@@ -845,44 +855,49 @@ char	*my_ft_strjoin_2(char *s1, char *s2)
 	return (str);
 }
 
-void	open_hdoc(t_data **data, t_tokens **tokens, t_env *env)
-{
-	t_tokens	*tmp;
-	t_data		*tmp_data;
-	int			n;
-	char		*name;
+// void	open_hdoc(t_data **data, t_tokens **tokens, t_env *env)
+// {
+// 	t_tokens	*tmp;
+// 	t_data		*tmp_data;
+// 	int			n;
+// 	char		*name;
 
-	tmp = *tokens;
-	tmp_data = *data;
-	n = 0;
-	while (tmp)
-	{
-		if (tmp->type == PIPE)
-			tmp_data = tmp_data->next;
-		if (tmp->type == HDOC)
-		{
-			name = my_ft_strjoin_2("/tmp/hdoc", ft_itoa(n++));
-			tmp_data->in = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			if (tmp_data->in == -1)
-				open_files_error(tmp);
-			open_hdoc_helper(tmp_data, tmp, env, name);
-			tmp = tmp->next;
-		}
-		if (tmp)
-			tmp = tmp->next;
-	}
-}
+// 	tmp = *tokens;
+// 	tmp_data = *data;
+// 	n = 0;
+// 	while (tmp)
+// 	{
+// 		if (tmp->type == PIPE)
+// 			tmp_data = tmp_data->next;
+// 		if (tmp->type == HDOC)
+// 		{
+// 			name = my_ft_strjoin_2("/tmp/hdoc", ft_itoa(n++));
+// 			tmp_data->in = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+// 			if (tmp_data->in == -1)
+// 				open_files_error(tmp);
+// 			open_hdoc_helper(tmp_data, tmp, env, name);
+// 			tmp = tmp->next;
+// 		}
+// 		if (tmp)
+// 			tmp = tmp->next;
+// 	}
+// }
 
-void	open_files_helper(t_data *tmp_data, t_tokens *tmp)
+void	open_files_helper(t_data *tmp_data, t_tokens *tmp, t_env *env)
 {
+	char *line;
+
+	line = NULL;
 	if (tmp->type == IN)
 	{
+		tmp_data->hdoc = 0;
 		tmp_data->in = open(tmp->next->str, O_RDONLY);
 		if (tmp_data->in == -1)
 			open_files_error(tmp);
 	}
 	else if (tmp->type == OUT)
 	{
+		tmp_data->hdoc = 0;
 		tmp_data->out = open(tmp->next->str, \
 			O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (tmp_data->out == -1)
@@ -890,16 +905,53 @@ void	open_files_helper(t_data *tmp_data, t_tokens *tmp)
 	}
 	else if (tmp->type == APP)
 	{
+		tmp_data->hdoc = 0;
 		tmp_data->out = open(tmp->next->str, \
 			O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (tmp_data->out == -1)
 			open_files_error(tmp);
 	}
+	else if (tmp->type == HDOC)
+	{
+		tmp_data->hdoc = 1;
+		free(tmp_data->buff);
+		tmp_data->buff = NULL;
+		while (1)
+		{
+			signal(SIGINT, sig_handler);
+			line = readline("> ");
+			if (!line)
+			{
+				rl_on_new_line();
+				rl_replace_line("", 0);
+				break ;
+			}
+			if (!ft_strcmp(line, tmp->next->str))
+				break ;
+			if (tmp->next->is_d == 3)
+				line = get_line(line, env);
+			if (!tmp_data->buff)
+				tmp_data->buff = ft_strdup(line);
+			else
+				tmp_data->buff = my_ft_strjoin_1(tmp_data->buff, line);
+			tmp_data->buff = my_ft_strjoin_1(tmp_data->buff, "\n");
+			free(line);
+		}
+		if (ttyname(0) == NULL)
+		{
+			dup2(backup_stdin, 0);
+			close(backup_stdin);
+			write(1, "\n", 1);
+		}
+		tmp_data->buff = ft_strtrim(tmp_data->buff, "\n");
+		if (line)
+			free(line);
+	}
 	if (tmp)
 		tmp = tmp->next;
 }
 
-void	open_files(t_data **data, t_tokens **tokens)
+void	open_files(t_data **data, t_tokens **tokens, t_env *env)
 {
 	t_tokens	*tmp;
 	t_data		*tmp_data;
@@ -910,9 +962,10 @@ void	open_files(t_data **data, t_tokens **tokens)
 	{
 		if (tmp->type == PIPE)
 			tmp_data = tmp_data->next;
-		if (tmp->type == IN || tmp->type == OUT || tmp->type == APP)
+		if ((tmp->type == IN || tmp->type == OUT || tmp->type == APP || \
+			tmp->type == HDOC) && !exitt)
 		{
-			if (tmp->next->is_d == 2)
+			if (tmp->next->is_d == 2 && tmp->type != HDOC)
 			{
 				write(2, "minishell: ", 11);
 				write(2, tmp->next->var, ft_strlen(tmp->next->var));
@@ -921,7 +974,7 @@ void	open_files(t_data **data, t_tokens **tokens)
 				tmp_data->in = -1;
 				continue ;
 			}
-			open_files_helper(tmp_data, tmp);
+			open_files_helper(tmp_data, tmp, env);
 		}
 		if (tmp)
 			tmp = tmp->next;
@@ -931,8 +984,8 @@ void	open_files(t_data **data, t_tokens **tokens)
 void	create_data(t_data **data, t_tokens **tokens, t_env *env)
 {
 	creat_nodes(data, tokens);
-	open_hdoc(data, tokens, env);
-	open_files(data, tokens);
+	//  open_hdoc(data, tokens, env);
+	open_files(data, tokens, env);
 }
 
 void	free_data(t_data **data)

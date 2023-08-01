@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 00:16:06 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/29 02:27:29 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/07/31 20:57:25 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,6 @@
 # include <term.h>
 # include <signal.h>
 
+int	backup_stdin;
+int	exitt;
 # endif

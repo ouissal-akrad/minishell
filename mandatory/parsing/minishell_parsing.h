@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 13:35:14 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/31 18:23:09 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/01 00:51:03 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void free_env(t_env **env);
 void close_files(t_data *data);
 
 void	sig(void);
+void	sig_handler(int sig);
 
 
 

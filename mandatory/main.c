@@ -9,7 +9,7 @@ int	main(int argc, char *argv[], char *env[])
 
 	(void)argc;
 	(void)argv;
-	sig();
+	t_data		*tmp;
 
 	if (!*env)
 	{
@@ -26,6 +26,8 @@ int	main(int argc, char *argv[], char *env[])
 	line = NULL;
 	while (1)
 	{
+		exitt = 0;
+		sig();
 		line = readline("minishell$ ");
 		if (!line)
 		{
@@ -59,13 +61,44 @@ int	main(int argc, char *argv[], char *env[])
 		{
 			free_tokens(&tokens);
 			tokens = NULL;
-			free(line);
 			continue ;
+		}
+		if (exitt == 1)
+		{
+			free_tokens(&tokens);
+			if (data)
+				free_data(&data);
+			tokens = NULL;
+			data = NULL;
+			// close files
+			continue ;
+		}
+
+
+
+		tmp = data;
+		int i = 0;
+		while (tmp)
+		{
+			printf("-----------------\n");
+			while (tmp->args[i])
+			{
+				printf("args[%d] = %s\n",i,tmp->args[i]);
+				i++;
+			}
+			printf("in = %d\n",tmp->in);
+			printf("out = %d\n",tmp->out);
+			printf("hdoc = %d\n",tmp->hdoc);
+			printf("buff = %s\n",tmp->buff);
+			printf("-----------------\n");
+
+			tmp = tmp->next;
 		}
 
 		direction(data,&new_env);
 		free_tokens(&tokens);
 		free_data(&data);
+		// close files
 		tokens = NULL;
 		data = NULL;
 	}
