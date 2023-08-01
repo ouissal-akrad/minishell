@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_parsing.h                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 13:35:14 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/30 11:29:55 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/08/01 14:39:43 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,7 @@ void free_data(t_data **data);
 void free_env(t_env **env);
 void close_files(t_data *data);
 
-void	new_line(void);
-void	new_line_no_display(void);
-
 void	sig(void);
-
-
+void	sig_handler(int sig);
 
 #endif

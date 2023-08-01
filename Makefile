@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+         #
+#    By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/23 03:03:58 by bel-idri          #+#    #+#              #
-#    Updated: 2023/07/30 18:49:23 by ouakrad          ###   ########.fr        #
+#    Updated: 2023/08/01 14:32:11 by bel-idri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -85,11 +85,11 @@ OBJS_LIBFT = $(SRCS_LIBFT:.c=.o)
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror -I/Users/ouakrad/.brew/opt/readline/include #-g -fsanitize=address		#---On Bilal Mac---#
-# CFLAGS = -Wall -Wextra -Werror -I/readline/include  #-g -fsanitize=address
+USER = $(shell whoami)
 
-RLFLAGES = -lreadline -lhistory -L/Users/ouakrad/.brew/opt/readline/lib		#---On Bilal Mac---#
-# RLFLAGES = -lreadline
+CFLAGS = -Wall -Wextra -Werror -I/Users/${USER}/.brew/opt/readline/include
+
+RLFLAGES = -lreadline -lhistory -L/Users/${USER}/.brew/opt/readline/lib
 
 RM = rm -f
 
