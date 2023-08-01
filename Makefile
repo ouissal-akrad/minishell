@@ -6,7 +6,7 @@
 #    By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/23 03:03:58 by bel-idri          #+#    #+#              #
-#    Updated: 2023/08/01 14:32:11 by bel-idri         ###   ########.fr        #
+#    Updated: 2023/08/01 17:34:10 by bel-idri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -87,7 +87,7 @@ CC = cc
 
 USER = $(shell whoami)
 
-CFLAGS = -Wall -Wextra -Werror -I/Users/${USER}/.brew/opt/readline/include
+CFLAGS = -Wall -Wextra -Werror -I/Users/${USER}/.brew/opt/readline/include #-g -fsanitize=address
 
 RLFLAGES = -lreadline -lhistory -L/Users/${USER}/.brew/opt/readline/lib
 

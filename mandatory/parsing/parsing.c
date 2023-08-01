@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/01 14:49:45 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/01 17:39:15 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,6 +259,7 @@ void	add_is_d(t_tokens **tokens)
 
 int	syntax_error_msg(char *str)
 {
+	g_exit = 258;
 	write(2, "minishell: syntax error near unexpected token `", 47);
 	write(2, str, ft_strlen(str));
 	write(2, "'\n", 2);
@@ -477,7 +478,7 @@ int	expand_env_halper_2(int *i, char *str, t_expvar *exp)
 	{
 		if (str[*i + 1] == '?')
 		{
-			ex_s = ft_itoa(9999);
+			ex_s = ft_itoa(g_exit);
 			exp->final = my_ft_strjoin_1(exp->final, ex_s);
 			free(ex_s);
 		}
@@ -938,8 +939,6 @@ void	open_hdoc(t_data **data, t_tokens **tokens, t_env *env)
 				close(backup_stdin);
 				write(1, "\n", 1);
 			}
-			if (tmp_data->buff)
-				tmp_data->buff[ft_strlen(tmp_data->buff) - 1] = '\0';
 		}
 		tmp = tmp->next;
 	}
@@ -999,6 +998,35 @@ void	close_files(t_data *data)
 			close(tmp->in);
 		if (tmp->out != 1)
 			close(tmp->out);
+		tmp = tmp->next;
+	}
+}
+
+void	open_files_hdoc_tmp(t_data **data)
+{
+	t_data	*tmp;
+	char	*name_file;
+	char	*tmp_name;
+	int		i;
+
+	tmp = *data;
+	i = 0;
+	while (tmp)
+	{
+		if (tmp->hdoc)
+		{
+			name_file = ft_strdup("/tmp/hdoc_");
+			tmp_name = ft_itoa(i);
+			name_file = my_ft_strjoin_1(name_file, tmp_name);
+			free(tmp_name);
+			unlink(name_file);
+			tmp->in = open(name_file, O_WRONLY | O_CREAT, 0644);
+			write(tmp->in, tmp->buff, ft_strlen(tmp->buff));
+			close(tmp->in);
+			tmp->in = open(name_file, O_RDONLY);
+			free(name_file);
+			i++;
+		}
 		tmp = tmp->next;
 	}
 }

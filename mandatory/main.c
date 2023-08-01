@@ -74,27 +74,28 @@ int	main(int argc, char *argv[], char *env[])
 			// close files
 			continue ;
 		}
+		open_files_hdoc_tmp(&data);
 
 
 
 		tmp = data;
-		int i = 0;
-		while (tmp)
-		{
-			printf("-----------------\n");
-			while (tmp->args[i])
-			{
-				printf("args[%d] = %s\n",i,tmp->args[i]);
-				i++;
-			}
-			printf("in = %d\n",tmp->in);
-			printf("out = %d\n",tmp->out);
-			printf("hdoc = %d\n",tmp->hdoc);
-			printf("buff = %s\n",tmp->buff);
-			printf("-----------------\n");
+		// int i = 0;
+		// while (tmp)
+		// {
+		// 	printf("-----------------\n");
+		// 	while (tmp->args[i])
+		// 	{
+		// 		printf("args[%d] = %s\n",i,tmp->args[i]);
+		// 		i++;
+		// 	}
+		// 	printf("in = %d\n",tmp->in);
+		// 	printf("out = %d\n",tmp->out);
+		// 	printf("hdoc = %d\n",tmp->hdoc);
+		// 	printf("buff = %s\n",tmp->buff);
+		// 	printf("-----------------\n");
 
-			tmp = tmp->next;
-		}
+		// 	tmp = tmp->next;
+		// }
 
 		direction(data,&new_env);
 		free_tokens(&tokens);

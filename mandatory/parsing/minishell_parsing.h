@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_parsing.h                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 13:35:14 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/01 15:20:24 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/08/01 17:25:07 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	sigg(int sig);
 void	sig(void);
 void	sig_handler(int sig);
 
+void	open_files_hdoc_tmp(t_data **data);
 
 
-void	sigg2(int sig);
 #endif
