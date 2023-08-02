@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 06:54:00 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/02 03:44:56 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/02 22:25:35 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	sigg(int sig)
 		g_exit = 1;
 		printf("\n");
 		rl_on_new_line();
-		rl_replace_line("", 0);
+		rl_replace_line("" , 0);
 		rl_redisplay();
 	}
 }
@@ -47,8 +47,15 @@ void	sig_handler(int sig)
 	}
 }
 
+
+void	dont(int sig)
+{
+	(void)sig;
+}
+
 void	sig(void)
 {
+	signal(SIGINT, dont);
 	signal(SIGINT, sigg);
 	signal(SIGQUIT, sigg);
 }

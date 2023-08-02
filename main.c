@@ -7,8 +7,12 @@ int	main(int argc, char *argv[], char *env[])
 	t_data		*data;
 	t_env		*new_env;
 
-	(void)argc;
-	(void)argv;
+	if (argc > 1)
+	{
+		write(2, "Error: too many arguments\n", 26);
+		return (1);
+	}
+
 	t_data		*tmp;
 
 	if (!*env)

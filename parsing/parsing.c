@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/02 03:45:06 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/02 21:45:30 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -779,13 +779,13 @@ void	go_to_pipe(t_tokens **tokens)
 	}
 }
 
-void	open_files_error(t_tokens *tmp)
+int	open_files_error(t_tokens *tmp)
 {
 	write(2, "minishell: ", 11);
 	write(2, tmp->next->str, ft_strlen(tmp->next->str));
 	write(2, ": ", 2);
 	perror("");
-	go_to_pipe(&tmp);
+	return (1);
 }
 
 void	free_2_str(char *str1, char *str2)
@@ -831,14 +831,14 @@ char	*my_ft_strjoin_2(char *s1, char *s2)
 	return (str);
 }
 
-void	open_files_helper(t_data *tmp_data, t_tokens *tmp)
+int	open_files_helper(t_data *tmp_data, t_tokens *tmp)
 {
 	if (tmp->type == IN)
 	{
 		tmp_data->hdoc = 0;
 		tmp_data->in = open(tmp->next->str, O_RDONLY);
 		if (tmp_data->in == -1)
-			open_files_error(tmp);
+			return(open_files_error(tmp));
 	}
 	else if (tmp->type == OUT)
 	{
@@ -846,7 +846,8 @@ void	open_files_helper(t_data *tmp_data, t_tokens *tmp)
 		tmp_data->out = open(tmp->next->str, \
 			O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (tmp_data->out == -1)
-			open_files_error(tmp);
+			return(open_files_error(tmp));
+
 	}
 	else if (tmp->type == APP)
 	{
@@ -854,10 +855,11 @@ void	open_files_helper(t_data *tmp_data, t_tokens *tmp)
 		tmp_data->out = open(tmp->next->str, \
 			O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (tmp_data->out == -1)
-			open_files_error(tmp);
+			return(open_files_error(tmp));
 	}
 	else if (tmp->type == HDOC)
 		tmp_data->hdoc = 1;
+	return (0);
 }
 
 void	open_files(t_data **data, t_tokens **tokens)
@@ -883,7 +885,11 @@ void	open_files(t_data **data, t_tokens **tokens)
 				tmp_data->in = -1;
 				continue ;
 			}
-			open_files_helper(tmp_data, tmp);
+			if (open_files_helper(tmp_data, tmp))
+			{
+				go_to_pipe(&tmp);
+				continue ;
+			}
 		}
 		tmp = tmp->next;
 	}
