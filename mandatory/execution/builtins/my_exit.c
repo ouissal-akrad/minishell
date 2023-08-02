@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:20:28 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/25 12:55:00 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/08/02 02:08:13 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,8 @@ void	my_exit(t_env **env,t_data *data)
 	i = 1;
 	if (!data->args[i])
 	{
-		printf("exit\n");
+		if(data_s == 1)
+			printf("exit\n");
 		g_exit = 0;
 		ft_lstfree(env);
 		exit(0);
@@ -79,6 +80,7 @@ void	my_exit(t_env **env,t_data *data)
     }
 	g_exit = ft_atoi(data->args[i]);
 	ft_lstfree(env);
-	printf("exit\n");
+	if(data_s == 1)
+		printf("exit\n");
 	exit(ft_atoi(data->args[i]) % 256);
 }

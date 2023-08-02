@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 09:48:12 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/01 15:24:04 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/08/02 02:10:48 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,8 +103,8 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 	if (pid == -1)
 	{
 		perror("fork");
-		free(path);
-		free_leaks(env);
+		// free(path);
+		// free_leaks(env);
 		return ;
 	}
 	else if (pid == 0)
@@ -156,8 +156,8 @@ void	exec_pipe(t_data *data, t_env *env_list)
 	if (pipe(pipefd) == -1)
 	{
 		perror("pipe");
-		free(path);
-		free_leaks(env);
+		// free(path);
+		// free_leaks(env);
 		return ;
 	}
 	if (data->next != NULL)
@@ -168,8 +168,8 @@ void	exec_pipe(t_data *data, t_env *env_list)
 			perror("fork");
 			close(pipefd[0]);
 			close(pipefd[1]);
-			free(path);
-			free_leaks(env);
+			// free(path);
+			// free_leaks(env);
 			return ;
 		}
 		if (pid == 0)
@@ -196,7 +196,7 @@ void	exec_pipe(t_data *data, t_env *env_list)
 		}
 		else
 		{
-			free(path);
+			// free(path);
 			// free_leaks(env);
 			close(pipefd[1]);
 			if (data->next->in == 0)

@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 22:06:09 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/02 01:58:44 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/08/02 02:06:02 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,5 +77,6 @@ typedef struct s_expvar
 int	backup_stdin;
 int	exitt;
 int		g_exit;
+int data_s;
 
 #endif

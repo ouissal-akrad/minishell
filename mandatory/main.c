@@ -103,8 +103,8 @@ int	main(int argc, char *argv[], char *env[])
 
 		// 	tmp = tmp->next;
 		// }
-
-		exec_cmds(data, new_env);
+		data_s = data_size(data);
+		direction(data,&new_env);
 
 		free_data(&data);
 		// close files

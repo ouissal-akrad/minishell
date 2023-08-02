@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/30 18:47:33 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/30 21:32:58 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/08/02 02:06:18 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,19 @@ int	ft_lstsizee(t_env *lst)
 		i++;
 	}
 	return (i);
+}
+
+int    data_size(t_data *lst)
+{
+    int        i;
+    t_data    *tmp;
+
+    tmp = lst;
+    i = 0;
+    while (tmp)
+    {
+        tmp = tmp->next;
+        i++;
+    }
+    return (i);
 }
