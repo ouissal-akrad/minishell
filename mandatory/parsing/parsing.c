@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/01 17:39:15 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/02 00:16:04 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1030,3 +1030,74 @@ void	open_files_hdoc_tmp(t_data **data)
 		tmp = tmp->next;
 	}
 }
+
+// int    data_size2(t_data *lst)
+// {
+//     int        i;
+//     t_data    *tmp;
+
+//     tmp = lst;
+//     i = 0;
+//     while (tmp)
+//     {
+//         tmp = tmp->next;
+//         i++;
+//     }
+//     return (i);
+// }
+
+// int	if_exit_in_pipe(t_data **data)
+// {
+// 	t_data	*tmp;
+// 	t_data	*prev;
+
+// 	tmp = *data;
+// 	if (data_size2(tmp) == 1)
+// 		return (0);
+
+// 	while (tmp)
+// 	{
+// 		prev = tmp;
+// 		if (!ft_strcmp(tmp->args[0], "exit"))
+// 		{
+// 			if (prev->args)
+// 				free_str(prev->args);
+
+
+
+// 			continue ;
+// 		}
+// 		tmp = tmp->next;
+// 	}
+// }
+
+// int	is_a_directory(t_data *data, t_env *env)
+// {
+// 	t_data	*tmp;
+// 	char	*str;
+// 	char	*path;
+
+// 	tmp = data;
+// 	while (tmp)
+// 	{
+// 		path = get_valid_path(tmp->args[0], env);
+// 		if (access(tmp->args[0], F_OK) == -1)
+// 		{
+// 			str = ft_strdup(tmp->args[0]);
+// 			write(2, "minishell: ", 11);
+// 			write(2, str, ft_strlen(str));
+// 			write(2, ": No such file or directory\n", 28);
+// 			free(str);
+// 			return (1);
+// 		}
+// 		if(open(tmp->args[0], O_DIRECTORY) != -1)
+// 		{
+// 			str = ft_strdup(tmp->args[0]);
+// 			write(2, "minishell: ", 11);
+// 			write(2, str, ft_strlen(str));
+// 			write(2, ": is a directory\n", 17);
+// 			free(str);
+// 			return (1);
+// 		}
+// 	}
+// }

@@ -57,24 +57,31 @@ int	main(int argc, char *argv[], char *env[])
 		if (!tokens)
 			continue ;
 		create_data(&data, &tokens, new_env);
+		free_tokens(&tokens);
+		tokens = NULL;
 		if (!data)
-		{
-			free_tokens(&tokens);
-			tokens = NULL;
 			continue ;
-		}
 		if (exitt == 1)
 		{
 			// unlink_file(tokens, data);
-			free_tokens(&tokens);
 			if (data)
 				free_data(&data);
-			tokens = NULL;
 			data = NULL;
 			// close files
 			continue ;
 		}
 		open_files_hdoc_tmp(&data);
+		// unlink_file
+
+		// if (is_a_directory(data, new_env))
+		// {
+		// 	free_tokens(&tokens);
+		// 	free_data(&data);
+		// 	tokens = NULL;
+		// 	data = NULL;
+		// 	// close files
+		// 	continue ;
+		// }
 
 
 
@@ -97,11 +104,10 @@ int	main(int argc, char *argv[], char *env[])
 		// 	tmp = tmp->next;
 		// }
 
-		direction(data,&new_env);
-		free_tokens(&tokens);
+		exec_cmds(data, new_env);
+
 		free_data(&data);
 		// close files
-		tokens = NULL;
 		data = NULL;
 	}
 	clear_history();
