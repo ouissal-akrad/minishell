@@ -1,24 +1,128 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_execution.h                              :+:      :+:    :+:   */
+/*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/22 13:35:12 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/02 03:23:16 by ouakrad          ###   ########.fr       */
+/*   Created: 2023/05/22 00:16:06 by bel-idri          #+#    #+#             */
+/*   Updated: 2023/08/02 03:46:51 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_EXECUTION_H
-# define MINISHELL_EXECUTION_H
+#ifndef MINISHELL_H
+# define MINISHELL_H
 
-# include "../minishell.h"
+# include "libft/libft.h"
+# include <curses.h>
+# include <dirent.h>
+# include <fcntl.h>
+# include <readline/history.h>
+# include <readline/readline.h>
+# include <signal.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <sys/ioctl.h>
+# include <sys/stat.h>
+# include <sys/wait.h>
+# include <term.h>
+# include <termios.h>
+# include <unistd.h>
 # include <errno.h>
 # include <limits.h>
 # include <string.h>
 
+/*---------------STRUCTS----------------*/
+typedef struct s_env
+{
+	char			*var;
+	char			*val;
+	int			flag;
+	struct s_env	*prev;
+	struct s_env	*next;
+}					t_env;
+
+typedef struct s_data
+{
+	char			**args; // args[0] = cmd
+	int				in;
+	int				out;
+	int				hdoc;
+	char			*buff;
+	struct s_data	*next;
+}					t_data;
+
+/// parsing
+
+typedef enum e_quote
+{
+	OQ, // outside quote
+	SQ, // single quote
+	DQ  // double quote
+}					t_quote;
+
+typedef enum e_token
+{
+	WORD, // any string
+	PIPE, // |
+	IN,   // <
+	OUT,  // >
+	APP,  // >>
+	HDOC  // <<
+}					t_token;
+
+typedef struct s_tokens
+{
+
+	char	*str;
+	t_token	type;
+	int		is_d;
+	char	*var;
+	struct s_tokens	*next;
+}					t_tokens;
+
+typedef struct s_expvar
+{
+	int j;
+	int k;
+	int quote;
+	char *var;
+	char *val;
+	char *final;
+	char *backup;
+} t_expvar;
+
+int	backup_stdin;
+int	exitt;
 int		g_exit;
+int data_s;
+/*---------------PARSING-----------------*/
+void	is_quote(char *str, int i, int *quote);
+int		count_tok(char *str);
+char	*add_spaces(char *str);
+void	add_token(t_tokens **tokens, char *str, t_token type);
+char	**split_tokens(char *str);
+void	free_tokens(t_tokens **tokens);
+void	free_str(char **str);
+void	lexar(char *str, t_tokens **tokens);
+int		syntax_error_quote(t_tokens *tokens);
+int		syntax_error(t_tokens *tokens);
+void	remove_quotes(t_tokens *tokens);
+void	expanding(t_tokens **token, t_env *env);
+void	split_var_no_quote(t_tokens **token);
+void	add_is_d(t_tokens **tokens);
+void	remove_null_tokens(t_tokens **tokens);
+void	ambiguous_redirect(t_tokens **tokens);
+void	create_data(t_data **data, t_tokens **tokens, t_env *env);
+void	free_data(t_data **data);
+void	free_env(t_env **env);
+void	close_files(t_data *data);
+void	sigg(int sig);
+void	sig(void);
+void	sig_handler(int sig);
+void	open_files_hdoc_tmp(t_data **data);
+
+/*---------------EXECUTION-----------------*/
 /*-------------------------builtins-------------------------------*/
 void	direction(t_data *data, t_env **new_env);
 int		is_builtins(char *cmd);

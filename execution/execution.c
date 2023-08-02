@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 09:48:12 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/02 02:10:48 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/08/02 03:45:32 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell_execution.h"
+#include "../minishell.h"
 
 char	*join_path(char *path, char *cmd)
 {
@@ -37,7 +37,7 @@ char	*join_path(char *path, char *cmd)
 		else if (errno == EACCES)
 		{
             fprintf(stderr, "minishell: %s: Permission denied\n", new_path);
-            g_exit = 126; 
+            g_exit = 126;
         }
 		free(new_path);
 	}
@@ -48,7 +48,7 @@ char	*find_path(char *cmd, char *envp[])
 {
 	int	i;
 
-	   if (cmd[0] == '\0') 
+	   if (cmd[0] == '\0')
 	{
         g_exit = 127;
         return NULL;
@@ -142,7 +142,7 @@ void	exec_pipe(t_data *data, t_env *env_list)
 	int		pipefd[2];
 	pid_t	pid;
 	int		status;
-	
+
 	env = env_list_to_char_array(env_list);
 	if (!env)
 		return ;
@@ -208,7 +208,7 @@ void	exec_pipe(t_data *data, t_env *env_list)
 	}
 	else
 	{
-		
+
 		exec_cmd(data, path, env, &env_list, pipefd);
 	}
 	close_files(data);

@@ -3,34 +3,28 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+         #
+#    By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/23 03:03:58 by bel-idri          #+#    #+#              #
-#    Updated: 2023/08/02 03:22:06 by ouakrad          ###   ########.fr        #
+#    Updated: 2023/08/02 03:46:38 by bel-idri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
-NAME_BONUS = minishell_bonus
-
-SRCS = mandatory/main.c \
-		mandatory/execution/builtins/my_cd.c \
-		mandatory/execution/builtins/my_echo.c \
-		mandatory/execution/helper.c \
-		mandatory/execution/builtins/my_env.c \
-		mandatory/execution/builtins/my_pwd.c \
-		mandatory/execution/builtins/my_unset.c \
-		mandatory/execution/builtins/my_exit.c \
-		mandatory/execution/builtins/my_export.c \
-		mandatory/execution/execution.c \
-		mandatory/execution/lib.c \
-		mandatory/parsing/parsing.c \
-		mandatory/parsing/signals.c \
-
-SRCS_BONUS = bonus/main_bonus.c \
-	# bonus/execution/tttttt.c \
-	# bonus/parsing/ttttt.c \
+SRCS = main.c \
+		execution/builtins/my_cd.c \
+		execution/builtins/my_echo.c \
+		execution/helper.c \
+		execution/builtins/my_env.c \
+		execution/builtins/my_pwd.c \
+		execution/builtins/my_unset.c \
+		execution/builtins/my_exit.c \
+		execution/builtins/my_export.c \
+		execution/execution.c \
+		execution/lib.c \
+		parsing/parsing.c \
+		parsing/signals.c \
 
 SRCS_LIBFT = libft/ft_atoi.c \
 	libft/ft_bzero.c \
@@ -79,13 +73,12 @@ SRCS_LIBFT = libft/ft_atoi.c \
 
 OBJS = $(SRCS:.c=.o)
 
-OBJS_BONUS = $(SRCS_BONUS:.c=.o)
-
 OBJS_LIBFT = $(SRCS_LIBFT:.c=.o)
 
 CC = cc
 
 USER = $(shell whoami)
+
 
 CFLAGS = -Wall -Wextra -Werror -I/Users/${USER}/.brew/opt/readline/include #-g -fsanitize=address
 
@@ -98,25 +91,18 @@ all: $(NAME)
 $(NAME): $(OBJS_LIBFT) $(OBJS)
 	$(CC) $(CFLAGS) $(RLFLAGES) $(OBJS) $(OBJS_LIBFT)  -o $(NAME)
 
-%.o: %.c mandatory/minishell.h mandatory/minishell_structs.h mandatory/parsing/minishell_parsing.h mandatory/execution/minishell_execution.h
+%.o: %.c minishell.h libft/libft.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
-bonus: $(NAME_BONUS)
-
-$(NAME_BONUS): $(OBJS_LIBFT) $(OBJS_BONUS)
-	$(CC) $(CFLAGS) $(RLFLAGES) $(OBJS_BONUS) $(OBJS_LIBFT) -o $(NAME_BONUS)
-
-%.o: %.c minishell_bonus.h
-	$(CC) $(CFLAGS) -c $<
 
 %libft/.o: %libft/.o libft/libft.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	$(RM) $(OBJS) $(OBJS_BONUS) $(OBJS_LIBFT)
+	$(RM) $(OBJS) $(OBJS_LIBFT)
 
 fclean: clean
-	$(RM) $(NAME) $(NAME_BONUS) $(NAME_LIBFT)
+	$(RM) $(NAME) $(NAME_LIBFT)
 
 re: fclean all
 

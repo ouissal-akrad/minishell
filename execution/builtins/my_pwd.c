@@ -1,18 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_bonus_executing.h                        :+:      :+:    :+:   */
+/*   my_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/22 13:35:06 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/07/25 07:23:59 by ouakrad          ###   ########.fr       */
+/*   Created: 2023/07/14 09:53:30 by ouakrad           #+#    #+#             */
+/*   Updated: 2023/08/02 03:46:13 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_BONUS_execution_H
-# define MINISHELL_BONUS_execution_H
+#include "../../minishell.h"
 
-# include "../minishell_bonus.h"
+void	my_pwd(void)
+{
+	char	cwd[1024];
 
-#endif
+	if (getcwd(cwd, sizeof(cwd)) == NULL)
+	{
+		printf("[%s]\n", cwd);
+		printf("pwd: Error occurred.\n");
+	}
+	else
+	{
+		g_exit = 0;
+		printf("%s\n", cwd);
+	}
+}

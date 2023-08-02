@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   lib.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/30 18:47:33 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/02 02:06:18 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/08/02 03:45:28 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell_execution.h"
+#include "../minishell.h"
 
 char	*ft_strcat(char *dest, char *src)
 {

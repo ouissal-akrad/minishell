@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   my_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:54:09 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/07/30 21:26:14 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/08/02 03:45:52 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell_execution.h"
+#include "../../minishell.h"
 
 void	ft_lstfree(t_env **head)
 {
@@ -89,7 +89,7 @@ void	ft_lstadd_backk(t_env **lst, t_env *new)
 void	print_env(t_env *env)
 {
 	t_env	*tmp;
-	
+
 	tmp = env;
 	while (tmp != NULL)
 	{

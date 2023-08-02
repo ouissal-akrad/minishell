@@ -6,12 +6,11 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 06:54:00 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/01 16:05:04 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/02 03:44:56 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell_parsing.h"
-
+#include "../minishell.h"
 
 void	sigg(int sig)
 {
@@ -47,18 +46,6 @@ void	sig_handler(int sig)
 		exitt = 1;
 	}
 }
-
-// void	sigg2(int sig)
-// {
-// 	printf("DD\n");
-// 	if (sig == SIGINT)
-// 	{
-// 		printf("\n");
-// 		rl_on_new_line();
-// 		rl_replace_line("", 0);
-// 	}
-// }
-
 
 void	sig(void)
 {

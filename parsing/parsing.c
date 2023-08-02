@@ -6,11 +6,11 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/02 00:16:04 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/02 03:45:06 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell_parsing.h"
+#include "../minishell.h"
 
 void	is_quote(char *str, int i, int *quote)
 {
