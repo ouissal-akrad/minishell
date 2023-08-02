@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 00:16:06 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/02 03:20:52 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/08/02 03:23:20 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,29 +14,22 @@
 # define MINISHELL_H
 
 # include "../libft/libft.h"
+# include "execution/minishell_execution.h"
 # include "minishell_structs.h"
 # include "parsing/minishell_parsing.h"
-# include "execution/minishell_execution.h"
-# include <stdio.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include <stdlib.h>
-# include <unistd.h>
-# include <fcntl.h>
-# include <sys/wait.h>
-# include <signal.h>
-# include <sys/stat.h>
-# include <dirent.h>
-# include <sys/ioctl.h>
-# include <termios.h>
 # include <curses.h>
-# include <term.h>
-
-
-
-
+# include <dirent.h>
+# include <fcntl.h>
+# include <readline/history.h>
+# include <readline/readline.h>
 # include <signal.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <sys/ioctl.h>
+# include <sys/stat.h>
+# include <sys/wait.h>
+# include <term.h>
+# include <termios.h>
+# include <unistd.h>
 
-
-
-# endif
+#endif
