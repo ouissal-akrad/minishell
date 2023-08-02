@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 13:35:12 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/02 02:06:24 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/08/02 03:22:30 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	swap_env(t_env *a, t_env *b);
 void	print_env_ex(t_env *env);
 int		all_str(char *str);
 void	my_export(t_env **env, t_data *data);
-t_env	*find_env(t_env *env, char *name);
+t_env	*find_env(t_env *env, char *name); 
 void	sequal(t_env *env, char *prev, char *rest, int plus);
 /*----------------execution---------------------*/
 void	free_leaks(char **paths);
@@ -70,4 +70,7 @@ char	*ft_strcat(char *dest, char *src);
 char	*ft_strcpy(char *dest, char *src);
 int	ft_lstsizee(t_env *lst);
 int    data_size(t_data *lst);
+
+
+
 #endif

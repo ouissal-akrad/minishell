@@ -6,7 +6,7 @@
 #    By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/23 03:03:58 by bel-idri          #+#    #+#              #
-#    Updated: 2023/08/02 02:11:05 by ouakrad          ###   ########.fr        #
+#    Updated: 2023/08/02 03:22:06 by ouakrad          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -98,7 +98,7 @@ all: $(NAME)
 $(NAME): $(OBJS_LIBFT) $(OBJS)
 	$(CC) $(CFLAGS) $(RLFLAGES) $(OBJS) $(OBJS_LIBFT)  -o $(NAME)
 
-%.o: %.c minishell.h
+%.o: %.c mandatory/minishell.h mandatory/minishell_structs.h mandatory/parsing/minishell_parsing.h mandatory/execution/minishell_execution.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 bonus: $(NAME_BONUS)
