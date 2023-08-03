@@ -4,6 +4,7 @@
 		"minishell_parsing.h": "c",
 		"minishell_execution.h": "c",
 		"minishell.h": "c",
-		"libft.h": "c"
+		"libft.h": "c",
+		"algorithm": "c"
 	}
 }

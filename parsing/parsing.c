@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/03 18:46:34 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/03 20:28:09 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -883,7 +883,6 @@ void	open_files(t_data **data, t_tokens **tokens)
 				write(2, tmp->next->var, ft_strlen(tmp->next->var));
 				write(2, ": ambiguous redirect\n", 21);
 				go_to_pipe(&tmp);
-				// g_exit = 1;
 				tmp_data->in = -1;
 				continue ;
 			}
@@ -1076,7 +1075,7 @@ void		is_a_directory(t_data **data)
 				tmp->is_dir = 3;
 				// write(2, "minishell: ", 11);
 				// write(2, tmp->args[0], ft_strlen(tmp->args[0]));
-				// write(2, ": No such file or directory\n", 28);
+				// write(2, ": No such file or directory", 27);
 			}
 
 		}

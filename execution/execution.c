@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 09:48:12 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/03 19:30:11 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/03 20:28:44 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 		int *pipefd)
 {
 	pid_t	pid;
-	// int		status;
+	int		status;
 
 	pid = fork();
 	if (pid == -1)
@@ -120,9 +120,12 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 					exec_builtin(data, env_list);
 				else if(execve(path, data->args, env) < 0)
 				{
-					perror("minishell");
+					write(2, "minishell: ", 11);
+					write(2, data->args[0], ft_strlen(data->args[0]));
+					write(2, ": ", 2);
+					perror("");
 					g_exit = 127;
-					// exit(g_exit);
+					exit(g_exit);
 				}
 		}
 		else if (data->is_dir == 1)
@@ -131,7 +134,7 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 			write(2, data->args[0], ft_strlen(data->args[0]));
 			write(2, ": is a directory\n", 17);
 			g_exit = 126;
-			// exit(g_exit);
+			exit(g_exit);
 		}
 		else if (data->is_dir == 2)
 		{
@@ -139,28 +142,23 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 			write(2, data->args[0], ft_strlen(data->args[0]));
 			write(2, ": Permission denied\n", 20);
 			g_exit = 126;
-				// exit(g_exit);
+				exit(g_exit);
 		}
 		else if (data->is_dir == 3)
 		{
 			write(2, "minishell: ", 11);
 			write(2, data->args[0], ft_strlen(data->args[0]));
-			write(2, ": No such file or directory\n", 28);
+			write(2, ": No such file or directory", 27);
 			g_exit = 127;
-				// exit(g_exit);
+				exit(g_exit);
 		}
 	}
 	else
 	{
-		waitpid(pid, NULL, 0);
-
-
-		printf("g_exit = %d\n", g_exit);
-		// printf("status = %d\n", status);
-
-		// g_exit = status;
-		// if (data_s > 1)
-			// exit(g_exit);
+		waitpid(pid, &status, 0);
+		g_exit = status / 256;
+		if (data_s > 1)
+			exit(g_exit);
 	}
 }
 
@@ -170,7 +168,7 @@ void	exec_pipe(t_data *data, t_env *env_list)
 	char	*path;
 	int		pipefd[2];
 	pid_t	pid;
-	// int		status;
+	int		status;
 	t_data *tmp = data;
 	path = ft_strdup("");
 	env = env_list_to_char_array(env_list);
@@ -228,16 +226,16 @@ void	exec_pipe(t_data *data, t_env *env_list)
 				{
 					perror("minishell");
 					g_exit = 127;
-					// exit(g_exit);
+					exit(g_exit);
 				}
 			}
 			else if (tmp->is_dir == 1)
 			{
 				write(2, "minishell: ", 11);
 				write(2, tmp->args[0], ft_strlen(tmp->args[0]));
-				write(2, ": is a directory\n", 17);
+				write(2, ": Is a directory\n", 17);
 				g_exit = 126;
-				// exit(g_exit);
+				exit(g_exit);
 			}
 			else if (tmp->is_dir == 2)
 			{
@@ -245,15 +243,15 @@ void	exec_pipe(t_data *data, t_env *env_list)
 				write(2, tmp->args[0], ft_strlen(tmp->args[0]));
 				write(2, ": Permission denied\n", 20);
 				g_exit = 126;
-				// exit(g_exit);
+				exit(g_exit);
 			}
 			else if (tmp->is_dir == 3)
 			{
 				write(2, "minishell: ", 11);
 				write(2, tmp->args[0], ft_strlen(tmp->args[0]));
-				write(2, ": No such file or directory\n", 28);
+				write(2, ": No such file or directory", 27);
 				g_exit = 127;
-				// exit(g_exit);
+				exit(g_exit);
 			}
 		}
 		else
@@ -264,15 +262,8 @@ void	exec_pipe(t_data *data, t_env *env_list)
 			if (tmp->next->in == 0)
 				tmp->next->in = pipefd[0];
 			exec_pipe(tmp->next, env_list);
-			waitpid(pid, NULL, 0);
-
-			// printf("status = %d\n", status);
-
-			// g_exit = status;
-
-			printf("g_exit = %d\n", g_exit);
-			// if (data_s > 1)
-				// exit(g_exit);
+			waitpid(pid, &status, 0);
+			g_exit = status / 256;
 		}
 	}
 	else

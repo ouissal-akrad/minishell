@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:20:28 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/03 18:29:39 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/03 20:02:32 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	my_exit(t_env **env,t_data *data)
 	}
 	else
 		data->args[i] = skip_zero(data->args[i]);
-	if ((ft_check(data->args[i]) == 0 || ft_check(data->args[i]) == -1) || all_digit(data->args[i]) == 0)
+	if (((ft_check(data->args[i]) == 0 || ft_check(data->args[i]) == -1) || all_digit(data->args[i]) == 0))
 	{
 		if (data_s == 1)
 			printf("exit\n");

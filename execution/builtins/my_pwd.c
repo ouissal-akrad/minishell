@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:53:30 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/03 01:49:57 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/03 20:30:33 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,5 +18,6 @@ void	my_pwd(void)
 
 	getcwd(cwd, sizeof(cwd));
 	g_exit = 0;
+	write(
 	printf("%s\n", cwd);
 }
