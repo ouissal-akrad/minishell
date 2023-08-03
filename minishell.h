@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 00:16:06 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/03 01:53:43 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/03 21:35:17 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,8 +139,8 @@ void				parent(char *path);
 void				my_echo(t_data *data);
 int					newline_checker(char *str);
 /*----------------env---------------------*/
-void				my_env(t_env **env);
-void				print_env(t_env *env);
+void				my_env(t_env **env, t_data *data);
+void				print_env(t_env *env,t_data *data);
 void				delete_node(t_env *head);
 void				ft_lstadd_backk(t_env **lst, t_env *new);
 t_env				*ft_lstneww(char *env_name, char *env_content);
@@ -149,7 +149,7 @@ void				ft_lstfree(t_env **head);
 void				shlvl(t_env *env);
 t_env				*no_env(void);
 /*----------------pwd---------------------*/
-void				my_pwd(void);
+void				my_pwd(t_data *data);
 /*----------------unset---------------------*/
 void				my_unset(t_env **env, t_data *data);
 /*----------------exit---------------------*/
@@ -160,7 +160,7 @@ void				my_export(t_env **env, t_data *data);
 void				ft_csp(t_env *env, t_data *data, int c);
 void				sort_env(t_env **env);
 void				swap_env(t_env *a, t_env *b);
-void				print_env_ex(t_env *env);
+void				print_env_ex(t_env *env,t_data *data);
 int					all_str(char *str);
 void				my_export(t_env **env, t_data *data);
 t_env				*find_env(t_env *env, char *name);

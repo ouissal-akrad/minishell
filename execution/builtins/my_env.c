@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:54:09 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/03 03:15:25 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/03 21:30:18 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void	ft_lstadd_backk(t_env **lst, t_env *new)
 	tmp->next = new;
 }
 
-void	print_env(t_env *env)
+void	print_env(t_env *env ,t_data *data)
 {
 	t_env	*tmp;
 
@@ -99,7 +99,11 @@ void	print_env(t_env *env)
 			continue;
 		}
 		if (tmp->var != NULL && tmp->val != NULL)
-			printf("%s=%s\n", tmp->var, tmp->val);
+		{
+			write(data->out,tmp->var, ft_strlen(tmp->var));
+			write(data->out,"=", 1);
+			write(data->out,tmp->val, ft_strlen(tmp->val));
+		}
 		tmp = tmp->next;
 	}
 }
@@ -148,8 +152,8 @@ t_env	*create_list(char *str[])
 	shlvl(env);
 	return (env);
 }
-void	my_env(t_env **env)
+void	my_env(t_env **env,t_data *data)
 {
-	print_env(*env);
+	print_env(*env,data);
 	g_exit = 0;
 }

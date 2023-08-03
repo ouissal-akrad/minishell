@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:46:00 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/03 18:31:06 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/03 21:36:12 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ t_env	*find_env(t_env *env, char *name)
 	return (NULL);
 }
 
-void	print_env_ex(t_env *env)
+void	print_env_ex(t_env *env,t_data *data)
 {
 	t_env	*tmp;
 	int		i;
@@ -58,21 +58,24 @@ void	print_env_ex(t_env *env)
 		if (tmp->var != NULL && tmp->val != NULL)
 		{
 			i = -1;
-			printf("declare -x ");
+			write(data->out, "declare -x ", 11);
 			while (tmp->var[++i])
-				printf("%c", tmp->var[i]);
-			printf("=\"");
+				write(data->out, &tmp->var[i], 1);
+			write(data->out, "=\"", 2);
 			i = -1;
 			while (tmp->val[++i])
 			{
 				if (tmp->val[i] == '\"')
-					printf("\\");
-				printf("%c", tmp->val[i]);
+					write(data->out, "\\", 2);
+				write(data->out, &tmp->val[i], 1);
 			}
-			printf("\"\n");
+			write(data->out, "\"\n", 2);
 		}
 		else if (tmp->var != NULL)
-			printf("declare -x %s\n", tmp->var);
+		{
+			write(data->out, "declare -x ", 11);
+			write(data->out, tmp->var, ft_strlen(tmp->var));
+		}
 		tmp = tmp->next;
 	}
 }
@@ -178,7 +181,7 @@ void	my_export(t_env **env, t_data *data)
 	if (!data->args[1])
 	{
 		sort_env(env);
-		print_env_ex(*env);
+		print_env_ex(*env,data);
 	}
 	else
 		ft_csp(*env, data, '=');
