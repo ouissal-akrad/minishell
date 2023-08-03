@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:21:57 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/03 21:35:43 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/03 21:39:59 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,11 @@ void	direction(t_data *data, t_env **new_env)
 				my_unset(new_env, data);
 				return;
 			}
-		// else if (ft_strncmp(data->args[0], "echo") == 0)
-		// 	{
-		// 		my_echo(data);
-		// 		return;
-		// 	}
+		else if (ft_strncmp(data->args[0], "echo") == 0)
+			{
+				my_echo(data);
+				return;
+			}
 		else if (ft_strncmp(data->args[0], "cd") == 0)
 			{
 				my_cd(new_env, data);
@@ -91,11 +91,6 @@ void	direction(t_data *data, t_env **new_env)
 				my_env(new_env, data);
 				return;
 			}
-		// else if (ft_strncmp(data->args[0], "exit") == 0)
-		// 	{
-		// 		my_exit(new_env, data);
-		// 		return;
-		// 	}
 		else if (ft_strncmp(data->args[0], "export") == 0)
 			{
 				my_export(new_env, data);

@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 09:48:12 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/03 20:28:44 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/03 21:41:29 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,8 +157,8 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 	{
 		waitpid(pid, &status, 0);
 		g_exit = status / 256;
-		if (data_s > 1)
-			exit(g_exit);
+		// if (data_s > 1)
+		// 	exit(g_exit);
 	}
 }
 
