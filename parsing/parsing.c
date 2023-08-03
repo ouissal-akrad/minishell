@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/03 01:36:35 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/03 18:46:34 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -745,7 +745,7 @@ void	ft_lstnewnode(t_data *new, t_tokens **tokens)
 	new->out = 1;
 	new->hdoc = 0;
 	new->buff = ft_strdup("");
-	// new->is_dir = 0;
+	new->is_dir = 0;
 	new->next = NULL;
 }
 
@@ -883,11 +883,13 @@ void	open_files(t_data **data, t_tokens **tokens)
 				write(2, tmp->next->var, ft_strlen(tmp->next->var));
 				write(2, ": ambiguous redirect\n", 21);
 				go_to_pipe(&tmp);
+				// g_exit = 1;
 				tmp_data->in = -1;
 				continue ;
 			}
 			if (open_files_helper(tmp_data, tmp))
 			{
+				// g_exit = 1;
 				go_to_pipe(&tmp);
 				continue ;
 			}

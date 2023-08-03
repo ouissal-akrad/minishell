@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:55:55 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/03 01:54:22 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/03 18:33:07 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,10 @@ void	my_cd(t_env **env, t_data *data)
 		parent(path);
 	if (chdir(path) == -1)
 	{
-		printf("cd: no such file or directory: %s\n", path);
+		write(2, "cd: ", 4);
+		write(2, path, ft_strlen(path));
+		write(2, ": No such file or directory\n", 28);
+
 		g_exit = 1;
 		return ;
 	}
@@ -101,7 +104,7 @@ char	*go_oldpwd(t_env **env)
 	path = find(*env, "OLDPWD");
 	if (path == NULL)
 	{
-		printf("cd: OLDPWD not set\n");
+		write(2, "cd: OLDPWD not set\n", 19);
 		g_exit = 1;
 		return (NULL);
 	}
@@ -112,10 +115,13 @@ void	parent(char *path)
 {
 	if (chdir(path) == -1)
 	{
-		printf("cd: no such file or directory: %s\n", path);
+		write(2, "cd: ", 4);
+		write(2, path, ft_strlen(path));
+		write(2, ": No such file or directory\n", 28);
 		g_exit = 1;
 		return ;
 	}
-	printf("cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory.\n");
-	return ;
+
+	write(2, "cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory.\n", 109);
+	return;
 }
