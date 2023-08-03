@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 09:48:12 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/03 21:41:29 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/03 22:23:03 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,8 +106,16 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 	{
 		signal(SIGINT, sigg);
 		signal(SIGQUIT, sigg);
-		if (!data->args[0] || data->in < 0 || data->out < 0)
-			exit(1);
+		if (data->in < 0 || data->out < 0)
+		{
+			g_exit = 1;
+			exit(g_exit);
+		}
+		if(!data->args[0])
+		{
+			g_exit = 0;
+			exit(g_exit);
+		}
 		if (data->in > 2)
 			dup2(data->in, STDIN_FILENO);
 		if (data->out > 2)
@@ -127,6 +135,7 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 					g_exit = 127;
 					exit(g_exit);
 				}
+
 		}
 		else if (data->is_dir == 1)
 		{
@@ -157,8 +166,6 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 	{
 		waitpid(pid, &status, 0);
 		g_exit = status / 256;
-		// if (data_s > 1)
-		// 	exit(g_exit);
 	}
 }
 
@@ -207,8 +214,16 @@ void	exec_pipe(t_data *data, t_env *env_list)
 		{
 			signal(SIGINT, sigg);
 			signal(SIGQUIT, sigg);
-			if (!tmp->args[0] || tmp->in < 0 || tmp->out < 0)
-				exit(1);
+			if (tmp->in < 0 || tmp->out < 0)
+			{
+				g_exit = 1;
+				exit(g_exit);
+			}
+			if(!data->args[0])
+			{
+				g_exit = 0;
+				exit(g_exit);
+			}
 			if (tmp->in > 2)
 				dup2(tmp->in, STDIN_FILENO);
 			if (tmp->out > 2)
@@ -228,6 +243,7 @@ void	exec_pipe(t_data *data, t_env *env_list)
 					g_exit = 127;
 					exit(g_exit);
 				}
+
 			}
 			else if (tmp->is_dir == 1)
 			{
@@ -254,7 +270,7 @@ void	exec_pipe(t_data *data, t_env *env_list)
 				exit(g_exit);
 			}
 		}
-		else
+		else if (pid > 0)
 		{
 			// free(path);
 			// free_leaks(env);
@@ -269,6 +285,11 @@ void	exec_pipe(t_data *data, t_env *env_list)
 	else
 	{
 		exec_cmd(tmp, path, env, &env_list, pipefd);
+
+		////// exit(g_exit);
+
+
 	}
 	close_files(data);
+
 }
