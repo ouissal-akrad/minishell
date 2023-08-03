@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/30 18:47:33 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/02 03:45:28 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/03 01:35:41 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ char	*ft_strcat(char *dest, char *src)
 
 	i = 0;
 	j = 0;
+	if(!src)
+		return (dest);
 	while (dest[i] != '\0')
 		i++;
 	while (src[j] != '\0')
@@ -71,4 +73,22 @@ int    data_size(t_data *lst)
         i++;
     }
     return (i);
+}
+
+int	ft_strncmp_2(const char *s1, const char *s2, size_t n)
+{
+	size_t	i;
+
+	i = 0;
+	if (n == 0)
+		return (0);
+	if (!s1[i] || !s2[i])
+		return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+	while ((s1[i] || s2[i]) && i < n)
+	{
+		if (s1[i] != s2[i])
+			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+		i++;
+	}
+	return (0);
 }

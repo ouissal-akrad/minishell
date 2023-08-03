@@ -3,6 +3,7 @@
 		"readline.h": "c",
 		"minishell_parsing.h": "c",
 		"minishell_execution.h": "c",
-		"minishell.h": "c"
+		"minishell.h": "c",
+		"libft.h": "c"
 	}
 }

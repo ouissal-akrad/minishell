@@ -6,17 +6,12 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:46:00 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/02 03:49:03 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/03 02:40:58 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	ft_error(char *str)
-{
-	printf("minishell: export: `%s`: not a valid identifier\n", str);
-	return ;
-}
 
 int	all_str(char *str)
 {
@@ -38,7 +33,7 @@ t_env	*find_env(t_env *env, char *name)
 {
 	while (env != NULL)
 	{
-		if (ft_strcmp(env->var, name) == 0)
+		if (ft_strncmp(env->var, name) == 0)
 			return (env);
 		env = env->next;
 	}
@@ -53,8 +48,8 @@ void	print_env_ex(t_env *env)
 	tmp = env;
 	while (tmp != NULL)
 	{
-		if (env->flag >= 1 && (ft_strcmp("PATH", tmp->var) == 0
-				|| ft_strcmp("SHELL", tmp->var) == 0 || ft_strcmp("_",
+		if (env->flag >= 1 && (ft_strncmp("PATH", tmp->var) == 0
+				|| ft_strncmp("SHELL", tmp->var) == 0 || ft_strncmp("_",
 					tmp->var) == 0))
 		{
 			tmp = tmp->next;
@@ -167,7 +162,7 @@ void	sort_env(t_env **env)
 		swapped = 0;
 		while (tmp && tmp->next)
 		{
-			if (ft_strcmp(tmp->var, tmp->next->var) > 0)
+			if (ft_strncmp(tmp->var, tmp->next->var) > 0)
 			{
 				swap_env(tmp, tmp->next);
 				swapped = 1;
@@ -208,9 +203,10 @@ void	ft_csp(t_env *env, t_data *data, int c)
 		tmp = data->args[cmd];
 		if (tmp[0] != '_' && !ft_isalpha(tmp[0]))
 		{
-			printf("minishell: export: `%s`: not a valid identifier============\n",
+			fprintf(stderr, "minishell: export: `%s': not a valid identifier\n",
 					data->args[cmd]);
 			cmd++;
+			g_exit = 1;
 			continue ;
 		}
 		while (tmp[i] && tmp[i] != c)
@@ -225,8 +221,10 @@ void	ft_csp(t_env *env, t_data *data, int c)
 					plus = 1;
 				else if (count_plus(tmp) == -1)
 				{
-					printf("minishell: export: `%s`: not a valid identifier++++++++\n",
+					fprintf(stderr, "minishell: export: `%s': not a valid identifier\n",
 							data->args[cmd]);
+										g_exit = 1;
+
 					cmd++;
 					continue ;
 				}
@@ -247,16 +245,19 @@ void	ft_csp(t_env *env, t_data *data, int c)
 			prev = ft_strdup(tmp);
 		else
 		{
-			printf("minishell: export: `%s`: not a valid identifie00000000r\n",
+			fprintf(stderr, "minishell: export: `%s': not a valid identifier\n",
 					data->args[cmd]);
 			cmd++;
+			g_exit = 1;
 			continue ;
 		}
 		if (!check(prev))
 		{
-			printf("minishell: export: `%s`: not a valid identifier*************\n",
+			fprintf(stderr, "minishell: export: `%s': not a valid identifier\n",
 					data->args[cmd]);
 			cmd++;
+						g_exit = 1;
+
 			continue ;
 		}
 		// check
@@ -265,7 +266,10 @@ void	ft_csp(t_env *env, t_data *data, int c)
 	}
 	//resort env
 	sort_env(&env);
-	g_exit = 0;
+	if (g_exit == 1)
+		g_exit = 1;
+	else if (g_exit == 0)
+		g_exit = 0;
 	// print_env_ex(env);
 	// puts("-----------------------------");
 	// print_env(env);

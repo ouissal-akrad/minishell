@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/03 03:20:11 by bel-idri          #+#    #+#             */
+/*   Updated: 2023/08/03 03:20:13 by bel-idri         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	main(int argc, char *argv[], char *env[])
@@ -7,6 +19,7 @@ int	main(int argc, char *argv[], char *env[])
 	t_data		*data;
 	t_env		*new_env;
 
+	(void)argv;
 	if (argc > 1)
 	{
 		write(2, "Error: too many arguments\n", 26);
@@ -77,15 +90,7 @@ int	main(int argc, char *argv[], char *env[])
 		open_files_hdoc_tmp(&data);
 		// unlink_file
 
-		// if (is_a_directory(data, new_env))
-		// {
-		// 	free_tokens(&tokens);
-		// 	free_data(&data);
-		// 	tokens = NULL;
-		// 	data = NULL;
-		// 	// close files
-		// 	continue ;
-		// }
+		is_a_directory(&data);
 
 
 
@@ -103,10 +108,12 @@ int	main(int argc, char *argv[], char *env[])
 		// 	printf("out = %d\n",tmp->out);
 		// 	printf("hdoc = %d\n",tmp->hdoc);
 		// 	printf("buff = %s\n",tmp->buff);
+		// 	printf("is_dir = %d\n",tmp->is_dir);
 		// 	printf("-----------------\n");
 
 		// 	tmp = tmp->next;
 		// }
+
 		data_s = data_size(data);
 		direction(data,&new_env);
 
@@ -118,5 +125,3 @@ int	main(int argc, char *argv[], char *env[])
 	free_env(&new_env);
 	return (0);
 }
-
-//  if -1 no exucte

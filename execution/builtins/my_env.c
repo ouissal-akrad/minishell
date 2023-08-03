@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:54:09 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/02 03:45:52 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/03 03:15:25 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void	print_env(t_env *env)
 	tmp = env;
 	while (tmp != NULL)
 	{
-		if(env->flag >= 1 && (ft_strcmp("PATH",tmp->var) == 0 || ft_strcmp("SHELL",tmp->var) == 0))
+		if(env->flag >= 1 && (ft_strncmp("PATH",tmp->var) == 0 || ft_strncmp("SHELL",tmp->var) == 0))
 		{
 			tmp = tmp->next;
 			continue;
@@ -107,20 +107,21 @@ void	print_env(t_env *env)
 void shlvl(t_env *env)
 {
 	int new_val;
-	while(env)
+	t_env *tmp = env;
+	while(tmp)
 	{
-		if (ft_strcmp(env->var, "SHLVL") == 0)
+		if (ft_strncmp(tmp->var, "SHLVL") == 0)
 		{
-			new_val = ft_atoi(env->val) + 1;
-			free(env->val);
+			new_val = ft_atoi(tmp->val) + 1;
+			free(tmp->val);
 			if(new_val == 1000)
-				env->val = ft_strdup("");
-			else if(ft_strcmp(env->var, "") == 0)
-				env->val = ft_itoa(1);
+				tmp->val = ft_strdup("");
+			else if(ft_strncmp(tmp->var, "") == 0)
+				tmp->val = ft_itoa(1);
 			else
-				env->val = ft_itoa(new_val);
+				tmp->val = ft_itoa(new_val);
 		}
-		env = env->next;
+		tmp = tmp->next;
 	}
 }
 
