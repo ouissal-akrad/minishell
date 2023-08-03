@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/02 21:45:30 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/03 00:54:40 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -745,6 +745,7 @@ void	ft_lstnewnode(t_data *new, t_tokens **tokens)
 	new->out = 1;
 	new->hdoc = 0;
 	new->buff = ft_strdup("");
+	// new->is_dir = 0;
 	new->next = NULL;
 }
 
@@ -1037,73 +1038,53 @@ void	open_files_hdoc_tmp(t_data **data)
 	}
 }
 
-// int    data_size2(t_data *lst)
-// {
-//     int        i;
-//     t_data    *tmp;
+void		is_a_directory(t_data **data)
+{
+	t_data	*tmp;
 
-//     tmp = lst;
-//     i = 0;
-//     while (tmp)
-//     {
-//         tmp = tmp->next;
-//         i++;
-//     }
-//     return (i);
-// }
+	tmp = *data;
 
-// int	if_exit_in_pipe(t_data **data)
-// {
-// 	t_data	*tmp;
-// 	t_data	*prev;
+	while (tmp)
+	{
 
-// 	tmp = *data;
-// 	if (data_size2(tmp) == 1)
-// 		return (0);
+		if (ft_strchr(tmp->args[0], '/'))
+		{
+			if (access(tmp->args[0], F_OK) == 0)
+			{
+				if (access(tmp->args[0], X_OK) == 0)
+				{
+					if (opendir(tmp->args[0]) != NULL)
+					{
+						tmp->is_dir = 1;
+						// write(2, "minishell: ", 11);
+						// write(2, tmp->args[0], ft_strlen(tmp->args[0]));
+						// write(2, ": is a directory\n", 17);
+					}
+				}
+				else
+				{
+					tmp->is_dir = 2;
+					// write(2, "minishell: ", 11);
+					// write(2, tmp->args[0], ft_strlen(tmp->args[0]));
+					// write(2, ": Permission denied\n", 20);
+				}
+			}
+			else
+			{
+				tmp->is_dir = 3;
+				// write(2, "minishell: ", 11);
+				// write(2, tmp->args[0], ft_strlen(tmp->args[0]));
+				// write(2, ": No such file or directory\n", 28);
+			}
 
-// 	while (tmp)
-// 	{
-// 		prev = tmp;
-// 		if (!ft_strcmp(tmp->args[0], "exit"))
-// 		{
-// 			if (prev->args)
-// 				free_str(prev->args);
+		}
+		else
+			tmp->is_dir = 0;
+		tmp = tmp->next;
+	}
+}
 
-
-
-// 			continue ;
-// 		}
-// 		tmp = tmp->next;
-// 	}
-// }
-
-// int	is_a_directory(t_data *data, t_env *env)
-// {
-// 	t_data	*tmp;
-// 	char	*str;
-// 	char	*path;
-
-// 	tmp = data;
-// 	while (tmp)
-// 	{
-// 		path = get_valid_path(tmp->args[0], env);
-// 		if (access(tmp->args[0], F_OK) == -1)
-// 		{
-// 			str = ft_strdup(tmp->args[0]);
-// 			write(2, "minishell: ", 11);
-// 			write(2, str, ft_strlen(str));
-// 			write(2, ": No such file or directory\n", 28);
-// 			free(str);
-// 			return (1);
-// 		}
-// 		if(open(tmp->args[0], O_DIRECTORY) != -1)
-// 		{
-// 			str = ft_strdup(tmp->args[0]);
-// 			write(2, "minishell: ", 11);
-// 			write(2, str, ft_strlen(str));
-// 			write(2, ": is a directory\n", 17);
-// 			free(str);
-// 			return (1);
-// 		}
-// 	}
-// }
+// 0 - comand
+// 1 - permission denied
+// 3 - no such file or directory
+// 4 - is a directory

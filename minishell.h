@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 00:16:06 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/02 03:46:51 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/03 00:46:34 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct s_data
 	int				out;
 	int				hdoc;
 	char			*buff;
+	int				is_dir;
 	struct s_data	*next;
 }					t_data;
 
@@ -174,5 +175,18 @@ char	*ft_strcat(char *dest, char *src);
 char	*ft_strcpy(char *dest, char *src);
 int		ft_lstsizee(t_env *lst);
 int		data_size(t_data *lst);
+
+
+
+
+
+
+
+
+
+
+
+
+void		is_a_directory(t_data **data);
 
 #endif
