@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/03 00:54:40 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/03 01:36:35 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,15 +200,15 @@ void	lexar(char *str, t_tokens **tokens)
 	i = -1;
 	while (str_t[++i])
 	{
-		if (!ft_strcmp(str_t[i], "|"))
+		if (!ft_strncmp(str_t[i], "|"))
 			add_token(tokens, ft_strdup("|"), PIPE);
-		else if (!ft_strcmp(str_t[i], "<"))
+		else if (!ft_strncmp(str_t[i], "<"))
 			add_token(tokens, ft_strdup("<"), IN);
-		else if (!ft_strcmp(str_t[i], ">"))
+		else if (!ft_strncmp(str_t[i], ">"))
 			add_token(tokens, ft_strdup(">"), OUT);
-		else if (!ft_strcmp(str_t[i], ">>"))
+		else if (!ft_strncmp(str_t[i], ">>"))
 			add_token(tokens, ft_strdup(">>"), APP);
-		else if (!ft_strcmp(str_t[i], "<<"))
+		else if (!ft_strncmp(str_t[i], "<<"))
 			add_token(tokens, ft_strdup("<<"), HDOC);
 		else
 			add_token(tokens, ft_strdup(str_t[i]), WORD);
@@ -286,7 +286,7 @@ void	syntax_error_hdoc_helper(char *str)
 			rl_hdoc();
 			break ;
 		}
-		if (!ft_strcmp(line, str))
+		if (!ft_strncmp(line, str))
 		{
 			free(line);
 			break ;
@@ -447,7 +447,7 @@ char	*get_val(char *var, t_env *env, int quote)
 	tmp = env;
 	while (tmp)
 	{
-		if (!ft_strcmp(tmp->var, var))
+		if (!ft_strncmp(tmp->var, var))
 		{
 			if (quote == OQ)
 				return (replace_space(tmp->val));
@@ -909,7 +909,7 @@ void	open_hdoc_helper(t_data **tmp_data, t_tokens *tmp, t_env *env)
 			rl_hdoc();
 			break ;
 		}
-		if (!ft_strcmp(line, tmp->next->str))
+		if (!ft_strncmp(line, tmp->next->str))
 			break ;
 		if (tmp->next->is_d == 3)
 			line = get_line(line, env);

@@ -6,7 +6,7 @@
 #    By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/23 03:03:58 by bel-idri          #+#    #+#              #
-#    Updated: 2023/08/02 21:50:01 by bel-idri         ###   ########.fr        #
+#    Updated: 2023/08/03 02:09:59 by bel-idri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,7 +54,6 @@ SRCS_LIBFT = libft/ft_atoi.c \
 	libft/ft_strlen.c \
 	libft/ft_strmapi.c \
 	libft/ft_strncmp.c \
-	libft/ft_strcmp.c \
 	libft/ft_strnstr.c \
 	libft/ft_strrchr.c \
 	libft/ft_strtrim.c \

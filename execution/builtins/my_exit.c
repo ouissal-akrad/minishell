@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:20:28 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/02 03:45:57 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/03 01:37:40 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,10 @@ char *skip_zero(char *str)
 static int	ft_check(char *str)
 {
 	if ((ft_strlen(str) >= 19)
-			&& (ft_strncmp(str, "9223372036854775807", 19) >= 0))
+			&& (ft_strncmp_2(str, "9223372036854775807", 19) >= 0))
 			return (-1);
 	if (ft_strlen(str) >= 20
-			&& ft_strncmp(str, "-9223372036854775808", 20) >= 0)
+			&& ft_strncmp_2(str, "-9223372036854775808", 20) >= 0)
 			return (0);
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 09:48:12 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/03 00:55:56 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/03 02:09:27 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ char	*find_path(char *cmd, char *envp[])
 	i = -1;
 	while (envp[++i])
 	{
-		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
+		if (ft_strncmp_2(envp[i], "PATH=", 5) == 0)
 			return (join_path(envp[i] + 5, cmd));
 	}
 	return (cmd);

@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:46:00 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/02 03:49:03 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/03 01:32:30 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ t_env	*find_env(t_env *env, char *name)
 {
 	while (env != NULL)
 	{
-		if (ft_strcmp(env->var, name) == 0)
+		if (ft_strncmp(env->var, name) == 0)
 			return (env);
 		env = env->next;
 	}
@@ -53,8 +53,8 @@ void	print_env_ex(t_env *env)
 	tmp = env;
 	while (tmp != NULL)
 	{
-		if (env->flag >= 1 && (ft_strcmp("PATH", tmp->var) == 0
-				|| ft_strcmp("SHELL", tmp->var) == 0 || ft_strcmp("_",
+		if (env->flag >= 1 && (ft_strncmp("PATH", tmp->var) == 0
+				|| ft_strncmp("SHELL", tmp->var) == 0 || ft_strncmp("_",
 					tmp->var) == 0))
 		{
 			tmp = tmp->next;
@@ -167,7 +167,7 @@ void	sort_env(t_env **env)
 		swapped = 0;
 		while (tmp && tmp->next)
 		{
-			if (ft_strcmp(tmp->var, tmp->next->var) > 0)
+			if (ft_strncmp(tmp->var, tmp->next->var) > 0)
 			{
 				swap_env(tmp, tmp->next);
 				swapped = 1;
