@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 09:48:12 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/04 06:55:14 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/04 07:34:37 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,11 +193,6 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 			g_exit = 127;
 			exit(g_exit);
 		}
-		// else if (tmp->is_dir == 4)
-			// {
-			// 	write(2, "minishell: .: filename argument required\n.: usage: . filename [arguments]", 73);
-			// }
-
 	}
 	else
 	{
@@ -328,11 +323,6 @@ void	exec_pipe(t_data *data, t_env *env_list)
 				g_exit = 127;
 				exit(g_exit);
 			}
-			// else if (tmp->is_dir == 4)
-			// {
-			// 	write(2, "minishell: .: filename argument required\n.: usage: . filename [arguments]", 73);
-			// }
-
 		}
 		else if (pid > 0)
 		{
