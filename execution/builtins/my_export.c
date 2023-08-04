@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:46:00 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/03 21:36:12 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/04 06:08:40 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ void	print_env_ex(t_env *env,t_data *data)
 		{
 			write(data->out, "declare -x ", 11);
 			write(data->out, tmp->var, ft_strlen(tmp->var));
+			write(data->out, "\n", 1);
 		}
 		tmp = tmp->next;
 	}

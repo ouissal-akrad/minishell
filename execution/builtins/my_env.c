@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:54:09 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/04 04:18:29 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/04 05:50:36 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,6 +155,14 @@ t_env	*create_list(char *str[])
 }
 void	my_env(t_env **env,t_data *data)
 {
-	print_env(*env,data);
-	g_exit = 0;
+	if(data->args[1])
+	{
+		write(2,"env: too many arguments\n",24);
+		g_exit = 1;
+	}
+	else
+	{
+		print_env(*env,data);
+		g_exit = 0;
+	}
 }

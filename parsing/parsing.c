@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/03 20:28:09 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/04 06:05:47 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -422,6 +422,8 @@ char	*replace_space(char *str)
 	int		j;
 	char	*new;
 
+	if (!str)
+		return (NULL);
 	new = ft_calloc(ft_strlen(str) + 1, 1);
 	if (!new)
 	{

@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:55:55 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/03 20:14:14 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/04 05:41:02 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ void	my_cd(t_env **env, t_data *data)
 		path = go_home(env);
 		if (path == NULL)
 			return ;
+		if (path[0] == '\0')
+			return ;
 	}
 	else if (data->args[1] != NULL && ft_strncmp(data->args[1], "-") == 0)
 	{
@@ -65,9 +67,9 @@ void	my_cd(t_env **env, t_data *data)
 		parent(path);
 	if (chdir(path) == -1)
 	{
-		write(2, "cd: ", 4);
+		write(2, "minishell: cd: ", 16);
 		write(2, path, ft_strlen(path));
-		write(2, ": No such file or directory", 27);
+			write(2, ": No such file or directory\n", 28);
 
 		g_exit = 1;
 		return ;
@@ -115,13 +117,13 @@ void	parent(char *path)
 {
 	if (chdir(path) == -1)
 	{
-		write(2, "cd: ", 4);
+		write(2, "minishell: cd: ", 16);
 		write(2, path, ft_strlen(path));
-		write(2, ": No such file or directory", 27);
+			write(2, ": No such file or directory\n", 28);
 		g_exit = 1;
 		return ;
 	}
 
-	write(2, "cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory.", 108);
+	write(2, "cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory.\n", 109);
 	return;
 }

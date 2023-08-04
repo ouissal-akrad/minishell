@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 09:48:12 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/04 05:25:20 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/04 06:20:07 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,7 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 				exec_builtin(data, env_list);
 			else if (execve(path, data->args, env) < 0)
 			{
+				// printf("path: %s\n", path);
 				write(2, "minishell: ", 11);
 				write(2, data->args[0], ft_strlen(data->args[0]));
 				write(2, ": ", 2);
@@ -173,7 +174,7 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 		{
 			write(2, "minishell: ", 11);
 			write(2, data->args[0], ft_strlen(data->args[0]));
-			write(2, ": No such file or directory", 27);
+			write(2, ": No such file or directory\n", 28);
 			g_exit = 127;
 			exit(g_exit);
 		}
@@ -295,7 +296,7 @@ void	exec_pipe(t_data *data, t_env *env_list)
 			{
 				write(2, "minishell: ", 11);
 				write(2, tmp->args[0], ft_strlen(tmp->args[0]));
-				write(2, ": No such file or directory", 27);
+			write(2, ": No such file or directory\n", 28);
 				g_exit = 127;
 				exit(g_exit);
 			}

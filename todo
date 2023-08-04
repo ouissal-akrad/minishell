@@ -8,11 +8,11 @@ READ of size 1 at 0x602000002d72 thread T0
     #2 0x1081fdef2 in main+0x3b2 (minishell:x86_64+0x100003ef2)
     #3 0x7fff692cbcc8 in start+0x0 (libdyld.dylib:x86_64+0x1acc8)
 exit status
-cd 
+cd
 cat << l < Makefile << kk // shoud take the last input close_file
 signals inside the heredoc
-in case of error in line dont execute the hole line . echo hh > l < j | ls should not exec echo 
-exit 
+in case of error in line dont execute the hole line . echo hh > l < j | ls should not exec echo
+exit
 
 minishell$ mandatory/
 minishell: Permission denied
@@ -22,7 +22,7 @@ bash: mandatory/: is a directory
 bash-3.2$ ..
 bash: ..: command not found
 
-minishell$ ..                                                                                                                          
+minishell$ ..
 minishell: Permission denied
 
 bash-3.2$ ./
