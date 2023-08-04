@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/04 06:05:47 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/04 06:55:25 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1046,40 +1046,45 @@ void		is_a_directory(t_data **data)
 	t_data	*tmp;
 
 	tmp = *data;
-
 	while (tmp)
 	{
-
-		if (ft_strchr(tmp->args[0], '/'))
+		if (tmp->args != NULL && tmp->args[0] != NULL)
 		{
-			if (access(tmp->args[0], F_OK) == 0)
+			if (ft_strchr(tmp->args[0], '/'))
 			{
-				if (access(tmp->args[0], X_OK) == 0)
+				if (access(tmp->args[0], F_OK) == 0)
 				{
-					if (opendir(tmp->args[0]) != NULL)
+					if (access(tmp->args[0], X_OK) == 0)
 					{
-						tmp->is_dir = 1;
+						if (opendir(tmp->args[0]) != NULL)
+						{
+							tmp->is_dir = 1;
+							// write(2, "minishell: ", 11);
+							// write(2, tmp->args[0], ft_strlen(tmp->args[0]));
+							// write(2, ": is a directory\n", 17);
+						}
+					}
+					else
+					{
+						tmp->is_dir = 2;
 						// write(2, "minishell: ", 11);
 						// write(2, tmp->args[0], ft_strlen(tmp->args[0]));
-						// write(2, ": is a directory\n", 17);
+						// write(2, ": Permission denied\n", 20);
 					}
 				}
 				else
 				{
-					tmp->is_dir = 2;
+					tmp->is_dir = 3;
 					// write(2, "minishell: ", 11);
 					// write(2, tmp->args[0], ft_strlen(tmp->args[0]));
-					// write(2, ": Permission denied\n", 20);
+					// write(2, ": No such file or directory", 27);
 				}
-			}
-			else
-			{
-				tmp->is_dir = 3;
-				// write(2, "minishell: ", 11);
-				// write(2, tmp->args[0], ft_strlen(tmp->args[0]));
-				// write(2, ": No such file or directory", 27);
-			}
 
+			}
+			// else if (tmp->args[0][0] == '.' && ft_strlen(tmp->args[0]) == 1)
+			// 	tmp->is_dir = 4;
+			else
+				tmp->is_dir = 0;
 		}
 		else
 			tmp->is_dir = 0;
