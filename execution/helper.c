@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:21:57 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/04 23:16:02 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/04 23:50:10 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	exec_builtin(t_data *data, t_env **new_env)
 			my_exit(new_env, data);
 		else if (ft_strncmp(cmd, "export") == 0)
 			my_export(new_env, data);
-		exit(0);
+		exit(g_exit);
 	}
 	// exit(1);
 }

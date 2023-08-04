@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 00:16:06 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/04 23:12:39 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/04 23:32:40 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,6 +157,7 @@ void				my_unset(t_env **env, t_data *data);
 void				my_exit(t_env **env, t_data *data);
 int					all_digit(char *str);
 /*----------------export---------------------*/
+int	check_value(char *str);
 void				my_export(t_env **env, t_data *data);
 void				ft_csp(t_env *env, t_data *data, int c);
 void	sort_env(t_env **env);
