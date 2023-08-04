@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 09:48:12 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/04 02:05:55 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/04 02:22:11 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 	if (pid == -1)
 	{
 		perror("fork");
-		free(path);
+		// free(path);
 		// free_leaks(env);
 		return ;
 	}
@@ -104,13 +104,11 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 		signal(SIGQUIT, sigg);
 		if (data->in < 0 || data->out < 0)
 		{
-			free(path);
 			g_global.g_exit = 1;
 			exit(g_global.g_exit);
 		}
 		if(!data->args[0])
 		{
-			free(path);
 			g_global.g_exit = 0;
 			exit(g_global.g_exit);
 		}
@@ -130,12 +128,9 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 					write(2, data->args[0], ft_strlen(data->args[0]));
 					write(2, ": ", 2);
 					perror("");
-					if (path)
-						free(path);
 					g_global.g_exit = 127;
 					exit(g_global.g_exit);
 				}
-				free(path);
 
 		}
 		else if (data->is_dir == 1)
@@ -143,8 +138,6 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 			write(2, "minishell: ", 11);
 			write(2, data->args[0], ft_strlen(data->args[0]));
 			write(2, ": is a directory\n", 17);
-			if (path)
-						free(path);
 			g_global.g_exit = 126;
 			exit(g_global.g_exit);
 		}
@@ -153,8 +146,6 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 			write(2, "minishell: ", 11);
 			write(2, data->args[0], ft_strlen(data->args[0]));
 			write(2, ": Permission denied\n", 20);
-			if (path)
-						free(path);
 			g_global.g_exit = 126;
 				exit(g_global.g_exit);
 		}
@@ -163,8 +154,6 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 			write(2, "minishell: ", 11);
 			write(2, data->args[0], ft_strlen(data->args[0]));
 			write(2, ": No such file or directory", 27);
-			if (path)
-						free(path);
 			g_global.g_exit = 127;
 				exit(g_global.g_exit);
 		}
@@ -184,16 +173,12 @@ void	exec_pipe(t_data *data, t_env *env_list)
 	pid_t	pid;
 	int		status;
 	t_data *tmp = data;
-
 	path = ft_strdup("");
 	env = env_list_to_char_array(env_list);
 	if (!env)
 		return ;
 	if (tmp->args[0])
-	{
-		free(path);
 		path = find_path(tmp->args[0], env);
-	}
 	if (!path && tmp->is_dir == 0)
 	{
 		write(2, "minishell: ", 11);
@@ -205,8 +190,7 @@ void	exec_pipe(t_data *data, t_env *env_list)
 	if (pipe(pipefd) == -1)
 	{
 		perror("pipe");
-		if (path)
-			free(path);
+		// free(path);
 		// free_leaks(env);
 		return ;
 	}
@@ -218,8 +202,7 @@ void	exec_pipe(t_data *data, t_env *env_list)
 			perror("fork");
 			close(pipefd[0]);
 			close(pipefd[1]);
-			if (path)
-			free(path);
+			// free(path);
 			// free_leaks(env);
 			return ;
 		}
@@ -254,12 +237,8 @@ void	exec_pipe(t_data *data, t_env *env_list)
 				{
 					perror("minishell");
 					g_global.g_exit = 127;
-					if (path)
-						free(path);
 					exit(g_global.g_exit);
 				}
-				if (path)
-			free(path);
 
 			}
 			else if (tmp->is_dir == 1)
@@ -267,8 +246,6 @@ void	exec_pipe(t_data *data, t_env *env_list)
 				write(2, "minishell: ", 11);
 				write(2, tmp->args[0], ft_strlen(tmp->args[0]));
 				write(2, ": Is a directory\n", 17);
-				if (path)
-						free(path);
 				g_global.g_exit = 126;
 				exit(g_global.g_exit);
 			}
@@ -277,8 +254,6 @@ void	exec_pipe(t_data *data, t_env *env_list)
 				write(2, "minishell: ", 11);
 				write(2, tmp->args[0], ft_strlen(tmp->args[0]));
 				write(2, ": Permission denied\n", 20);
-				if (path)
-						free(path);
 				g_global.g_exit = 126;
 				exit(g_global.g_exit);
 			}
@@ -287,16 +262,13 @@ void	exec_pipe(t_data *data, t_env *env_list)
 				write(2, "minishell: ", 11);
 				write(2, tmp->args[0], ft_strlen(tmp->args[0]));
 				write(2, ": No such file or directory", 27);
-				if (path)
-						free(path);
 				g_global.g_exit = 127;
 				exit(g_global.g_exit);
 			}
 		}
 		else if (pid > 0)
 		{
-			if (path)
-			free(path);
+			// free(path);
 			// free_leaks(env);
 			close(pipefd[1]);
 			if (tmp->next->in == 0)
@@ -310,8 +282,6 @@ void	exec_pipe(t_data *data, t_env *env_list)
 	else
 	{
 		exec_cmd(tmp, path, env, &env_list, pipefd);
-		if (path)
-			free(path);
 	}
 	// exit(g_global.g_exit);
 }

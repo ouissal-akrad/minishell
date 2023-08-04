@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:55:55 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/04 00:36:45 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/04 02:21:48 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ char	*go_home(t_env **env)
 {
 	char	*path;
 
-	path = find(*env, "HOME"); // no leaks
+	path = find(*env, "HOME");
 	if (path == NULL)
 	{
 		printf("cd: HOME not set\n");

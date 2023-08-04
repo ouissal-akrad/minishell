@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 23:08:50 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/04 02:10:36 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/04 02:20:13 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,17 +110,17 @@ void	free_data(t_data *data)
 	int		i;
 
 	tmp = data;
-	while (tmp)
+	while (tmp != NULL)
 	{
 		next = tmp->next;
 		i = 0;
-		if (tmp->args)
+		if (tmp->args != NULL)
 		{
-			while (tmp->args[i])
+			while (tmp->args[i] != NULL)
 				free(tmp->args[i++]);
 			free(tmp->args);
 		}
-		if (tmp->buff)
+		if (tmp->buff != NULL)
 			free(tmp->buff);
 		free(tmp);
 		tmp = next;
