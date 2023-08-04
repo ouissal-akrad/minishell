@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:46:00 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/03 21:36:12 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/04 01:16:41 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,7 +210,7 @@ void	ft_csp(t_env *env, t_data *data, int c)
 			write(2, data->args[cmd], ft_strlen(data->args[cmd]));
 			write(2, "': not a valid identifier\n", 26);
 			cmd++;
-			g_exit = 1;
+			g_global.g_exit = 1;
 			continue ;
 		}
 		while (tmp[i] && tmp[i] != c)
@@ -228,12 +228,13 @@ void	ft_csp(t_env *env, t_data *data, int c)
 					write(2, "minishell: export: `", 20);
 			write(2, data->args[cmd], ft_strlen(data->args[cmd]));
 			write(2, "': not a valid identifier\n", 26);
-										g_exit = 1;
+										g_global.g_exit = 1;
 
 					cmd++;
 					continue ;
 				}
-				prev = tmp;
+
+				prev = tmp; // BILAL
 				prev[i - plus] = '\0';
 				rest = tmp + i + 1;
 			}
@@ -247,14 +248,16 @@ void	ft_csp(t_env *env, t_data *data, int c)
 		}
 		//without = ,rest == NULL
 		if (check_value(tmp))
-			prev = ft_strdup(tmp);
+		{
+			prev = ft_strdup(tmp); // go back
+		}
 		else
 		{
 			write(2, "minishell: export: `", 20);
 			write(2, data->args[cmd], ft_strlen(data->args[cmd]));
 			write(2, "': not a valid identifier\n", 26);
 			cmd++;
-			g_exit = 1;
+			g_global.g_exit = 1;
 			continue ;
 		}
 		if (!check(prev))
@@ -263,7 +266,9 @@ void	ft_csp(t_env *env, t_data *data, int c)
 			write(2, data->args[cmd], ft_strlen(data->args[cmd]));
 			write(2, "': not a valid identifier\n", 26);
 			cmd++;
-						g_exit = 1;
+						g_global.g_exit = 1;
+			if (prev)
+				free(prev);
 
 			continue ;
 		}
@@ -273,10 +278,10 @@ void	ft_csp(t_env *env, t_data *data, int c)
 	}
 	//resort env
 	sort_env(&env);
-	if (g_exit == 1)
-		g_exit = 1;
-	else if (g_exit == 0)
-		g_exit = 0;
+	if (g_global.g_exit == 1)
+		g_global.g_exit = 1;
+	else if (g_global.g_exit == 0)
+		g_global.g_exit = 0;
 	// print_env_ex(env);
 	// puts("-----------------------------");
 	// print_env(env);
@@ -315,6 +320,10 @@ void	sequal(t_env *env, char *prev, char *rest, int plus)
 		new_var = ft_lstneww(prev, rest);
 		if (new_var == NULL)
 			return ;
+		// if (prev)
+		// 	free(prev);
+		// if (rest)
+		// 	free(rest);
 		ft_lstadd_backk(&env, new_var);
 	}
 }

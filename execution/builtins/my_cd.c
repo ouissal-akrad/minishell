@@ -6,39 +6,31 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:55:55 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/03 20:14:14 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/04 00:36:45 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-char	*find(t_env *env, char *to_find)
+void	my_cd_helper(char *path, t_data *data, char *pwd)
 {
-	while (env)
+	if (chdir(path) == -1)
 	{
-		if (ft_strncmp(env->var, to_find) == 0)
-			return (env->val);
-		env = env->next;
+		write(2, "cd: ", 4);
+		write(2, path, ft_strlen(path));
+		write(2, ": No such file or directory", 27);
+		g_global.g_exit = 1;
+		return ;
 	}
-	return (NULL);
-}
-
-void	update_env(t_env *env, char *oldpwd, char *pwd)
-{
-	while (env)
+	if (getcwd(pwd, PATH_MAX) == NULL)
 	{
-		if (ft_strncmp(env->var, "OLDPWD") == 0)
-		{
-			free(env->val);
-			env->val = ft_strdup(oldpwd);
-		}
-		else if (ft_strncmp(env->var, "PWD") == 0)
-		{
-			free(env->val);
-			env->val = ft_strdup(pwd);
-		}
-		env = env->next;
+		perror("getcwd");
+		g_global.g_exit = 1;
+		return ;
 	}
+	if (data->args[1] != NULL && ft_strncmp(data->args[1], "-") == 0)
+		printf("%s\n", pwd);
+	g_global.g_exit = 0;
 }
 
 void	my_cd(t_env **env, t_data *data)
@@ -63,40 +55,24 @@ void	my_cd(t_env **env, t_data *data)
 		path = data->args[1];
 	if (getcwd(oldpwd, PATH_MAX) == NULL)
 		parent(path);
-	if (chdir(path) == -1)
-	{
-		write(2, "cd: ", 4);
-		write(2, path, ft_strlen(path));
-		write(2, ": No such file or directory", 27);
-
-		g_exit = 1;
-		return ;
-	}
-	if (getcwd(pwd, PATH_MAX) == NULL)
-	{
-		perror("getcwd");
-		g_exit = 1;
-		return ;
-	}
-	if (data->args[1] != NULL && ft_strncmp(data->args[1], "-") == 0)
-		printf("%s\n", pwd);
+	my_cd_helper(path, data, pwd);
 	update_env(*env, oldpwd, pwd);
-	g_exit = 0;
 }
 
 char	*go_home(t_env **env)
 {
 	char	*path;
 
-	path = find(*env, "HOME");
+	path = find(*env, "HOME"); // no leaks
 	if (path == NULL)
 	{
 		printf("cd: HOME not set\n");
-		g_exit = 1;
+		g_global.g_exit = 1;
 		return (NULL);
 	}
 	return (path);
 }
+
 char	*go_oldpwd(t_env **env)
 {
 	char	*path;
@@ -105,7 +81,7 @@ char	*go_oldpwd(t_env **env)
 	if (path == NULL)
 	{
 		write(2, "cd: OLDPWD not set\n", 19);
-		g_exit = 1;
+		g_global.g_exit = 1;
 		return (NULL);
 	}
 	return (path);
@@ -118,10 +94,11 @@ void	parent(char *path)
 		write(2, "cd: ", 4);
 		write(2, path, ft_strlen(path));
 		write(2, ": No such file or directory", 27);
-		g_exit = 1;
+		g_global.g_exit = 1;
 		return ;
 	}
-
-	write(2, "cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory.", 108);
-	return;
+	write(2, "cd: error retrieving current directory: getcwd: \
+			cannot access parent directories: No such file or directory.",
+		108);
+	return ;
 }

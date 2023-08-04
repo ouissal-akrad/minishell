@@ -6,11 +6,42 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:54:09 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/03 21:30:18 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/03 23:28:08 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
+
+void	update_env(t_env *env, char *oldpwd, char *pwd)
+{
+	while (env)
+	{
+		if (ft_strncmp(env->var, "OLDPWD") == 0)
+		{
+			free(env->val);
+			env->val = ft_strdup(oldpwd);
+		}
+		else if (ft_strncmp(env->var, "PWD") == 0)
+		{
+			free(env->val);
+			env->val = ft_strdup(pwd);
+		}
+		env = env->next;
+	}
+}
+
+char	*find(t_env *env, char *to_find)
+{
+	while (env)
+	{
+		if (ft_strncmp(env->var, to_find) == 0)
+			return (env->val);
+		env = env->next;
+	}
+	return (NULL);
+}
+
+/////////////////////////////////////////
 
 void	ft_lstfree(t_env **head)
 {
@@ -155,5 +186,5 @@ t_env	*create_list(char *str[])
 void	my_env(t_env **env,t_data *data)
 {
 	print_env(*env,data);
-	g_exit = 0;
+	g_global.g_exit = 0;
 }

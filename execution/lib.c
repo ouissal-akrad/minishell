@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/30 18:47:33 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/03 01:35:41 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/04 01:16:10 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,4 +91,45 @@ int	ft_strncmp_2(const char *s1, const char *s2, size_t n)
 		i++;
 	}
 	return (0);
+}
+
+void	all_free(t_data *data, t_env *env)
+{
+	int	i;
+	t_env	*tmp;
+	t_data	*tmp2;
+
+	i = -1;
+	if (data)
+	{
+		tmp2 = data->next;
+		if (data->args)
+		{
+			while (data->args[++i])
+				free(data->args[i]);
+			free(data->args);
+		}
+		if (data->buff)
+			free(data->buff);
+		free(data);
+		data = tmp2;
+
+	}
+	i = -1;
+	if (env)
+	{
+		tmp = env->next;
+		if (env->val)
+		{
+			if (env->val)
+				free(env->val);
+		}
+		if (env->var)
+		{
+			if (env->var)
+				free(env->var);
+		}
+		free(env);
+		env = tmp;
+	}
 }

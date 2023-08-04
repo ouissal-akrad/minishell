@@ -5,6 +5,15 @@
 		"minishell_execution.h": "c",
 		"minishell.h": "c",
 		"libft.h": "c",
-		"algorithm": "c"
+		"algorithm": "c",
+		"sstream": "c",
+		"__bit_reference": "c",
+		"__hash_table": "c",
+		"__string": "c",
+		"string": "c",
+		"string_view": "c",
+		"unordered_map": "c",
+		"iterator": "c",
+		"locale": "c"
 	}
 }
