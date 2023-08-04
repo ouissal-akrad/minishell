@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 09:48:12 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/04 05:16:51 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/04 05:25:20 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,15 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 		close(pipefd[1]);
 		if (data->is_dir == 0)
 		{
+			if (!path)
+				{
+					write(2, "minishell: ", 11);
+					write(2, data->args[0], ft_strlen(data->args[0]));
+					write(2, ": command not found\n", 20);
+					g_exit = 127;
+					exit(g_exit);
+				}
+
 			if (!is_builtins(path))
 				exec_builtin(data, env_list);
 			else if (execve(path, data->args, env) < 0)
@@ -198,14 +207,6 @@ void	exec_pipe(t_data *data, t_env *env_list)
 		return ;
 	if (tmp->args[0])
 		path = find_path(tmp->args[0], env);
-	if (!path && tmp->is_dir == 0)
-	{
-		write(2, "minishell: ", 11);
-		write(2, tmp->args[0], ft_strlen(tmp->args[0]));
-		write(2, ": command not found\n", 20);
-		g_exit = 127;
-		// return ;
-	}
 	if (pipe(pipefd) == -1)
 	{
 		perror("pipe");
@@ -249,6 +250,14 @@ void	exec_pipe(t_data *data, t_env *env_list)
 			close(pipefd[1]);
 			if (tmp->is_dir == 0)
 			{
+				if (!path)
+				{
+					write(2, "minishell: ", 11);
+					write(2, tmp->args[0], ft_strlen(tmp->args[0]));
+					write(2, ": command not found\n", 20);
+					g_exit = 127;
+					exit(g_exit);
+				}
 				if (!is_builtins(path))
 					exec_builtin(data, &env_list);
 				else if (execve(path, data->args, env) < 0)
@@ -258,6 +267,14 @@ void	exec_pipe(t_data *data, t_env *env_list)
 					exit(g_exit);
 				}
 			}
+			// if (!path && tmp->is_dir == 0)
+			// {
+			// 	write(2, "minishell: ", 11);
+			// 	write(2, tmp->args[0], ft_strlen(tmp->args[0]));
+			// 	write(2, ": command not found\n", 20);
+			// 	g_exit = 127;
+			// 	// return ;
+			// }
 			else if (tmp->is_dir == 1)
 			{
 				write(2, "minishell: ", 11);
