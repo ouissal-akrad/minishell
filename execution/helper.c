@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:21:57 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/03 23:18:43 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/04 04:28:39 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,22 +17,26 @@ void	exec_builtin(t_data *data, t_env **new_env)
 {
 	char	*cmd;
 
-	cmd = data->args[0];
-	if (ft_strncmp(cmd, "pwd") == 0)
-		my_pwd(data);
-	else if (ft_strncmp(cmd, "unset") == 0)
-		my_unset(new_env, data);
-	else if (ft_strncmp(cmd, "echo") == 0)
-		my_echo(data);
-	else if (ft_strncmp(cmd, "cd") == 0)
-		my_cd(new_env, data);
-	else if (ft_strncmp(cmd, "env") == 0)
-		my_env(new_env,data);
-	else if (ft_strncmp(cmd, "exit") == 0)
-		my_exit(new_env, data);
-	else if (ft_strncmp(cmd, "export") == 0)
-		my_export(new_env, data);
-	exit(g_global.g_exit);
+	if (data->in != -1 && data->out != -1)
+	{
+		cmd = data->args[0];
+		if (ft_strncmp(cmd, "pwd") == 0)
+			my_pwd(data);
+		else if (ft_strncmp(cmd, "unset") == 0)
+			my_unset(new_env, data);
+		else if (ft_strncmp(cmd, "echo") == 0)
+			my_echo(data);
+		else if (ft_strncmp(cmd, "cd") == 0)
+			my_cd(new_env, data);
+		else if (ft_strncmp(cmd, "env") == 0)
+			my_env(new_env,data);
+		else if (ft_strncmp(cmd, "exit") == 0)
+			my_exit(new_env, data);
+		else if (ft_strncmp(cmd, "export") == 0)
+			my_export(new_env, data);
+		exit(0);
+	}
+	// exit(1);
 }
 
 void	direction(t_data *data, t_env **new_env)
@@ -59,7 +63,7 @@ void	direction(t_data *data, t_env **new_env)
 	// }
 	// else
 
-	if (data->next == NULL && data->args != NULL && data->args[0] != NULL)
+	if (data->next == NULL && data->args != NULL && data->args[0] != NULL && (data->out != -1 && data->in != -1))
 	{
 		if (ft_strncmp(data->args[0], "exit") == 0)
 		{

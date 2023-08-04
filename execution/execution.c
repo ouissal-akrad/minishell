@@ -6,13 +6,13 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 09:48:12 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/04 02:22:11 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/03 22:23:03 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*join_path(char *path, char *cmd) // Done leaks;
+char	*join_path(char *path, char *cmd)
 {
 	char	**paths;
 	char	*new_path;
@@ -21,12 +21,16 @@ char	*join_path(char *path, char *cmd) // Done leaks;
 
 	paths = ft_split(path, ':');
 	if (!paths)
-		return (NULL);
+		return (write(2, "Memorry Error!\n", 15), NULL);
 	i = -1;
 	while (paths[++i])
 	{
 		tmp = ft_strjoin(paths[i], "/");
+		if (!tmp)
+			return (free_leaks(paths), NULL);
 		new_path = ft_strjoin(tmp, cmd);
+		if (!new_path)
+			return (free_leaks(paths), free(tmp), NULL);
 		free(tmp);
 		if (access(new_path, X_OK) == 0)
 			return (free_leaks(paths), new_path);
@@ -41,7 +45,7 @@ char	*find_path(char *cmd, char *envp[])
 
 	if (cmd[0] == '\0')
 	{
-		g_global.g_exit = 127;
+		g_exit = 127;
 		return (NULL);
 	}
 	if ((ft_strchr(cmd, '/')) || !is_builtins(cmd))
@@ -104,13 +108,13 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 		signal(SIGQUIT, sigg);
 		if (data->in < 0 || data->out < 0)
 		{
-			g_global.g_exit = 1;
-			exit(g_global.g_exit);
+			g_exit = 1;
+			exit(g_exit);
 		}
 		if(!data->args[0])
 		{
-			g_global.g_exit = 0;
-			exit(g_global.g_exit);
+			g_exit = 0;
+			exit(g_exit);
 		}
 		if (data->in > 2)
 			dup2(data->in, STDIN_FILENO);
@@ -128,8 +132,8 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 					write(2, data->args[0], ft_strlen(data->args[0]));
 					write(2, ": ", 2);
 					perror("");
-					g_global.g_exit = 127;
-					exit(g_global.g_exit);
+					g_exit = 127;
+					exit(g_exit);
 				}
 
 		}
@@ -138,30 +142,30 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 			write(2, "minishell: ", 11);
 			write(2, data->args[0], ft_strlen(data->args[0]));
 			write(2, ": is a directory\n", 17);
-			g_global.g_exit = 126;
-			exit(g_global.g_exit);
+			g_exit = 126;
+			exit(g_exit);
 		}
 		else if (data->is_dir == 2)
 		{
 			write(2, "minishell: ", 11);
 			write(2, data->args[0], ft_strlen(data->args[0]));
 			write(2, ": Permission denied\n", 20);
-			g_global.g_exit = 126;
-				exit(g_global.g_exit);
+			g_exit = 126;
+				exit(g_exit);
 		}
 		else if (data->is_dir == 3)
 		{
 			write(2, "minishell: ", 11);
 			write(2, data->args[0], ft_strlen(data->args[0]));
 			write(2, ": No such file or directory", 27);
-			g_global.g_exit = 127;
-				exit(g_global.g_exit);
+			g_exit = 127;
+				exit(g_exit);
 		}
 	}
 	else
 	{
 		waitpid(pid, &status, 0);
-		g_global.g_exit = status / 256;
+		g_exit = status / 256;
 	}
 }
 
@@ -184,7 +188,7 @@ void	exec_pipe(t_data *data, t_env *env_list)
 		write(2, "minishell: ", 11);
 		write(2, tmp->args[0], ft_strlen(tmp->args[0]));
 		write(2, ": command not found\n", 20);
-		g_global.g_exit = 127;
+		g_exit = 127;
 		return ;
 	}
 	if (pipe(pipefd) == -1)
@@ -212,13 +216,13 @@ void	exec_pipe(t_data *data, t_env *env_list)
 			signal(SIGQUIT, sigg);
 			if (tmp->in < 0 || tmp->out < 0)
 			{
-				g_global.g_exit = 1;
-				exit(g_global.g_exit);
+				g_exit = 1;
+				exit(g_exit);
 			}
 			if(!data->args[0])
 			{
-				g_global.g_exit = 0;
-				exit(g_global.g_exit);
+				g_exit = 0;
+				exit(g_exit);
 			}
 			if (tmp->in > 2)
 				dup2(tmp->in, STDIN_FILENO);
@@ -236,8 +240,8 @@ void	exec_pipe(t_data *data, t_env *env_list)
 				else if(execve(path, data->args, env) < 0)
 				{
 					perror("minishell");
-					g_global.g_exit = 127;
-					exit(g_global.g_exit);
+					g_exit = 127;
+					exit(g_exit);
 				}
 
 			}
@@ -246,24 +250,24 @@ void	exec_pipe(t_data *data, t_env *env_list)
 				write(2, "minishell: ", 11);
 				write(2, tmp->args[0], ft_strlen(tmp->args[0]));
 				write(2, ": Is a directory\n", 17);
-				g_global.g_exit = 126;
-				exit(g_global.g_exit);
+				g_exit = 126;
+				exit(g_exit);
 			}
 			else if (tmp->is_dir == 2)
 			{
 				write(2, "minishell: ", 11);
 				write(2, tmp->args[0], ft_strlen(tmp->args[0]));
 				write(2, ": Permission denied\n", 20);
-				g_global.g_exit = 126;
-				exit(g_global.g_exit);
+				g_exit = 126;
+				exit(g_exit);
 			}
 			else if (tmp->is_dir == 3)
 			{
 				write(2, "minishell: ", 11);
 				write(2, tmp->args[0], ft_strlen(tmp->args[0]));
 				write(2, ": No such file or directory", 27);
-				g_global.g_exit = 127;
-				exit(g_global.g_exit);
+				g_exit = 127;
+				exit(g_exit);
 			}
 		}
 		else if (pid > 0)
@@ -275,13 +279,17 @@ void	exec_pipe(t_data *data, t_env *env_list)
 				tmp->next->in = pipefd[0];
 			exec_pipe(tmp->next, env_list);
 			waitpid(pid, &status, 0);
-			g_global.g_exit = status / 256;
-			// exit(g_global.g_exit);
+			g_exit = status / 256;
 		}
 	}
 	else
 	{
 		exec_cmd(tmp, path, env, &env_list, pipefd);
+
+		////// exit(g_exit);
+
+
 	}
-	// exit(g_global.g_exit);
+	close_files(data);
+
 }

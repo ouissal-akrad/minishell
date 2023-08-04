@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:54:33 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/04 00:52:06 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/03 01:31:51 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@ void	my_unset(t_env **env, t_data *data)
 			{
 				if (cur->prev == NULL)
 					*env = cur->next;
-				delete_node(cur); // need to go back to this
+				delete_node(cur);
 				break ;
 			}
 			cur = cur->next;
 		}
 		i++;
 	}
-	g_global.g_exit = 0;
+	g_exit = 0;
 }

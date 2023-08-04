@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 03:20:11 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/04 02:17:08 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/03 18:34:22 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	main(int argc, char *argv[], char *env[])
 	line = NULL;
 	while (1)
 	{
-		g_global.exitt = 0;
+		exitt = 0;
 		sig();
 		line = readline("minishell$ ");
 		if (!line)
@@ -78,11 +78,11 @@ int	main(int argc, char *argv[], char *env[])
 		tokens = NULL;
 		if (!data)
 			continue ;
-		if (g_global.exitt == 1)
+		if (exitt == 1)
 		{
 			// unlink_file(tokens, data);
 			if (data)
-				free_data(data);
+				free_data(&data);
 			data = NULL;
 			// close files
 			continue ;
@@ -114,10 +114,10 @@ int	main(int argc, char *argv[], char *env[])
 		// 	tmp = tmp->next;
 		// }
 
-		g_global.data_s = data_size(data);
+		data_s = data_size(data);
 		direction(data,&new_env);
 
-		free_data(data);
+		free_data(&data);
 		// close files
 		data = NULL;
 	}

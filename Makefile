@@ -6,7 +6,7 @@
 #    By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/23 03:03:58 by bel-idri          #+#    #+#              #
-#    Updated: 2023/08/04 02:21:13 by bel-idri         ###   ########.fr        #
+#    Updated: 2023/08/03 02:09:59 by bel-idri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,18 +23,7 @@ SRCS = main.c \
 		execution/builtins/my_export.c \
 		execution/execution.c \
 		execution/lib.c \
-		parsing/parsing_1.c \
-		parsing/parsing_2.c \
-		parsing/parsing_3.c \
-		parsing/parsing_4.c \
-		parsing/parsing_5.c \
-		parsing/parsing_6.c \
-		parsing/parsing_7.c \
-		parsing/parsing_8.c \
-		parsing/parsing_9.c \
-		parsing/parsing_10.c \
-		parsing/parsing_11.c \
-		parsing/parsing_12.c \
+		parsing/parsing.c \
 		parsing/signals.c \
 
 SRCS_LIBFT = libft/ft_atoi.c \
@@ -90,7 +79,7 @@ CC = cc
 USER = $(shell whoami)
 
 
-CFLAGS = -Wall -Wextra -Werror -I/Users/${USER}/.brew/opt/readline/include -g -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -I/Users/${USER}/.brew/opt/readline/include #-g -fsanitize=address
 
 RLFLAGES = -lreadline -lhistory -L/Users/${USER}/.brew/opt/readline/lib
 
