@@ -6,11 +6,19 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 09:48:12 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/03 22:23:03 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/04 05:16:51 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+// void    ft_wait(int pid)
+// {
+//     if (!lines)
+//         waitpid(pid, &g_exit, 0);
+//     // close(old);
+//     // close(fd);
+// }
 
 char	*join_path(char *path, char *cmd)
 {
@@ -111,7 +119,7 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 			g_exit = 1;
 			exit(g_exit);
 		}
-		if(!data->args[0])
+		if (!data->args[0])
 		{
 			g_exit = 0;
 			exit(g_exit);
@@ -125,17 +133,16 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 		if (data->is_dir == 0)
 		{
 			if (!is_builtins(path))
-					exec_builtin(data, env_list);
-				else if(execve(path, data->args, env) < 0)
-				{
-					write(2, "minishell: ", 11);
-					write(2, data->args[0], ft_strlen(data->args[0]));
-					write(2, ": ", 2);
-					perror("");
-					g_exit = 127;
-					exit(g_exit);
-				}
-
+				exec_builtin(data, env_list);
+			else if (execve(path, data->args, env) < 0)
+			{
+				write(2, "minishell: ", 11);
+				write(2, data->args[0], ft_strlen(data->args[0]));
+				write(2, ": ", 2);
+				perror("");
+				g_exit = 127;
+				exit(g_exit);
+			}
 		}
 		else if (data->is_dir == 1)
 		{
@@ -151,7 +158,7 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 			write(2, data->args[0], ft_strlen(data->args[0]));
 			write(2, ": Permission denied\n", 20);
 			g_exit = 126;
-				exit(g_exit);
+			exit(g_exit);
 		}
 		else if (data->is_dir == 3)
 		{
@@ -159,13 +166,18 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 			write(2, data->args[0], ft_strlen(data->args[0]));
 			write(2, ": No such file or directory", 27);
 			g_exit = 127;
-				exit(g_exit);
+			exit(g_exit);
 		}
 	}
 	else
 	{
-		waitpid(pid, &status, 0);
-		g_exit = status / 256;
+		// waitpid(pid, &status, 0);
+		// g_exit = status / 256;
+		// // free(path);
+		// // free_leaks(env);
+			waitpid(pid, &status, 0);
+			g_exit = status / 256;
+		// exit(g_exit); // the is exit is returnrd
 	}
 }
 
@@ -175,8 +187,11 @@ void	exec_pipe(t_data *data, t_env *env_list)
 	char	*path;
 	int		pipefd[2];
 	pid_t	pid;
-	int		status;
-	t_data *tmp = data;
+	// int		status;
+	t_data	*tmp;
+			// int child_exit_status;
+
+	tmp = data;
 	path = ft_strdup("");
 	env = env_list_to_char_array(env_list);
 	if (!env)
@@ -189,7 +204,7 @@ void	exec_pipe(t_data *data, t_env *env_list)
 		write(2, tmp->args[0], ft_strlen(tmp->args[0]));
 		write(2, ": command not found\n", 20);
 		g_exit = 127;
-		return ;
+		// return ;
 	}
 	if (pipe(pipefd) == -1)
 	{
@@ -219,7 +234,7 @@ void	exec_pipe(t_data *data, t_env *env_list)
 				g_exit = 1;
 				exit(g_exit);
 			}
-			if(!data->args[0])
+			if (!data->args[0])
 			{
 				g_exit = 0;
 				exit(g_exit);
@@ -232,18 +247,16 @@ void	exec_pipe(t_data *data, t_env *env_list)
 				dup2(pipefd[1], STDOUT_FILENO);
 			close(pipefd[0]);
 			close(pipefd[1]);
-
 			if (tmp->is_dir == 0)
 			{
 				if (!is_builtins(path))
 					exec_builtin(data, &env_list);
-				else if(execve(path, data->args, env) < 0)
+				else if (execve(path, data->args, env) < 0)
 				{
 					perror("minishell");
 					g_exit = 127;
 					exit(g_exit);
 				}
-
 			}
 			else if (tmp->is_dir == 1)
 			{
@@ -278,18 +291,25 @@ void	exec_pipe(t_data *data, t_env *env_list)
 			if (tmp->next->in == 0)
 				tmp->next->in = pipefd[0];
 			exec_pipe(tmp->next, env_list);
-			waitpid(pid, &status, 0);
-			g_exit = status / 256;
+			// waitpid(pid, &status, 0);
+			// g_exit = status / 256;
 		}
+		// else if (pid > 0)
+		// {
+		// 	// free(path);
+		// 	// free_leaks(env);
+		// 	close(pipefd[1]);
+		// 	if (tmp->next->in == 0)
+		// 		tmp->next->in = pipefd[0];
+		// 	exec_pipe(tmp->next, env_list);
+		// 	waitpid(pid, &status, 0);
+		// 	g_exit = WIFEXITED(status) ? WEXITSTATUS(status) : 1;
+		// }
 	}
 	else
 	{
 		exec_cmd(tmp, path, env, &env_list, pipefd);
-
 		////// exit(g_exit);
-
-
 	}
 	close_files(data);
-
 }
