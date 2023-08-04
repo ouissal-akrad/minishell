@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 00:16:06 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/04 05:13:16 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/04 23:12:39 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ int					backup_stdin;
 int					exitt;
 int					g_exit;
 int					data_s;
+int					g_env;
 /*---------------PARSING-----------------*/
 void				is_quote(char *str, int i, int *quote);
 int					count_tok(char *str);
@@ -158,7 +159,7 @@ int					all_digit(char *str);
 /*----------------export---------------------*/
 void				my_export(t_env **env, t_data *data);
 void				ft_csp(t_env *env, t_data *data, int c);
-void				sort_env(t_env **env);
+void	sort_env(t_env **env);
 void				swap_env(t_env *a, t_env *b);
 void				print_env_ex(t_env *env,t_data *data);
 int					all_str(char *str);

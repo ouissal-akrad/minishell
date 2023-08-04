@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:21:57 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/04 04:28:39 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/04 23:16:02 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ int	is_builtins(char *cmd)
 	else
 		return (1);
 }
+
 t_env	*no_env(void)
 {
 	t_env	*env;
@@ -130,6 +131,7 @@ t_env	*no_env(void)
 
 	if (getcwd(pwd, PATH_MAX) == NULL)
 		return (NULL);
+	g_env = 1;
 	ft_lstadd_backk(&env, ft_lstneww("PWD", pwd));
 	ft_lstadd_backk(&env, ft_lstneww("SHLVL", "1"));
 	ft_lstadd_backk(&env, ft_lstneww("_", "/usr/bin/env"));

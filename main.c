@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 03:20:11 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/04 08:31:52 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/04 22:51:20 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,9 @@ int	main(int argc, char *argv[], char *env[])
 	t_data		*tmp;
 
 	if (!*env)
-	{
 		new_env = no_env();
-		new_env->flag = 1;
-	}
 	else
-	{
 		new_env = create_list(env);
-		new_env->flag = 0;
-	}
 	tokens = NULL;
 	data = NULL;
 	line = NULL;

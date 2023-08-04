@@ -6,12 +6,11 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:46:00 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/04 06:08:40 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/04 23:09:15 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
 
 int	all_str(char *str)
 {
@@ -40,7 +39,7 @@ t_env	*find_env(t_env *env, char *name)
 	return (NULL);
 }
 
-void	print_env_ex(t_env *env,t_data *data)
+void	print_env_ex(t_env *env, t_data *data)
 {
 	t_env	*tmp;
 	int		i;
@@ -177,12 +176,70 @@ void	sort_env(t_env **env)
 	}
 }
 
+t_env	*create_new_env(const t_env *original)
+{
+	t_env	*new_env;
+
+	new_env = (t_env *)malloc(sizeof(t_env));
+	if (new_env == NULL)
+	{
+		return (NULL); // Handle memory allocation failure
+	}
+	new_env->var = ft_strdup(original->var);
+	if (original->val == NULL)
+		new_env->val = NULL;
+	else
+		new_env->val = ft_strdup(original->val);
+	new_env->flag = original->flag;
+	new_env->prev = NULL;
+	new_env->next = NULL;
+	return (new_env);
+}
+
+t_env	*copy_env_list(const t_env *original_head)
+{
+	t_env	*copy_head;
+	t_env	*original_curr;
+	t_env	*copy_prev;
+	t_env	*copy_curr;
+
+	if (original_head == NULL)
+	{
+		return (NULL); // Handle the case of an empty list
+	}
+	copy_head = create_new_env(original_head);
+	if (copy_head == NULL)
+	{
+		return (NULL); // Handle memory allocation failure
+	}
+	original_curr = original_head->next;
+	copy_prev = copy_head;
+	while (original_curr != NULL)
+	{
+		copy_curr = create_new_env(original_curr);
+		if (copy_curr == NULL)
+		{
+			// Handle memory allocation failure
+			// You should also free the memory of the copied nodes created so far
+			return (NULL);
+		}
+		copy_curr->prev = copy_prev;
+		copy_prev->next = copy_curr;
+		original_curr = original_curr->next;
+		copy_prev = copy_curr;
+	}
+	return (copy_head);
+}
+
 void	my_export(t_env **env, t_data *data)
 {
+	t_env *cpy;
 	if (!data->args[1])
 	{
-		sort_env(env);
-		print_env_ex(*env,data);
+		cpy = copy_env_list(*env);
+		sort_env(&cpy);
+		print_env_ex(cpy, data);
+		ft_lstfree(&cpy);
 	}
 	else
 		ft_csp(*env, data, '=');
@@ -216,10 +273,10 @@ void	ft_csp(t_env *env, t_data *data, int c)
 		}
 		while (tmp[i] && tmp[i] != c)
 			i++;
-		//with equal
+		// with equal
 		if (tmp[i] == c)
 		{
-			//with plus
+			// with plus
 			if (ft_strchr(tmp, '+') != NULL)
 			{
 				if (count_plus(tmp) == 1)
@@ -227,10 +284,9 @@ void	ft_csp(t_env *env, t_data *data, int c)
 				else if (count_plus(tmp) == -1)
 				{
 					write(2, "minishell: export: `", 20);
-			write(2, data->args[cmd], ft_strlen(data->args[cmd]));
-			write(2, "': not a valid identifier\n", 26);
-										g_exit = 1;
-
+					write(2, data->args[cmd], ft_strlen(data->args[cmd]));
+					write(2, "': not a valid identifier\n", 26);
+					g_exit = 1;
 					cmd++;
 					continue ;
 				}
@@ -238,7 +294,7 @@ void	ft_csp(t_env *env, t_data *data, int c)
 				prev[i - plus] = '\0';
 				rest = tmp + i + 1;
 			}
-			//without plus
+			// without plus
 			else
 			{
 				prev = tmp;
@@ -246,7 +302,7 @@ void	ft_csp(t_env *env, t_data *data, int c)
 				rest = tmp + i + 1;
 			}
 		}
-		//without = ,rest == NULL
+		// without = ,rest == NULL
 		if (check_value(tmp))
 			prev = ft_strdup(tmp);
 		else
@@ -264,16 +320,15 @@ void	ft_csp(t_env *env, t_data *data, int c)
 			write(2, data->args[cmd], ft_strlen(data->args[cmd]));
 			write(2, "': not a valid identifier\n", 26);
 			cmd++;
-						g_exit = 1;
-
+			g_exit = 1;
 			continue ;
 		}
 		// check
 		sequal(env, prev, rest, plus);
 		cmd++;
 	}
-	//resort env
-	sort_env(&env);
+	// resort env
+	// sort_env(&env);
 	if (g_exit == 1)
 		g_exit = 1;
 	else if (g_exit == 0)

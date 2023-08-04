@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:54:09 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/04 05:50:36 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/04 23:19:35 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,10 @@ void	ft_lstfree(t_env **head)
 	while (current != NULL)
 	{
 		next = current->next;
-		free(current->var);
-		free(current->val);
+		if (current->var)
+			free(current->var);
+		if (current->val)
+			free(current->val);
 		free(current);
 		current = next;
 	}
@@ -64,6 +66,7 @@ t_env	*ft_lstneww(char *env_name, char *env_content)
 	new->val = NULL;
 	if (env_content != NULL)
 		new->val = ft_strdup(env_content);
+	new->flag = g_env;
 	new->next = NULL;
 	new->prev = NULL;
 	return (new);
@@ -138,6 +141,7 @@ t_env	*create_list(char *str[])
 	char	*equal_sign;
 
 	env = NULL;
+	g_env = 0;
 	i = 0;
 	while (str[i])
 	{
