@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:55:55 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/04 05:41:02 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/04 08:44:04 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ void	parent(char *path)
 	{
 		write(2, "minishell: cd: ", 16);
 		write(2, path, ft_strlen(path));
-			write(2, ": No such file or directory\n", 28);
+		write(2, ": No such file or directory\n", 28);
 		g_exit = 1;
 		return ;
 	}

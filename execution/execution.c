@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 09:48:12 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/04 07:34:37 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/04 08:40:29 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,7 +212,7 @@ void	exec_pipe(t_data *data, t_env *env_list)
 	char	*path;
 	int		pipefd[2];
 	pid_t	pid;
-	// int		status;
+	int		status;
 	t_data	*tmp;
 			// int child_exit_status;
 
@@ -332,19 +332,21 @@ void	exec_pipe(t_data *data, t_env *env_list)
 			if (tmp->next->in == 0)
 				tmp->next->in = pipefd[0];
 			exec_pipe(tmp->next, env_list);
+				waitpid(pid, &status, 0);
+			// g_exit = status / 256;
 			// waitpid(pid, &status, 0);
 			// g_exit = status / 256;
 		}
 		// else if (pid > 0)
 		// {
-		// 	// free(path);
-		// 	// free_leaks(env);
-		// 	close(pipefd[1]);
-		// 	if (tmp->next->in == 0)
-		// 		tmp->next->in = pipefd[0];
-		// 	exec_pipe(tmp->next, env_list);
-		// 	waitpid(pid, &status, 0);
-		// 	g_exit = WIFEXITED(status) ? WEXITSTATUS(status) : 1;
+			// free(path);
+			// free_leaks(env);
+			// close(pipefd[1]);
+			// if (tmp->next->in == 0)
+			// 	tmp->next->in = pipefd[0];
+			// exec_pipe(tmp->next, env_list);
+			// waitpid(pid, &status, 0);
+			// g_exit = WIFEXITED(status) ? WEXITSTATUS(status) : 1;
 		// }
 	}
 	else

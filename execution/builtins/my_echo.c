@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:55:18 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/03 21:31:29 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/04 08:26:21 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 int	newline_checker(char *str)
 {
 	int	i;
-
+	if (!str || str[0] == '\0')
+		return (0);
 	i = 0;
 	if (str[i] == '-')
 		i++;
