@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 09:48:12 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/04 08:40:29 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/05 03:18:33 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,15 @@ char	*join_path(char *path, char *cmd)
 	{
 		tmp = ft_strjoin(paths[i], "/");
 		if (!tmp)
-			return (free_leaks(paths), NULL);
+			return (NULL);
 		new_path = ft_strjoin(tmp, cmd);
 		if (!new_path)
-			return (free_leaks(paths), free(tmp), NULL);
-		free(tmp);
+			return (NULL);
+
 		if (access(new_path, X_OK) == 0)
-			return (free_leaks(paths), new_path);
-		free(new_path);
+			return ( new_path);
 	}
-	return (free_leaks(paths), NULL);
+	return (NULL);
 }
 
 char	*find_path(char *cmd, char *envp[])

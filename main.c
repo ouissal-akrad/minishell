@@ -6,12 +6,11 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 03:20:11 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/05 03:10:55 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/05 03:56:17 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 void f()
 {
@@ -40,6 +39,8 @@ int	main(int argc, char *argv[], char *env[])
 		new_env = no_env();
 	else
 		new_env = create_list(env);
+
+
 	tokens = NULL;
 	data = NULL;
 	line = NULL;
@@ -117,7 +118,7 @@ int	main(int argc, char *argv[], char *env[])
 		// }
 
 		data_s = data_size(data);
-		// direction(data,&new_env);
+		direction(data,&new_env);
 
 		close_files(data);
 		free_data(&data);

@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:55:55 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/05 01:27:24 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/05 10:31:15 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,14 @@
 
 char	*find(t_env *env, char *to_find)
 {
-	while (env)
+	t_env	*e;
+
+	e = env;
+	while (e)
 	{
-		if (ft_strncmp(env->var, to_find) == 0)
-			return (env->val);
-		env = env->next;
+		if (ft_strncmp(e->var, to_find) == 0)
+			return (ft_strdup(e->val));
+		e = e->next;
 	}
 	return (NULL);
 }
@@ -26,15 +29,23 @@ char	*find(t_env *env, char *to_find)
 void	update_env(t_env **env, char *oldpwd, char *pwd)
 {
 	t_env	*e;
+	char 	*f_oldpwd;
+	char	*f_pwd;
 
-	if (find(*env, "OLDPWD") == NULL || find(*env, "PWD") == NULL)
+	f_oldpwd = find(*env, "OLDPWD");
+	f_pwd = find(*env, "PWD");
+
+	if (f_oldpwd == NULL || f_pwd == NULL)
 	{
-		if (find(*env, "OLDPWD") == NULL)
+		if (f_oldpwd == NULL)
 			ft_lstadd_backk(env, ft_lstneww("OLDPWD", oldpwd));
-		if (find(*env, "PWD") == NULL)
+		if (f_pwd == NULL)
 			ft_lstadd_backk(env, ft_lstneww("PWD", pwd));
-		return ;
 	}
+	if (f_oldpwd != NULL)
+		free(f_oldpwd);
+	if (f_pwd != NULL)
+		free(f_pwd);
 	e = *env;
 	while (e)
 	{
@@ -50,7 +61,6 @@ void	update_env(t_env **env, char *oldpwd, char *pwd)
 		}
 		e = e->next;
 	}
-
 }
 
 void	my_cd(t_env **env, t_data *data)
@@ -58,6 +68,8 @@ void	my_cd(t_env **env, t_data *data)
 	char	oldpwd[PATH_MAX];
 	char	pwd[PATH_MAX];
 	char	*path;
+	DIR		*dir;
+	// char	*cwd;
 
 	if (data->args[1] == NULL)
 	{
@@ -74,35 +86,40 @@ void	my_cd(t_env **env, t_data *data)
 			return ;
 	}
 	else
-		path = data->args[1];
+		path = ft_strdup(data->args[1]);
 	if (getcwd(oldpwd, PATH_MAX) == NULL)
 		parent(path);
 	if (access(path, F_OK) == 0)
 	{
-		if (opendir(path) == NULL)
+		dir = opendir(path);
+		if (dir == NULL)
 		{
 			write(2, "minishell: cd: ", 16);
 			write(2, path, ft_strlen(path));
 			write(2, ": Not a directory\n", 18);
 			g_exit = 1;
+			free(path);
 			return ;
 		}
+		closedir(dir);
 	}
 	if (chdir(path) == -1)
 	{
 		write(2, "minishell: cd: ", 16);
 		write(2, path, ft_strlen(path));
 		write(2, ": No such file or directory\n", 28);
-
 		g_exit = 1;
+		free(path);
 		return ;
 	}
 	if (getcwd(pwd, PATH_MAX) == NULL)
 	{
 		perror("getcwd");
 		g_exit = 1;
+		free(path);
 		return ;
 	}
+	free(path);
 	if (data->args[1] != NULL && ft_strncmp(data->args[1], "-") == 0)
 		printf("%s\n", pwd);
 	update_env(env, oldpwd, pwd);
@@ -138,6 +155,7 @@ char	*go_oldpwd(t_env **env)
 
 void	parent(char *path)
 {
+	free(path);
 	if (chdir(path) == -1)
 	{
 		write(2, "minishell: cd: ", 16);
@@ -146,7 +164,6 @@ void	parent(char *path)
 		g_exit = 1;
 		return ;
 	}
-
 	write(2, "cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory.\n", 109);
 	return;
 }

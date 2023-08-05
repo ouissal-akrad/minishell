@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:20:28 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/03 20:02:32 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/05 04:19:45 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@ int	all_digit(char *str)
 {
 	int	i;
 	int len = ft_strlen(str);
+
+	if (len == 0)
+		return (0);
 	if(len == 1 && (str[0] == '-' || str[0] == '+'))
 		return 0;
 	i = 1;
@@ -31,13 +34,31 @@ int	all_digit(char *str)
 
 char *skip_zero(char *str)
 {
-	while(*str)
+	char	*result;
+	size_t		i;
+	size_t 	j;
+
+	i = 0;
+	j = 0;
+	result = ft_calloc(ft_strlen(str) + 1, sizeof(char));
+	if (!result)
+		return (NULL);
+	while (str[i] == '0')
+		i++;
+	if (i == ft_strlen(str))
 	{
-		if(*str != '0')
-			return((char *)str);
-		str++;
+		result[0] = '0';
+		free(str);
+		return (result);
 	}
-	return(NULL);
+	while (str[i])
+	{
+		result[j] = str[i];
+		i++;
+		j++;
+	}
+	free(str);
+	return (result);
 }
 
 static int	ft_check(char *str)
@@ -54,6 +75,7 @@ static int	ft_check(char *str)
 void	my_exit(t_env **env,t_data *data)
 {
 	int	i;
+	int e;
 
 	i = 1;
 	if (!data->args[i])
@@ -62,6 +84,7 @@ void	my_exit(t_env **env,t_data *data)
 			printf("exit\n");
 		g_exit = 0;
 		ft_lstfree(env);
+		free_data(&data);
 		exit(0);
 	}
 	else
@@ -74,7 +97,8 @@ void	my_exit(t_env **env,t_data *data)
 		write(2, data->args[i], ft_strlen(data->args[i]));
 		write(2, ": numeric argument required\n", 28);
 		g_exit = 255;
-		// ft_lstfree(env);
+		ft_lstfree(env);
+		free_data(&data);
 		exit(255);
 	}
 	else if (data->args[2])
@@ -86,8 +110,10 @@ void	my_exit(t_env **env,t_data *data)
 		return;
     }
 	g_exit = ft_atoi(data->args[i]);
-	ft_lstfree(env);
 	if(data_s == 1)
 		printf("exit\n");
-	exit(ft_atoi(data->args[i]) % 256);
+	e = ft_atoi(data->args[i]);
+	ft_lstfree(env);
+	free_data(&data);
+	exit(e % 256);
 }

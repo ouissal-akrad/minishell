@@ -6,12 +6,11 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:21:57 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/04 23:50:10 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/05 03:46:55 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
 
 void	exec_builtin(t_data *data, t_env **new_env)
 {
@@ -29,7 +28,7 @@ void	exec_builtin(t_data *data, t_env **new_env)
 		else if (ft_strncmp(cmd, "cd") == 0)
 			my_cd(new_env, data);
 		else if (ft_strncmp(cmd, "env") == 0)
-			my_env(new_env,data);
+			my_env(new_env, data);
 		else if (ft_strncmp(cmd, "exit") == 0)
 			my_exit(new_env, data);
 		else if (ft_strncmp(cmd, "export") == 0)
@@ -41,65 +40,24 @@ void	exec_builtin(t_data *data, t_env **new_env)
 
 void	direction(t_data *data, t_env **new_env)
 {
-	// // char	*cmd;
-
-	// if (data->args != NULL && data->args[0] != NULL && !is_builtins(data->args[0]))
-	// {
-	// 		cmd = data->args[0];
-	// 	if (ft_strncmp(cmd, "pwd") == 0 && data->next == NULL)
-	// 		my_pwd();
-	// 	else if (ft_strncmp(cmd, "unset") == 0 && data->next == NULL)
-	// 		my_unset(new_env, data);
-	// 	else if (ft_strncmp(cmd, "echo") == 0 && data->next == NULL)
-	// 		my_echo(data);
-	// 	else if (ft_strncmp(cmd, "cd") == 0 && data->next == NULL)
-	// 		my_cd(new_env, data);
-	// 	else if (ft_strncmp(cmd, "env") == 0 && data->next == NULL)
-	// 		my_env(new_env);
-	// 	else if (ft_strncmp(cmd, "exit") == 0 && data->next == NULL)
-	// 		my_exit(new_env, data);
-	// 	else if (ft_strncmp(cmd, "export") == 0 && data->next == NULL)
-	// 		my_export(new_env, data);
-	// }
-	// else
-
-	if (data->next == NULL && data->args != NULL && data->args[0] != NULL && (data->out != -1 && data->in != -1))
+	if (data->next == NULL && data->args != NULL && data->args[0] != NULL
+		&& (data->out != -1 && data->in != -1) && !is_builtins(data->args[0]))
 	{
 		if (ft_strncmp(data->args[0], "exit") == 0)
-		{
 			my_exit(new_env, data);
-			return ;
-		}
-		if (ft_strncmp(data->args[0], "pwd") == 0)
-		{
+		else if (ft_strncmp(data->args[0], "pwd") == 0) // IDA W9A3 MOCHKIL ANREJ3OHA IF
 			my_pwd(data);
-			return ;
-		}
 		else if (ft_strncmp(data->args[0], "unset") == 0)
-			{
-				my_unset(new_env, data);
-				return;
-			}
+			my_unset(new_env, data);
 		else if (ft_strncmp(data->args[0], "echo") == 0)
-			{
-				my_echo(data);
-				return;
-			}
+			my_echo(data);
 		else if (ft_strncmp(data->args[0], "cd") == 0)
-			{
-				my_cd(new_env, data);
-				return;
-			}
+			my_cd(new_env, data);
 		else if (ft_strncmp(data->args[0], "env") == 0)
-			{
-				my_env(new_env, data);
-				return;
-			}
+			my_env(new_env, data);
 		else if (ft_strncmp(data->args[0], "export") == 0)
-			{
-				my_export(new_env, data);
-				return;
-			}
+			my_export(new_env, data);
+		return ;
 	}
 	exec_pipe(data, *new_env);
 }
@@ -136,9 +94,9 @@ t_env	*no_env(void)
 	ft_lstadd_backk(&env, ft_lstneww("SHLVL", "1"));
 	ft_lstadd_backk(&env, ft_lstneww("_", "/usr/bin/env"));
 	ft_lstadd_backk(&env, ft_lstneww("OLDPWD", NULL));
-	//hiden
+	// hiden
 	ft_lstadd_backk(&env, ft_lstneww("PATH",
-				"/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:."));
+			"/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:."));
 	ft_lstadd_backk(&env, ft_lstneww("SHELL", "/bin/zsh"));
 	return (env);
 }

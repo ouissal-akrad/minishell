@@ -6,7 +6,7 @@
 #    By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/23 03:03:58 by bel-idri          #+#    #+#              #
-#    Updated: 2023/08/05 02:59:25 by bel-idri         ###   ########.fr        #
+#    Updated: 2023/08/05 11:07:26 by bel-idri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -77,7 +77,6 @@ OBJS_LIBFT = $(SRCS_LIBFT:.c=.o)
 CC = cc
 
 USER = $(shell whoami)
-
 
 CFLAGS = -Wall -Wextra -Werror -I/Users/${USER}/.brew/opt/readline/include #-g -fsanitize=address
 

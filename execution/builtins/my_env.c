@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:54:09 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/05 01:38:42 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/05 10:08:31 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,19 +116,23 @@ void shlvl(t_env **env)
 {
 	int new_val;
 	t_env *tmp = *env;
+	char *f;
 
-	if (find(*env, "SHLVL") == NULL)
+	f = find(*env, "SHLVL");
+	if (f == NULL)
 	{
 		ft_lstadd_backk(env, ft_lstneww("SHLVL", "1"));
 		return ;
 	}
+	free(f);
 
 	while(tmp)
 	{
 		if (ft_strncmp(tmp->var, "SHLVL") == 0)
 		{
 			new_val = ft_atoi(tmp->val) + 1;
-			free(tmp->val);
+			if (tmp->val)
+				free(tmp->val);
 			if(new_val == 1000)
 				tmp->val = ft_strdup("");
 			else if(ft_strncmp(tmp->var, "") == 0)
