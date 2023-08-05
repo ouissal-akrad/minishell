@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 03:20:11 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/05 03:05:53 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/05 03:10:55 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	main(int argc, char *argv[], char *env[])
 	t_data		*data;
 	t_env		*new_env;
 
-	// atexit(f);
+	atexit(f);
 	g_exit = 0;
 	(void)argv;
 	if (argc > 1)
@@ -117,9 +117,9 @@ int	main(int argc, char *argv[], char *env[])
 		// }
 
 		data_s = data_size(data);
-		direction(data,&new_env);
+		// direction(data,&new_env);
 
-		// close_files(data);
+		close_files(data);
 		free_data(&data);
 		data = NULL;
 	}

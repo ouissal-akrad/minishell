@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/04 06:55:25 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/05 03:08:44 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -997,21 +997,6 @@ void	free_env(t_env **env)
 	}
 }
 
-void	close_files(t_data *data)
-{
-	t_data	*tmp;
-
-	tmp = data;
-	while (tmp)
-	{
-		if (tmp->in != 0)
-			close(tmp->in);
-		if (tmp->out != 1)
-			close(tmp->out);
-		tmp = tmp->next;
-	}
-}
-
 void	open_files_hdoc_tmp(t_data **data)
 {
 	t_data	*tmp;
@@ -1092,7 +1077,17 @@ void		is_a_directory(t_data **data)
 	}
 }
 
-// 0 - comand
-// 1 - permission denied
-// 3 - no such file or directory
-// 4 - is a directory
+void	close_files(t_data *data)
+{
+	t_data	*tmp;
+
+	tmp = data;
+	while (tmp)
+	{
+		if (tmp->in != 0 && tmp->in != -1)
+			close(tmp->in);
+		if (tmp->out != 1 && tmp->out != -1)
+			close(tmp->out);
+		tmp = tmp->next;
+	}
+}
