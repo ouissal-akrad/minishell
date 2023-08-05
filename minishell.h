@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 00:16:06 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/04 23:32:40 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/05 01:38:26 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ void				direction(t_data *data, t_env **new_env);
 int					is_builtins(char *cmd);
 /*----------------cd---------------------*/
 void				my_cd(t_env **env, t_data *data);
-void				update_env(t_env *env, char *oldpwd, char *pwd);
+void				update_env(t_env **env, char *oldpwd, char *pwd);
 char				*find(t_env *env, char *to_find);
 char				*go_home(t_env **env);
 char				*go_oldpwd(t_env **env);
@@ -147,7 +147,7 @@ void				ft_lstadd_backk(t_env **lst, t_env *new);
 t_env				*ft_lstneww(char *env_name, char *env_content);
 t_env				*create_list(char *str[]);
 void				ft_lstfree(t_env **head);
-void				shlvl(t_env *env);
+void				shlvl(t_env **env);
 t_env				*no_env(void);
 /*----------------pwd---------------------*/
 void				my_pwd(t_data *data);

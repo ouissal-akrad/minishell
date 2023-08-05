@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:54:09 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/04 23:19:35 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/05 01:38:42 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,10 +112,17 @@ void	print_env(t_env *env ,t_data *data)
 	}
 }
 
-void shlvl(t_env *env)
+void shlvl(t_env **env)
 {
 	int new_val;
-	t_env *tmp = env;
+	t_env *tmp = *env;
+
+	if (find(*env, "SHLVL") == NULL)
+	{
+		ft_lstadd_backk(env, ft_lstneww("SHLVL", "1"));
+		return ;
+	}
+
 	while(tmp)
 	{
 		if (ft_strncmp(tmp->var, "SHLVL") == 0)
@@ -133,13 +140,23 @@ void shlvl(t_env *env)
 	}
 }
 
+int array_size(char **str)
+{
+	int i = 0;
+	while(str[i])
+		i++;
+	return i;
+}
 t_env	*create_list(char *str[])
 {
 	t_env	*env;
 	int		i;
 	char	*variable;
 	char	*equal_sign;
+	int size = array_size(str);
+	char	wdir[PATH_MAX];
 
+	getcwd(wdir, PATH_MAX);
 	env = NULL;
 	g_env = 0;
 	i = 0;
@@ -147,14 +164,20 @@ t_env	*create_list(char *str[])
 	{
 		variable = str[i];
 		equal_sign = ft_strchr(variable, '=');
-		if (equal_sign != NULL)
+		if (equal_sign != NULL && ft_strncmp_2(variable, "OLDPWD=", 7) != 0 \
+			&& ft_strncmp_2(variable, "PWD=", 4) != 0)
 		{
 			*equal_sign = '\0';
 			ft_lstadd_backk(&env, ft_lstneww(variable, equal_sign + 1));
 		}
+		if(i == size / 2)
+		{
+			ft_lstadd_backk(&env, ft_lstneww("OLDPWD", NULL));
+			ft_lstadd_backk(&env, ft_lstneww("PWD", wdir));
+		}
 		i++;
 	}
-	shlvl(env);
+	shlvl(&env);
 	return (env);
 }
 void	my_env(t_env **env,t_data *data)

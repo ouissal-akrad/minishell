@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:55:55 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/04 23:58:20 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/05 01:27:24 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,22 +23,34 @@ char	*find(t_env *env, char *to_find)
 	return (NULL);
 }
 
-void	update_env(t_env *env, char *oldpwd, char *pwd)
+void	update_env(t_env **env, char *oldpwd, char *pwd)
 {
-	while (env)
+	t_env	*e;
+
+	if (find(*env, "OLDPWD") == NULL || find(*env, "PWD") == NULL)
 	{
-		if (ft_strncmp(env->var, "OLDPWD") == 0)
-		{
-			free(env->val);
-			env->val = ft_strdup(oldpwd);
-		}
-		else if (ft_strncmp(env->var, "PWD") == 0)
-		{
-			free(env->val);
-			env->val = ft_strdup(pwd);
-		}
-		env = env->next;
+		if (find(*env, "OLDPWD") == NULL)
+			ft_lstadd_backk(env, ft_lstneww("OLDPWD", oldpwd));
+		if (find(*env, "PWD") == NULL)
+			ft_lstadd_backk(env, ft_lstneww("PWD", pwd));
+		return ;
 	}
+	e = *env;
+	while (e)
+	{
+		if (ft_strncmp(e->var, "OLDPWD") == 0)
+		{
+			free(e->val);
+			e->val = ft_strdup(oldpwd);
+		}
+		else if (ft_strncmp(e->var, "PWD") == 0)
+		{
+			free(e->val);
+			e->val = ft_strdup(pwd);
+		}
+		e = e->next;
+	}
+
 }
 
 void	my_cd(t_env **env, t_data *data)
@@ -65,9 +77,19 @@ void	my_cd(t_env **env, t_data *data)
 		path = data->args[1];
 	if (getcwd(oldpwd, PATH_MAX) == NULL)
 		parent(path);
+	if (access(path, F_OK) == 0)
+	{
+		if (opendir(path) == NULL)
+		{
+			write(2, "minishell: cd: ", 16);
+			write(2, path, ft_strlen(path));
+			write(2, ": Not a directory\n", 18);
+			g_exit = 1;
+			return ;
+		}
+	}
 	if (chdir(path) == -1)
 	{
-		printf("GG\n");
 		write(2, "minishell: cd: ", 16);
 		write(2, path, ft_strlen(path));
 		write(2, ": No such file or directory\n", 28);
@@ -83,7 +105,7 @@ void	my_cd(t_env **env, t_data *data)
 	}
 	if (data->args[1] != NULL && ft_strncmp(data->args[1], "-") == 0)
 		printf("%s\n", pwd);
-	update_env(*env, oldpwd, pwd);
+	update_env(env, oldpwd, pwd);
 	g_exit = 0;
 }
 

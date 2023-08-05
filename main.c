@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 03:20:11 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/04 22:51:20 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/05 01:41:44 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ int	main(int argc, char *argv[], char *env[])
 		// }
 
 		data_s = data_size(data);
-		direction(data,&new_env);
+		// direction(data,&new_env);
 
 		free_data(&data);
 		// close files
