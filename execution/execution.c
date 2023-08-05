@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 09:48:12 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/05 03:18:33 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/05 23:46:54 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,16 @@ char	*join_path(char *path, char *cmd)
 	{
 		tmp = ft_strjoin(paths[i], "/");
 		if (!tmp)
-			return (NULL);
+			return (free_leaks(paths), NULL);
 		new_path = ft_strjoin(tmp, cmd);
 		if (!new_path)
-			return (NULL);
-
+			return (free_leaks(paths), free(tmp), NULL);
+		free(tmp);
 		if (access(new_path, X_OK) == 0)
-			return ( new_path);
+			return (free_leaks(paths), new_path);
+		free(new_path);
 	}
-	return (NULL);
+	return (free_leaks(paths), NULL);
 }
 
 char	*find_path(char *cmd, char *envp[])
@@ -56,14 +57,14 @@ char	*find_path(char *cmd, char *envp[])
 		return (NULL);
 	}
 	if ((ft_strchr(cmd, '/')) || !is_builtins(cmd))
-		return (cmd);
+		return (ft_strdup(cmd));
 	i = -1;
 	while (envp[++i])
 	{
 		if (ft_strncmp_2(envp[i], "PATH=", 5) == 0)
 			return (join_path(envp[i] + 5, cmd));
 	}
-	return (cmd);
+	return (ft_strdup(cmd));
 }
 
 char	**env_list_to_char_array(t_env *env_list)
@@ -105,8 +106,8 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 	if (pid == -1)
 	{
 		perror("fork");
-		// free(path);
-		// free_leaks(env);
+		free(path);
+		free_leaks(env);
 		return ;
 	}
 	else if (pid == 0)
@@ -195,13 +196,8 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 	}
 	else
 	{
-		// waitpid(pid, &status, 0);
-		// g_exit = status / 256;
-		// // free(path);
-		// // free_leaks(env);
-			waitpid(pid, &status, 0);
-			g_exit = status / 256;
-		// exit(g_exit); // the is exit is returnrd
+		waitpid(pid, &status, 0);
+		g_exit = status / 256;
 	}
 }
 
@@ -216,7 +212,7 @@ void	exec_pipe(t_data *data, t_env *env_list)
 			// int child_exit_status;
 
 	tmp = data;
-	path = ft_strdup("");
+	path = NULL;
 	env = env_list_to_char_array(env_list);
 	if (!env)
 		return ;
@@ -225,8 +221,8 @@ void	exec_pipe(t_data *data, t_env *env_list)
 	if (pipe(pipefd) == -1)
 	{
 		perror("pipe");
-		// free(path);
-		// free_leaks(env);
+		free(path);
+		free_leaks(env);
 		return ;
 	}
 	if (tmp->next != NULL)
@@ -237,8 +233,8 @@ void	exec_pipe(t_data *data, t_env *env_list)
 			perror("fork");
 			close(pipefd[0]);
 			close(pipefd[1]);
-			// free(path);
-			// free_leaks(env);
+			free(path);
+			free_leaks(env);
 			return ;
 		}
 		if (pid == 0)
@@ -325,33 +321,24 @@ void	exec_pipe(t_data *data, t_env *env_list)
 		}
 		else if (pid > 0)
 		{
-			// free(path);
-			// free_leaks(env);
+			if (path != NULL)
+				free(path);
+			if (env != NULL)
+				free_leaks(env);
 			close(pipefd[1]);
 			if (tmp->next->in == 0)
 				tmp->next->in = pipefd[0];
 			exec_pipe(tmp->next, env_list);
-				waitpid(pid, &status, 0);
-			// g_exit = status / 256;
-			// waitpid(pid, &status, 0);
-			// g_exit = status / 256;
+			waitpid(pid, &status, 0);
 		}
-		// else if (pid > 0)
-		// {
-			// free(path);
-			// free_leaks(env);
-			// close(pipefd[1]);
-			// if (tmp->next->in == 0)
-			// 	tmp->next->in = pipefd[0];
-			// exec_pipe(tmp->next, env_list);
-			// waitpid(pid, &status, 0);
-			// g_exit = WIFEXITED(status) ? WEXITSTATUS(status) : 1;
-		// }
 	}
 	else
 	{
 		exec_cmd(tmp, path, env, &env_list, pipefd);
-		////// exit(g_exit);
+		if (path != NULL)
+			free(path);
+		if (env != NULL)
+			free_leaks(env);
 	}
 	close_files(data);
 }

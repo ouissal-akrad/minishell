@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   my_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:46:00 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/05 11:54:26 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/05 23:13:29 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,12 +151,6 @@ void	swap_env(t_env *a, t_env *b)
 	a->val = b->val;
 	b->var = var_temp;
 	b->val = val_temp;
-
-	// if (var_temp != NULL)
-	// 	free(var_temp);
-	// if (val_temp != NULL)
-	// 	free(val_temp);
-
 }
 
 void	sort_env(t_env **env)
@@ -188,9 +182,7 @@ t_env	*create_new_env(const t_env *original)
 
 	new_env = (t_env *)malloc(sizeof(t_env));
 	if (new_env == NULL)
-	{
-		return (NULL); // Handle memory allocation failure
-	}
+		return (NULL);
 	new_env->var = ft_strdup(original->var);
 	if (original->val == NULL)
 		new_env->val = NULL;
@@ -210,25 +202,17 @@ t_env	*copy_env_list(const t_env *original_head)
 	t_env	*copy_curr;
 
 	if (original_head == NULL)
-	{
-		return (NULL); // Handle the case of an empty list
-	}
+		return (NULL);
 	copy_head = create_new_env(original_head);
 	if (copy_head == NULL)
-	{
-		return (NULL); // Handle memory allocation failure
-	}
+		return (NULL);
 	original_curr = original_head->next;
 	copy_prev = copy_head;
 	while (original_curr != NULL)
 	{
 		copy_curr = create_new_env(original_curr);
 		if (copy_curr == NULL)
-		{
-			// Handle memory allocation failure
-			// You should also free the memory of the copied nodes created so far
 			return (NULL);
-		}
 		copy_curr->prev = copy_prev;
 		copy_prev->next = copy_curr;
 		original_curr = original_curr->next;
@@ -267,7 +251,7 @@ void	ft_csp(t_env *env, t_data *data, int c)
 		i = 0;
 		prev = NULL;
 		rest = NULL;
-		tmp = ft_strdup(data->args[cmd]);
+		tmp = data->args[cmd];
 		if (tmp[0] != '_' && !ft_isalpha(tmp[0]))
 		{
 			write(2, "minishell: export: `", 20);
@@ -293,8 +277,6 @@ void	ft_csp(t_env *env, t_data *data, int c)
 					write(2, data->args[cmd], ft_strlen(data->args[cmd]));
 					write(2, "': not a valid identifier\n", 26);
 					g_exit = 1;
-					if (tmp)
-						free(tmp);
 					cmd++;
 					continue ;
 				}
@@ -312,11 +294,7 @@ void	ft_csp(t_env *env, t_data *data, int c)
 		}
 		// without = ,rest == NULL
 		if (check_value(tmp))
-		{
 			prev = ft_strdup(tmp);
-			if (tmp)
-				free(tmp);
-		}
 		else
 		{
 			write(2, "minishell: export: `", 20);
@@ -333,11 +311,13 @@ void	ft_csp(t_env *env, t_data *data, int c)
 			write(2, "': not a valid identifier\n", 26);
 			cmd++;
 			g_exit = 1;
+			free(prev);
 			continue ;
 		}
 		// check
 		sequal(env, prev, rest, plus);
 		cmd++;
+		free(prev);
 	}
 	// resort env
 	// sort_env(&env);
@@ -359,22 +339,18 @@ void	sequal(t_env *env, char *prev, char *rest, int plus)
 	existing_var = find_env(env, prev);
 	if (existing_var != NULL)
 	{
-		free(prev);
 		// Duplicate the new value and store it in the existing variable and + exists
 		if (plus && existing_var->val)
 		{
 			old_val = ft_strdup(existing_var->val);
-			if (existing_var->val)
-				free(existing_var->val);
+			free(existing_var->val);
 			existing_var->val = ft_strjoin(old_val, rest);
-			if (old_val)
-				free(old_val);
+			free(old_val);
 		}
 		// assign new value to the old variable if it exists
 		else
 		{
-			if (existing_var->val)
-				free(existing_var->val);
+			free(existing_var->val);
 			if (!rest)
 				existing_var->val = NULL;
 			else
@@ -387,10 +363,6 @@ void	sequal(t_env *env, char *prev, char *rest, int plus)
 		new_var = ft_lstneww(prev, rest);
 		if (new_var == NULL)
 			return ;
-		if (prev)
-			free(prev);
-		// if (rest)
-		// 	free(rest);
 		ft_lstadd_backk(&env, new_var);
 	}
 }

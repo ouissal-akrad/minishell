@@ -16,6 +16,8 @@
 		"iterator": "c",
 		"locale": "c",
 		"array": "c",
-		"vector": "c"
+		"vector": "c",
+		"__locale": "c",
+		"ios": "c"
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/05 03:08:44 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/05 23:59:04 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -972,11 +972,13 @@ void	free_data(t_data **data)
 	{
 		prev = tmp;
 		i = -1;
-		while (tmp->args[++i])
-			free(tmp->args[i]);
-		if (tmp->args)
+		if (tmp->args != NULL )
+		{
+			while (tmp->args[++i] != NULL)
+				free(tmp->args[i]);
 			free(tmp->args);
-		if (tmp->buff)
+		}
+		if (tmp->buff != NULL)
 			free(tmp->buff);
 		tmp = tmp->next;
 		free(prev);
@@ -1029,7 +1031,9 @@ void	open_files_hdoc_tmp(t_data **data)
 void		is_a_directory(t_data **data)
 {
 	t_data	*tmp;
+	DIR		*dir;
 
+	dir = NULL;
 	tmp = *data;
 	while (tmp)
 	{
@@ -1041,13 +1045,17 @@ void		is_a_directory(t_data **data)
 				{
 					if (access(tmp->args[0], X_OK) == 0)
 					{
-						if (opendir(tmp->args[0]) != NULL)
+						dir = opendir(tmp->args[0]);
+						if (dir != NULL)
 						{
+							closedir(dir);
+							// printf("dir = %p\n", dir);
 							tmp->is_dir = 1;
 							// write(2, "minishell: ", 11);
 							// write(2, tmp->args[0], ft_strlen(tmp->args[0]));
 							// write(2, ": is a directory\n", 17);
 						}
+						// closedir(dir);
 					}
 					else
 					{
