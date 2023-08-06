@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 09:48:12 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/06 02:11:24 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/08/06 03:27:50 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,8 +114,8 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 	}
 	else if (pid == 0)
 	{
-		signal(SIGINT, sigg);
-		signal(SIGQUIT, sigg);
+		// signal(SIGINT, sigg);
+		// signal(SIGQUIT, sigg);
 		if (data->in < 0 || data->out < 0)
 		{
 			g_exit = 1;
@@ -199,7 +199,11 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 	else
 	{
 		waitpid(pid, &status, 0);
-		g_exit = status / 256;
+			if (WIFEXITED(status))
+          		 g_exit = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				g_exit = 128 + WTERMSIG(status);
+
 	}
 }
 
@@ -241,8 +245,8 @@ void	exec_pipe(t_data *data, t_env *env_list)
 		}
 		if (pid == 0)
 		{
-			signal(SIGINT, sigg);
-			signal(SIGQUIT, sigg);
+			// signal(SIGINT, sigg);
+			// signal(SIGQUIT, sigg);
 			if (tmp->in < 0 || tmp->out < 0)
 			{
 				g_exit = 1;

@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 03:20:11 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/06 01:48:29 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/08/06 03:00:43 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void f()
-{
-	system("leaks minishell");
-}
+// void f()
+// {
+// 	system("leaks minishell");
+// }
 
 int	main(int argc, char *argv[], char *env[])
 {
@@ -120,7 +120,7 @@ int	main(int argc, char *argv[], char *env[])
 
 		data_s = data_size(data);
 		direction(data,&new_env);
-		
+
 		close_files(data);
 		free_data(&data);
 		data = NULL;

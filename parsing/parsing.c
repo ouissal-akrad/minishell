@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/06 02:03:26 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/08/06 02:59:38 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -971,8 +971,10 @@ void	free_env(t_env **env)
 	{
 		tmp = *env;
 		*env = (*env)->next;
-		free(tmp->var);
-		free(tmp->val);
+		if (tmp->var != NULL)
+			free(tmp->var);
+		if (tmp->val != NULL)
+			free(tmp->val);
 		free(tmp);
 	}
 }
