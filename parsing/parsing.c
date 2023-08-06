@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/06 05:44:50 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/06 05:50:30 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1089,7 +1089,9 @@ int	check_only_w(char *str)
 	int	i;
 
 	i = 0;
-	if (ft_strlen(str) == 0)
+	if (ft_strlen(str) == 0 || str == NULL)
+		return (0);
+	if (ft_strlen (str) == 2 &&  ((str[i] == '\'' && str[i + 1] == '\'') || (str[i] == '\"' && str[i + 1] == '\"')))
 		return (0);
 	while (str[i])
 	{

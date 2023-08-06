@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 03:20:11 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/06 05:19:32 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/06 05:47:32 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,6 @@ int	main(int argc, char *argv[], char *env[])
 		// unlink_file
 
 		is_a_directory(&data);
-
-
 
 		tmp = data;
 		// int i;
