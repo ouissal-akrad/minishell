@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 00:16:06 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/06 08:48:16 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/06 11:17:23 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 # include <termios.h>
 # include <unistd.h>
 
-/*---------------STRUCTS----------------*/
+/*----------------------------STRUCTS------------------------------*/
 typedef struct s_env
 {
 	char			*var;
@@ -44,7 +44,7 @@ typedef struct s_env
 
 typedef struct s_data
 {
-	char **args; // args[0] = cmd
+	char			**args;
 	int				in;
 	int				out;
 	int				hdoc;
@@ -53,23 +53,21 @@ typedef struct s_data
 	struct s_data	*next;
 }					t_data;
 
-/// parsing
-
 typedef enum e_quote
 {
-	OQ, // outside quote
-	SQ, // single quote
-	DQ  // double quote
+	OQ,
+	SQ,
+	DQ
 }					t_quote;
 
 typedef enum e_token
 {
-	WORD, // any string
-	PIPE, // |
-	IN,   // <
-	OUT,  // >
-	APP,  // >>
-	HDOC  // <<
+	WORD,
+	PIPE,
+	IN,
+	OUT,
+	APP,
+	HDOC
 }					t_token;
 
 typedef struct s_tokens
@@ -100,44 +98,121 @@ typedef struct s_prvrest
 	int				flag;
 }					t_prvrest;
 
-int					backup_stdin;
-int					exitt;
-int					g_exit;
-int					data_s;
-int					g_env;
-/*---------------PARSING-----------------*/
-void				is_quote(char *str, int i, int *quote);
-int					count_tok(char *str);
+typedef struct s_main
+{
+	char			*line;
+	t_tokens		*tokens;
+	t_data			*data;
+	t_env			*new_env;
+}					t_main;
+
+typedef struct s_global
+{
+	int				backup_stdin;
+	int				exitt;
+	int				g_exit;
+	int				data_s;
+	int				g_env;
+}					t_global;
+
+/*----------------------------GLOBAL------------------------------*/
+t_global			g_global;
+
+/*----------------------------MAIN------------------------------*/
+void				start(t_main *main, int argc, char *argv[], char *env[]);
+char				*read_line(void);
+int					read_line_empty(char *line);
+int					parsing(t_main *main);
+int					check_exit_hdoc(t_main *main);
+void				configs(t_main *main);
+void				fin_line(t_main *main);
+void				fin_program(t_main *main);
+
+/*----------------------------PARSING------------------------------*/
+/*----------------------------parsing------------------------------*/
+void				add_tok_split(char **split, t_tokens **tmp,
+						t_tokens **tokens);
+void				split_var_no_quote(t_tokens **tokens);
+void				free_remove(t_tokens *tmp);
+int					check_remove_null_1(t_tokens *tmp);
+int					check_remove_null_2(t_tokens *tmp);
+int					expand_env_halper_2(int *i, char *str, t_expvar *exp);
+int					expand_env_halper(char *str, int *i, t_expvar *exp,
+						t_env *env);
+int					the_big_check(char *str, int i, int state, t_expvar exp);
+char				*expand_env(char *str, t_env *env, int state);
+void				expanding(t_tokens **tokens, t_env *env);
+int					syntax_error(t_tokens *tokens);
+void				remove_quotes(t_tokens *tokens);
+char				*replace_space(char *str);
+char				*get_val(char *var, t_env *env, int quote);
+int					count_j(char *str, int i);
+void				rl_hdoc(void);
+int					syntax_error_hdoc(char *str, t_tokens *tokens, int i);
+int					syntax_error_halper(t_tokens *tmp, t_tokens *tokens, int i);
+int					syntax_error_quote(t_tokens *tokens);
+void				lexar(char *str, t_tokens **tokens);
+int					check_quotes(char *str);
+int					check_char(char *str, char c);
+void				add_is_d(t_tokens **tokens);
+int					syntax_error_msg(char *str);
 char				*add_spaces(char *str);
 void				add_token(t_tokens **tokens, char *str, t_token type);
 char				**split_tokens(char *str);
 void				free_tokens(t_tokens **tokens);
 void				free_str(char **str);
-void				lexar(char *str, t_tokens **tokens);
-int					syntax_error_quote(t_tokens *tokens);
-int					syntax_error(t_tokens *tokens);
-void				remove_quotes(t_tokens *tokens);
-void				expanding(t_tokens **token, t_env *env);
-void				split_var_no_quote(t_tokens **token);
-void				add_is_d(t_tokens **tokens);
+void				is_quote(char *str, int i, int *quote);
+char				*my_ft_strjoin_1(char *s1, char *s2);
+int					is_whitespace(char c);
+int					count_tok(char *str);
+void				add_spaces_handler(char *str, char *new);
 void				remove_null_tokens(t_tokens **tokens);
+int					check_no_expanding_valid(char *str);
 void				ambiguous_redirect(t_tokens **tokens);
-void				create_data(t_data **data, t_tokens **tokens, t_env *env);
-void				free_data(t_data **data);
-void				free_env(t_env **env);
-void				close_files(t_data *data);
-void				sigg(int sig);
-void				sig(void);
-void				sig_handler(int sig);
-void				open_files_hdoc_tmp(t_data **data);
+int					count_n_tokens(t_tokens *tokens);
+void				ft_lstadddd_back(t_data **data, t_data *new);
+void				ft_lstnewnode(t_data *new, t_tokens **tokens);
+void				creat_nodes(t_data **data, t_tokens **tokens);
+void				go_to_pipe(t_tokens **tokens);
+int					open_files_error(t_tokens *tmp);
+void				free_2_str(char *str1, char *str2);
 void				expanding_wildcard(t_tokens **tokens);
+t_tokens			*ft_lstnew_token_w(char *str, char *var);
+void				ft_lstadd_in_second_place(t_tokens **lst, t_tokens *new);
+void				sort_p(char **tmp);
+char				**reserve_names(void);
+void				fill_names(char **names);
+char				*get_line(char *line, t_env *env);
+char				*my_ft_strjoin_2(char *s1, char *s2);
+int					open_files_helper(t_data *tmpd, t_tokens *tmp);
+void				amgi_msg(t_data *tmp_data, t_tokens **tmp);
+void				open_files(t_data **data, t_tokens **tokens);
+void				open_hdoc_helper(t_data **tmp_data, t_tokens *tmp,
+						t_env *env);
+void				open_hdoc(t_data **data, t_tokens **tokens, t_env *env);
+void				create_data(t_data **data, t_tokens **tokens, t_env *env);
+void				free_env(t_env **env);
+void				open_files_hdoc_tmp(t_data **data);
+void				is_a_dir_helper(t_data *tmp);
+void				is_a_directory(t_data **data);
+void				close_files(t_data *data);
 int					check_only_w(char *str);
+void				open_hdoc_helper(t_data **tmp_data, t_tokens *tmp,
+						t_env *env);
+void				open_hdoc(t_data **data, t_tokens **tokens, t_env *env);
+void				create_data(t_data **data, t_tokens **tokens, t_env *env);
+void				free_env(t_env **env);
+void				free_data(t_data **data);
+/*----------------------------signals------------------------------*/
+void				sigg(int sig);
+void				sig_handler(int sig);
+void				sig(void);
 
-/*---------------EXECUTION-----------------*/
-/*-------------------------builtins-------------------------------*/
+/*----------------------------EXECUTION------------------------------*/
+/*----------------------------builtins------------------------------*/
 void				direction(t_data *data, t_env **new_env);
 int					is_builtins(char *cmd);
-/*----------------cd---------------------*/
+/*----------------------------cd------------------------------*/
 void				my_cd(t_env **env, t_data *data);
 void				update_env(t_env **env, char *oldpwd, char *pwd);
 char				*find(t_env *env, char *to_find);
@@ -148,10 +223,10 @@ void				print_working_directory(void);
 void				parent(char *path);
 void				error_msg_1(char *path);
 void				error_msg_2(char *path);
-/*----------------echo---------------------*/
+/*----------------------------echo------------------------------*/
 void				my_echo(t_data *data);
 int					newline_checker(char *str);
-/*----------------env---------------------*/
+/*----------------------------env------------------------------*/
 void				my_env(t_env **env, t_data *data);
 void				print_env(t_env *env, t_data *data);
 void				delete_node(t_env *head);
@@ -162,14 +237,14 @@ void				ft_lstfree(t_env **head);
 void				shlvl(t_env **env);
 t_env				*no_env(void);
 int					array_size(char **str);
-/*----------------pwd---------------------*/
+/*----------------------------pwd------------------------------*/
 void				my_pwd(t_data *data);
-/*----------------unset---------------------*/
+/*----------------------------unset------------------------------*/
 void				my_unset(t_env **env, t_data *data, int i);
-/*----------------exit---------------------*/
+/*----------------------------exit------------------------------*/
 void				my_exit(t_env **env, t_data *data);
 int					all_digit(char *str);
-/*----------------export---------------------*/
+/*----------------------------export------------------------------*/
 int					check_value(char *str);
 void				my_export(t_env **env, t_data *data);
 void				ft_csp(t_env *env, t_data *data, int c);
@@ -180,7 +255,7 @@ int					all_str(char *str);
 void				my_export(t_env **env, t_data *data);
 t_env				*find_env(t_env *env, char *name);
 void				sequal(t_env *env, char *prev, char *rest, int plus);
-/*----------------execution---------------------*/
+/*----------------------------execution------------------------------*/
 void				free_leaks(char **paths);
 char				*join_path(char *path, char *cmd);
 char				*find_path(char *cmd, char *envp[]);
@@ -189,14 +264,11 @@ void				exec_cmd(t_data *data, char *path, char **env,
 void				exec_pipe(t_data *data, t_env *env_list);
 char				**env_list_to_char_array(t_env *env_list);
 void				exec_builtin(t_data *data, t_env **new_env);
-/*----------------LIBFT---------------------*/
+/*----------------------------libft------------------------------*/
 char				*ft_strcat(char *dest, char *src);
 char				*ft_strcpy(char *dest, char *src);
 int					ft_lstsizee(t_env *lst);
 int					data_size(t_data *lst);
-
 int					ft_strncmp_2(const char *s1, const char *s2, size_t n);
-
-void				is_a_directory(t_data **data);
 
 #endif

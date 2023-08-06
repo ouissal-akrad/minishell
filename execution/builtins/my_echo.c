@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:55:18 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/06 06:50:54 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/06 10:38:00 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,5 +53,5 @@ void	my_echo(t_data *data)
 	}
 	if (new_line)
 		write(data->out, "\n", 1);
-	g_exit = 0;
+	g_global.g_exit = 0;
 }

@@ -6,13 +6,15 @@
 #    By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/23 03:03:58 by bel-idri          #+#    #+#              #
-#    Updated: 2023/08/06 07:40:42 by bel-idri         ###   ########.fr        #
+#    Updated: 2023/08/06 11:19:26 by bel-idri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
 SRCS = main.c \
+		main_helper_1.c \
+		main_helper_2.c \
 		execution/builtins/my_cd.c \
 		execution/builtins/my_cd_helper.c \
 		execution/builtins/my_echo.c \
@@ -25,7 +27,20 @@ SRCS = main.c \
 		execution/builtins/my_export.c \
 		execution/execution.c \
 		execution/lib.c \
-		parsing/parsing.c \
+		parsing/parsing_1.c \
+		parsing/parsing_2.c \
+		parsing/parsing_3.c \
+		parsing/parsing_4.c \
+		parsing/parsing_5.c \
+		parsing/parsing_6.c \
+		parsing/parsing_7.c \
+		parsing/parsing_8.c \
+		parsing/parsing_9.c \
+		parsing/parsing_10.c \
+		parsing/parsing_11.c \
+		parsing/parsing_12.c \
+		parsing/parsing_13.c \
+		parsing/parsing_14.c \
 		parsing/signals.c \
 
 SRCS_LIBFT = libft/ft_atoi.c \
@@ -85,6 +100,8 @@ CFLAGS = -Wall -Wextra -Werror -I/Users/${USER}/.brew/opt/readline/include #-g -
 RLFLAGES = -lreadline -lhistory -L/Users/${USER}/.brew/opt/readline/lib
 
 RM = rm -f
+
+bonus: all
 
 all: $(NAME)
 

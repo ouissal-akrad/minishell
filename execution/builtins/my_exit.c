@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:20:28 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/06 07:55:05 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/06 10:38:08 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,20 +79,20 @@ int	my_exit_helper(char *data_arg, t_data *data, t_env **env)
 	if (((ft_check(data_arg) == 0 || ft_check(data_arg) == -1)
 			|| all_digit(data_arg) == 0))
 	{
-		if (data_s == 1)
+		if (g_global.data_s == 1)
 			printf("exit\n");
 		write(2, "minishell: exit: ", 17);
 		write(2, data_arg, ft_strlen(data_arg));
 		write(2, ": numeric argument required\n", 28);
-		g_exit = 255;
+		g_global.g_exit = 255;
 		ft_lstfree(env);
 		free_data(&data);
 		exit(255);
 	}
 	else if (data->args[2])
 	{
-		g_exit = 1;
-		if (data_s == 1)
+		g_global.g_exit = 1;
+		if (g_global.data_s == 1)
 			printf("exit\n");
 		write(2, "minishell: exit: too many arguments\n", 36);
 		return (1);
@@ -108,9 +108,9 @@ void	my_exit(t_env **env, t_data *data)
 	i = 1;
 	if (!data->args[i])
 	{
-		if (data_s == 1)
+		if (g_global.data_s == 1)
 			printf("exit\n");
-		g_exit = 0;
+		g_global.g_exit = 0;
 		ft_lstfree(env);
 		free_data(&data);
 		exit(0);
@@ -119,8 +119,8 @@ void	my_exit(t_env **env, t_data *data)
 		data->args[i] = skip_zero(data->args[i]);
 	if (my_exit_helper(data->args[i], data, env))
 		return ;
-	g_exit = ft_atoi(data->args[i]);
-	if (data_s == 1)
+	g_global.g_exit = ft_atoi(data->args[i]);
+	if (g_global.data_s == 1)
 		printf("exit\n");
 	e = ft_atoi(data->args[i]);
 	ft_lstfree(env);

@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/30 18:47:33 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/03 01:35:41 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/06 11:18:18 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*ft_strcat(char *dest, char *src)
 
 	i = 0;
 	j = 0;
-	if(!src)
+	if (!src)
 		return (dest);
 	while (dest[i] != '\0')
 		i++;
@@ -60,19 +60,19 @@ int	ft_lstsizee(t_env *lst)
 	return (i);
 }
 
-int    data_size(t_data *lst)
+int	data_size(t_data *lst)
 {
-    int        i;
-    t_data    *tmp;
+	int		i;
+	t_data	*tmp;
 
-    tmp = lst;
-    i = 0;
-    while (tmp)
-    {
-        tmp = tmp->next;
-        i++;
-    }
-    return (i);
+	tmp = lst;
+	i = 0;
+	while (tmp)
+	{
+		tmp = tmp->next;
+		i++;
+	}
+	return (i);
 }
 
 int	ft_strncmp_2(const char *s1, const char *s2, size_t n)

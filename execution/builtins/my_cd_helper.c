@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/06 06:49:10 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/06 07:01:29 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/06 10:38:00 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	error_msg_1(char *path)
 	write(2, "minishell: cd: ", 16);
 	write(2, path, ft_strlen(path));
 	write(2, ": Not a directory\n", 18);
-	g_exit = 1;
+	g_global.g_exit = 1;
 }
 
 void	error_msg_2(char *path)
@@ -39,7 +39,7 @@ void	error_msg_2(char *path)
 	write(2, "minishell: cd: ", 16);
 	write(2, path, ft_strlen(path));
 	write(2, ": No such file or directory\n", 28);
-	g_exit = 1;
+	g_global.g_exit = 1;
 }
 
 char	*go_home(t_env **env)
@@ -50,7 +50,7 @@ char	*go_home(t_env **env)
 	if (path == NULL)
 	{
 		write(2, "cd: HOME not set\n", 17);
-		g_exit = 1;
+		g_global.g_exit = 1;
 		return (NULL);
 	}
 	return (path);
@@ -64,7 +64,7 @@ char	*go_oldpwd(t_env **env)
 	if (path == NULL)
 	{
 		write(2, "cd: OLDPWD not set\n", 19);
-		g_exit = 1;
+		g_global.g_exit = 1;
 		return (NULL);
 	}
 	return (path);

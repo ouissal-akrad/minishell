@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:54:33 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/06 08:37:57 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/06 10:38:00 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,14 @@ void	error_msg_unset(char *data_arg)
 	write(2, "minishell: export: `", 20);
 	write(2, data_arg, ft_strlen(data_arg));
 	write(2, "': not a valid identifier\n", 26);
-	g_exit = 1;
+	g_global.g_exit = 1;
 }
 
 void	my_unset(t_env **env, t_data *data, int i)
 {
 	t_env	*cur;
 
-	g_exit = 0;
+	g_global.g_exit = 0;
 	while (data->args[++i] != NULL)
 	{
 		cur = *env;

@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:55:55 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/06 07:39:29 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/06 10:38:00 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,10 @@ void	my_cd_helper(t_data *data, char *path, char *pwd)
 	if (chdir(path) == -1)
 		return (error_msg_2(path));
 	if (getcwd(pwd, PATH_MAX) == NULL)
-		return (g_exit = 1, perror("getcwd"));
+		return (g_global.g_exit = 1, perror("getcwd"));
 	if (data->args[1] != NULL && ft_strncmp(data->args[1], "-") == 0)
 		printf("%s\n", pwd);
-	g_exit = 0;
+	g_global.g_exit = 0;
 }
 
 void	my_cd(t_env **env, t_data *data)
@@ -97,7 +97,7 @@ void	parent(char *path)
 		write(2, "minishell: cd: ", 16);
 		write(2, path, ft_strlen(path));
 		write(2, ": No such file or directory\n", 28);
-		g_exit = 1;
+		g_global.g_exit = 1;
 		return ;
 	}
 	write(2, "cd: error retrieving current directory: ", 40);

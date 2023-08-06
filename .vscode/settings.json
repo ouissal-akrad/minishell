@@ -18,6 +18,8 @@
 		"array": "c",
 		"vector": "c",
 		"__locale": "c",
-		"ios": "c"
+		"ios": "c",
+		"bitset": "c",
+		"chrono": "c"
 	}
 }

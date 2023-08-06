@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 09:48:12 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/06 08:45:46 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/06 10:38:00 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char	*find_path(char *cmd, char *envp[])
 
 	if (cmd[0] == '\0')
 	{
-		g_exit = 127;
+		g_global.g_exit = 127;
 		return (NULL);
 	}
 	if ((ft_strchr(cmd, '/')) || !is_builtins(cmd))
@@ -95,7 +95,6 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list)
 	pid_t	pid;
 	int		status;
 
-	(void)pipefd;
 	pid = fork();
 	if (pid == -1)
 	{
@@ -108,13 +107,13 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list)
 	{
 		if (data->in < 0 || data->out < 0)
 		{
-			g_exit = 1;
-			exit(g_exit);
+			g_global.g_exit = 1;
+			exit(g_global.g_exit);
 		}
 		if (!data->args[0])
 		{
-			g_exit = 0;
-			exit(g_exit);
+			g_global.g_exit = 0;
+			exit(g_global.g_exit);
 		}
 		if (data->in > 2)
 			dup2(data->in, STDIN_FILENO);
@@ -127,8 +126,8 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list)
 				write(2, "minishell: ", 11);
 				write(2, data->args[0], ft_strlen(data->args[0]));
 				write(2, ": command not found\n", 20);
-				g_exit = 127;
-				exit(g_exit);
+				g_global.g_exit = 127;
+				exit(g_global.g_exit);
 			}
 			else if (path[ft_strlen(path) - 2] == '.' && \
 				path[ft_strlen(path) - 1] == '.')
@@ -136,8 +135,8 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list)
 				write(2, "minishell: ", 11);
 				write(2, data->args[0], ft_strlen(data->args[0]));
 				write(2, ": command not found\n", 20);
-				g_exit = 127;
-				exit(g_exit);
+				g_global.g_exit = 127;
+				exit(g_global.g_exit);
 			}
 			if (!is_builtins(path))
 				exec_builtin(data, env_list);
@@ -147,8 +146,8 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list)
 				write(2, data->args[0], ft_strlen(data->args[0]));
 				write(2, ": ", 2);
 				perror("");
-				g_exit = 127;
-				exit(g_exit);
+				g_global.g_exit = 127;
+				exit(g_global.g_exit);
 			}
 			else if (path[ft_strlen(path) - 2] == '.' && \
 				path[ft_strlen(path) - 3] == '.')
@@ -156,8 +155,8 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list)
 				write(2, "minishell: ", 11);
 				write(2, data->args[0], ft_strlen(data->args[0]));
 				write(2, ": command not found\n", 20);
-				g_exit = 127;
-				exit(g_exit);
+				g_global.g_exit = 127;
+				exit(g_global.g_exit);
 			}
 		}
 		else if (data->is_dir == 1)
@@ -165,33 +164,33 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list)
 			write(2, "minishell: ", 11);
 			write(2, data->args[0], ft_strlen(data->args[0]));
 			write(2, ": is a directory\n", 17);
-			g_exit = 126;
-			exit(g_exit);
+			g_global.g_exit = 126;
+			exit(g_global.g_exit);
 		}
 		else if (data->is_dir == 2)
 		{
 			write(2, "minishell: ", 11);
 			write(2, data->args[0], ft_strlen(data->args[0]));
 			write(2, ": Permission denied\n", 20);
-			g_exit = 126;
-			exit(g_exit);
+			g_global.g_exit = 126;
+			exit(g_global.g_exit);
 		}
 		else if (data->is_dir == 3)
 		{
 			write(2, "minishell: ", 11);
 			write(2, data->args[0], ft_strlen(data->args[0]));
 			write(2, ": No such file or directory\n", 28);
-			g_exit = 127;
-			exit(g_exit);
+			g_global.g_exit = 127;
+			exit(g_global.g_exit);
 		}
 	}
 	else
 	{
 		waitpid(pid, &status, 0);
 		if (WIFEXITED(status))
-			g_exit = WEXITSTATUS(status);
+			g_global.g_exit = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
-			g_exit = 128 + WTERMSIG(status);
+			g_global.g_exit = 128 + WTERMSIG(status);
 	}
 }
 
@@ -234,13 +233,13 @@ void	exec_pipe(t_data *data, t_env *env_list)
 		{
 			if (tmp->in < 0 || tmp->out < 0)
 			{
-				g_exit = 1;
-				exit(g_exit);
+				g_global.g_exit = 1;
+				exit(g_global.g_exit);
 			}
 			if (!data->args[0])
 			{
-				g_exit = 0;
-				exit(g_exit);
+				g_global.g_exit = 0;
+				exit(g_global.g_exit);
 			}
 			if (tmp->in > 2)
 				dup2(tmp->in, STDIN_FILENO);
@@ -257,8 +256,8 @@ void	exec_pipe(t_data *data, t_env *env_list)
 					write(2, "minishell: ", 11);
 					write(2, tmp->args[0], ft_strlen(tmp->args[0]));
 					write(2, ": command not found\n", 20);
-					g_exit = 127;
-					exit(g_exit);
+					g_global.g_exit = 127;
+					exit(g_global.g_exit);
 				}
 				else if (path[ft_strlen(path) - 2] == '.'
 					&& path[ft_strlen(path) - 1] == '.')
@@ -266,16 +265,16 @@ void	exec_pipe(t_data *data, t_env *env_list)
 					write(2, "minishell: ", 11);
 					write(2, data->args[0], ft_strlen(data->args[0]));
 					write(2, ": command not found\n", 20);
-					g_exit = 127;
-					exit(g_exit);
+					g_global.g_exit = 127;
+					exit(g_global.g_exit);
 				}
 				if (!is_builtins(path))
 					exec_builtin(data, &env_list);
 				else if (execve(path, data->args, env) < 0)
 				{
 					perror("minishell");
-					g_exit = 127;
-					exit(g_exit);
+					g_global.g_exit = 127;
+					exit(g_global.g_exit);
 				}
 			}
 			else if (tmp->is_dir == 1)
@@ -283,24 +282,24 @@ void	exec_pipe(t_data *data, t_env *env_list)
 				write(2, "minishell: ", 11);
 				write(2, tmp->args[0], ft_strlen(tmp->args[0]));
 				write(2, ": Is a directory\n", 17);
-				g_exit = 126;
-				exit(g_exit);
+				g_global.g_exit = 126;
+				exit(g_global.g_exit);
 			}
 			else if (tmp->is_dir == 2)
 			{
 				write(2, "minishell: ", 11);
 				write(2, tmp->args[0], ft_strlen(tmp->args[0]));
 				write(2, ": Permission denied\n", 20);
-				g_exit = 126;
-				exit(g_exit);
+				g_global.g_exit = 126;
+				exit(g_global.g_exit);
 			}
 			else if (tmp->is_dir == 3)
 			{
 				write(2, "minishell: ", 11);
 				write(2, tmp->args[0], ft_strlen(tmp->args[0]));
 				write(2, ": No such file or directory\n", 28);
-				g_exit = 127;
-				exit(g_exit);
+				g_global.g_exit = 127;
+				exit(g_global.g_exit);
 			}
 		}
 		else if (pid > 0)

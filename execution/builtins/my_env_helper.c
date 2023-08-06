@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/06 07:40:51 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/06 07:43:03 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/06 10:39:27 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_env	*ft_lstneww(char *env_name, char *env_content)
 	new->val = NULL;
 	if (env_content != NULL)
 		new->val = ft_strdup(env_content);
-	new->flag = g_env;
+	new->flag = g_global.g_env;
 	new->next = NULL;
 	new->prev = NULL;
 	return (new);
@@ -64,7 +64,7 @@ t_env	*create_list(char *str[])
 
 	size = array_size(str);
 	env = NULL;
-	g_env = 0;
+	g_global.g_env = 0;
 	i = -1;
 	while (str[++i])
 	{

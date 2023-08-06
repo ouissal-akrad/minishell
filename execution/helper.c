@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:21:57 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/06 08:40:30 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/06 10:39:27 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	exec_builtin(t_data *data, t_env **new_env)
 			my_exit(new_env, data);
 		else if (ft_strncmp(cmd, "export") == 0)
 			my_export(new_env, data);
-		exit(g_exit);
+		exit(g_global.g_exit);
 	}
 }
 
@@ -88,7 +88,7 @@ t_env	*no_env(void)
 
 	if (getcwd(pwd, PATH_MAX) == NULL)
 		return (NULL);
-	g_env = 1;
+	g_global.g_env = 1;
 	ft_lstadd_backk(&env, ft_lstneww("PWD", pwd));
 	ft_lstadd_backk(&env, ft_lstneww("SHLVL", "1"));
 	ft_lstadd_backk(&env, ft_lstneww("_", "/usr/bin/env"));

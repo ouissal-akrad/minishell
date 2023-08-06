@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:46:00 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/06 08:30:56 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/06 10:38:00 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,7 +246,7 @@ void	print_error_csp(char *data_cmd)
 	write(2, "minishell: export: `", 20);
 	write(2, data_cmd, ft_strlen(data_cmd));
 	write(2, "': not a valid identifier\n", 26);
-	g_exit = 1;
+	g_global.g_exit = 1;
 }
 
 void	ft_csp(t_env *env, t_data *data, int c)
@@ -312,10 +312,10 @@ void	ft_csp(t_env *env, t_data *data, int c)
 		cmd++;
 		free(prev);
 	}
-	if (g_exit == 1)
-		g_exit = 1;
-	else if (g_exit == 0)
-		g_exit = 0;
+	if (g_global.g_exit == 1)
+		g_global.g_exit = 1;
+	else if (g_global.g_exit == 0)
+		g_global.g_exit = 0;
 }
 
 void	sequal_helper(t_env *existing_var, char *rest)

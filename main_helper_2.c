@@ -1,23 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   my_pwd.c                                           :+:      :+:    :+:   */
+/*   main_helper_2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/14 09:53:30 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/06 10:38:00 by bel-idri         ###   ########.fr       */
+/*   Created: 2023/08/06 11:14:36 by bel-idri          #+#    #+#             */
+/*   Updated: 2023/08/06 11:14:50 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "minishell.h"
 
-void	my_pwd(t_data *data)
+void	configs(t_main *main)
 {
-	char	cwd[1024];
+	open_files_hdoc_tmp(&main->data);
+	is_a_directory(&main->data);
+}
 
-	getcwd(cwd, sizeof(cwd));
-	g_global.g_exit = 0;
-	write(data->out, cwd, ft_strlen(cwd));
-	write(data->out, "\n", 1);
+void	fin_line(t_main *main)
+{
+	close_files(main->data);
+	free_data(&main->data);
+	main->data = NULL;
+}
+
+void	fin_program(t_main *main)
+{
+	clear_history();
+	free_env(&main->new_env);
 }
