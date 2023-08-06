@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/06 05:08:03 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/06 05:44:50 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -857,7 +857,7 @@ void	open_files(t_data **data, t_tokens **tokens)
 		if ((tmp->type == IN || tmp->type == OUT || tmp->type == APP || \
 			tmp->type == HDOC) && !exitt)
 		{
-			if (tmp->next->is_d == 2 && tmp->type != HDOC)
+			if ((tmp->next->is_d == 2 || tmp->next->is_d == 5) && tmp->type != HDOC)
 			{
 				write(2, "minishell: ", 11);
 				write(2, tmp->next->var, ft_strlen(tmp->next->var));
@@ -868,7 +868,6 @@ void	open_files(t_data **data, t_tokens **tokens)
 			}
 			if (open_files_helper(tmp_data, tmp))
 			{
-				// g_exit = 1;
 				go_to_pipe(&tmp);
 				continue ;
 			}
@@ -1106,7 +1105,7 @@ int	check_only_w(char *str)
 	return (1);
 }
 
-t_tokens *ft_lstnew_token_w(char *str)
+t_tokens *ft_lstnew_token_w(char *str, char *var)
 {
 	t_tokens	*new;
 
@@ -1115,8 +1114,8 @@ t_tokens *ft_lstnew_token_w(char *str)
 		return (NULL);
 	new->str = ft_strdup(str);
 	new->type = WORD;
-	new->is_d = 0;
-	new->var = NULL;
+	new->is_d = 5;
+	new->var = ft_strdup(var);
 	new->next = NULL;
 	return (new);
 }
@@ -1139,16 +1138,48 @@ void	ft_lstadd_in_second_place(t_tokens **lst, t_tokens *new)
 	new->next = tmp2;
 }
 
+
+
+
+void	sort_p(char **tmp)
+{
+	int	i;
+	int	j;
+	char	*tmp2;
+
+	i = 0;
+	while (tmp[i])
+	{
+		j = i + 1;
+		while (tmp[j])
+		{
+			if (ft_strncmp(tmp[i], tmp[j]) > 0)
+			{
+				tmp2 = tmp[i];
+				tmp[i] = tmp[j];
+				tmp[j] = tmp2;
+			}
+			j++;
+		}
+		i++;
+	}
+}
+
+
+
 void	expanding_wildcard(t_tokens **tokens)
 {
 	t_tokens	*tmp;
 	DIR			*dir;
 	struct dirent	*en;
+	char		**names;
+	int			count;
 
 
 	tmp = *tokens;
 	while (tmp)
 	{
+		count = 0;
 		if (tmp->type == WORD && check_only_w(tmp->str))
 		{
 			dir = opendir(".");
@@ -1161,10 +1192,42 @@ void	expanding_wildcard(t_tokens **tokens)
 					break ;
 				if (ft_strncmp(en->d_name, ".") == 0 || ft_strncmp(en->d_name, "..") == 0 || en->d_name[0] == '.')
 					continue ;
-				ft_lstadd_in_second_place(&tmp, ft_lstnew_token_w(en->d_name));
-				tmp = tmp->next;
+				count++;
 			}
 			closedir(dir);
+
+			names = ft_calloc(count + 1, sizeof(char *));
+			if (names == NULL)
+				return ;
+			count = 0;
+
+
+
+			dir = opendir(".");
+			if (dir == NULL)
+				return (perror("opendir"));
+			while (1)
+			{
+				en = readdir(dir);
+				if (en == NULL)
+					break ;
+				if (ft_strncmp(en->d_name, ".") == 0 || ft_strncmp(en->d_name, "..") == 0 || en->d_name[0] == '.')
+					continue ;
+				names[count++] = ft_strdup(en->d_name);
+			}
+			closedir(dir);
+
+			sort_p(names);
+
+			count = -1;
+
+			while (names[++count])
+			{
+				ft_lstadd_in_second_place(&tmp, ft_lstnew_token_w(names[count], tmp->var));
+				tmp = tmp->next;
+			}
+
+			free_leaks(names);
 		}
 		if (tmp)
 			tmp = tmp->next;
