@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 09:48:12 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/05 23:46:54 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/08/06 01:45:24 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,8 @@ char	**env_list_to_char_array(t_env *env_list)
 	char	*var_val_str;
 
 	env_array = malloc((ft_lstsizee(env_list) + 1) * sizeof(char *));
+	if (!env_array)
+		return (NULL);
 	i = 0;
 	curr = env_list;
 	while (curr != NULL)
@@ -286,14 +288,6 @@ void	exec_pipe(t_data *data, t_env *env_list)
 					exit(g_exit);
 				}
 			}
-			// if (!path && tmp->is_dir == 0)
-			// {
-			// 	write(2, "minishell: ", 11);
-			// 	write(2, tmp->args[0], ft_strlen(tmp->args[0]));
-			// 	write(2, ": command not found\n", 20);
-			// 	g_exit = 127;
-			// 	// return ;
-			// }
 			else if (tmp->is_dir == 1)
 			{
 				write(2, "minishell: ", 11);

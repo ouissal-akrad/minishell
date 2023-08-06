@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/05 23:59:04 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/08/06 01:51:04 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,10 +109,7 @@ char	*add_spaces(char *str)
 
 	new = ft_calloc(ft_strlen(str) + count_tok(str) + 1, sizeof(char));
 	if (!new)
-	{
-		free(str);
-		exit(1);
-	}
+		return (NULL);
 	add_spaces_handler(str, new);
 	return (new);
 }
@@ -124,10 +121,7 @@ void	add_token(t_tokens **tokens, char *str, t_token type)
 
 	new = ft_calloc(1, sizeof(t_tokens));
 	if (!new)
-	{
-		free_tokens(tokens);
-		exit(1);
-	}
+		return ;
 	new->str = str;
 	new->type = type;
 	new->is_d = 0;
@@ -426,10 +420,7 @@ char	*replace_space(char *str)
 		return (NULL);
 	new = ft_calloc(ft_strlen(str) + 1, 1);
 	if (!new)
-	{
-		free(str);
-		exit(1);
-	}
+		return (NULL);
 	i = -1;
 	j = 0;
 	while (str[++i])
@@ -517,12 +508,6 @@ int	expand_env_halper(char *str, int *i, t_expvar *exp, t_env *env)
 	return (0);
 }
 
-void	exit_calloc_2(char *str)
-{
-	free(str);
-	exit(1);
-}
-
 int	the_big_check(char *str, int i, int state, t_expvar exp)
 {
 	if ((state && ((str[i] == '$' && exp.quote != SQ) && ((ft_isalpha \
@@ -543,7 +528,7 @@ char	*expand_env(char *str, t_env *env, int state)
 	exp.quote = OQ;
 	exp.backup = ft_calloc(ft_strlen(str) + 1, 1);
 	if (!exp.backup)
-		exit_calloc_2(str);
+		return (NULL);
 	exp.final = ft_strdup("");
 	i = -1;
 	exp.k = 0;
@@ -704,13 +689,6 @@ int	count_n_tokens(t_tokens *tokens)
 	return (c);
 }
 
-void	exit_calloc(t_data **data, t_tokens **tokens)
-{
-	free_data(data);
-	free_tokens(tokens);
-	exit(1);
-}
-
 void	ft_lstadddd_back(t_data **data, t_data *new)
 {
 	t_data	*tmp;
@@ -761,10 +739,10 @@ void	creat_nodes(t_data **data, t_tokens **tokens)
 	{
 		new = ft_calloc(1, sizeof(t_data));
 		if (!new)
-			exit_calloc(data, tokens);
+			return ;
 		new->args = ft_calloc(count_n_tokens(tmp) + 1, sizeof(char *));
 		if (!new->args)
-			exit_calloc(data, tokens);
+			return ;
 		ft_lstnewnode(new, &tmp);
 		ft_lstadddd_back(data, new);
 		if (tmp)
