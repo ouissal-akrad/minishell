@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/06 01:51:04 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/08/06 02:03:26 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1071,9 +1071,14 @@ void	close_files(t_data *data)
 	while (tmp)
 	{
 		if (tmp->in != 0 && tmp->in != -1)
+		{
+			// printf("str = %s | in = %d\n", tmp->args[0], tmp->in);
 			close(tmp->in);
+		}
 		if (tmp->out != 1 && tmp->out != -1)
+		{
+			// printf("str = %s | out = %d\n", tmp->args[0], tmp->out);
 			close(tmp->out);
-		tmp = tmp->next;
+		}				tmp = tmp->next;
 	}
 }
