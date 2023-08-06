@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:21:57 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/06 02:59:51 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/06 08:40:30 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	exec_builtin(t_data *data, t_env **new_env)
 		if (ft_strncmp(cmd, "pwd") == 0)
 			my_pwd(data);
 		else if (ft_strncmp(cmd, "unset") == 0)
-			my_unset(new_env, data);
+			my_unset(new_env, data, 0);
 		else if (ft_strncmp(cmd, "echo") == 0)
 			my_echo(data);
 		else if (ft_strncmp(cmd, "cd") == 0)
@@ -35,7 +35,6 @@ void	exec_builtin(t_data *data, t_env **new_env)
 			my_export(new_env, data);
 		exit(g_exit);
 	}
-	// exit(1);
 }
 
 void	direction(t_data *data, t_env **new_env)
@@ -45,10 +44,10 @@ void	direction(t_data *data, t_env **new_env)
 	{
 		if (ft_strncmp(data->args[0], "exit") == 0)
 			my_exit(new_env, data);
-		else if (ft_strncmp(data->args[0], "pwd") == 0) // IDA W9A3 MOCHKIL ANREJ3OHA IF
+		else if (ft_strncmp(data->args[0], "pwd") == 0)
 			my_pwd(data);
 		else if (ft_strncmp(data->args[0], "unset") == 0)
-			my_unset(new_env, data);
+			my_unset(new_env, data, 0);
 		else if (ft_strncmp(data->args[0], "echo") == 0)
 			my_echo(data);
 		else if (ft_strncmp(data->args[0], "cd") == 0)
@@ -94,7 +93,6 @@ t_env	*no_env(void)
 	ft_lstadd_backk(&env, ft_lstneww("SHLVL", "1"));
 	ft_lstadd_backk(&env, ft_lstneww("_", "/usr/bin/env"));
 	ft_lstadd_backk(&env, ft_lstneww("OLDPWD", NULL));
-	// hiden
 	ft_lstadd_backk(&env, ft_lstneww("PATH",
 			"/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:."));
 	ft_lstadd_backk(&env, ft_lstneww("SHELL", "/bin/zsh"));

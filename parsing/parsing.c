@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/06 05:50:30 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/06 06:34:10 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1198,7 +1198,7 @@ void	expanding_wildcard(t_tokens **tokens)
 			}
 			closedir(dir);
 
-			names = ft_calloc(count + 1, sizeof(char *));
+			names = ft_calloc(count + 3, sizeof(char *));
 			if (names == NULL)
 				return ;
 			count = 0;

@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:53:30 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/03 22:01:06 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/06 08:31:08 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,6 @@ void	my_pwd(t_data *data)
 
 	getcwd(cwd, sizeof(cwd));
 	g_exit = 0;
-	write(data->out,cwd, ft_strlen(cwd));
-	write(data->out,"\n", 1);
+	write(data->out, cwd, ft_strlen(cwd));
+	write(data->out, "\n", 1);
 }

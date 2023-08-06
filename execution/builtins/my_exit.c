@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:20:28 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/05 04:19:45 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/06 07:55:05 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,18 @@
 int	all_digit(char *str)
 {
 	int	i;
-	int len = ft_strlen(str);
+	int	len;
 
+	len = ft_strlen(str);
 	if (len == 0)
 		return (0);
-	if(len == 1 && (str[0] == '-' || str[0] == '+'))
-		return 0;
+	if (len == 1 && (str[0] == '-' || str[0] == '+'))
+		return (0);
 	i = 1;
 	while (str[i])
 	{
-		if ((str[0] == '-' || str[0] == '+' || ft_isdigit(str[0])) && (str[i] >= '0' && str[i] <= '9'))
+		if ((str[0] == '-' || str[0] == '+' || ft_isdigit(str[0]))
+			&& (str[i] >= '0' && str[i] <= '9'))
 			i++;
 		else
 			return (0);
@@ -32,11 +34,11 @@ int	all_digit(char *str)
 	return (1);
 }
 
-char *skip_zero(char *str)
+char	*skip_zero(char *str)
 {
 	char	*result;
-	size_t		i;
-	size_t 	j;
+	size_t	i;
+	size_t	j;
 
 	i = 0;
 	j = 0;
@@ -63,24 +65,50 @@ char *skip_zero(char *str)
 
 static int	ft_check(char *str)
 {
-	if ((ft_strlen(str) >= 19)
-			&& (ft_strncmp_2(str, "9223372036854775807", 19) > 0))
-			return (-1);
-	if (ft_strlen(str) >= 20
-			&& ft_strncmp_2(str, "-9223372036854775808", 20) > 0)
-			return (0);
+	if ((ft_strlen(str) >= 19) && (ft_strncmp_2(str, "9223372036854775807",
+				19) > 0))
+		return (-1);
+	if (ft_strlen(str) >= 20 && ft_strncmp_2(str, "-9223372036854775808",
+			20) > 0)
+		return (0);
 	return (1);
 }
 
-void	my_exit(t_env **env,t_data *data)
+int	my_exit_helper(char *data_arg, t_data *data, t_env **env)
+{
+	if (((ft_check(data_arg) == 0 || ft_check(data_arg) == -1)
+			|| all_digit(data_arg) == 0))
+	{
+		if (data_s == 1)
+			printf("exit\n");
+		write(2, "minishell: exit: ", 17);
+		write(2, data_arg, ft_strlen(data_arg));
+		write(2, ": numeric argument required\n", 28);
+		g_exit = 255;
+		ft_lstfree(env);
+		free_data(&data);
+		exit(255);
+	}
+	else if (data->args[2])
+	{
+		g_exit = 1;
+		if (data_s == 1)
+			printf("exit\n");
+		write(2, "minishell: exit: too many arguments\n", 36);
+		return (1);
+	}
+	return (0);
+}
+
+void	my_exit(t_env **env, t_data *data)
 {
 	int	i;
-	int e;
+	int	e;
 
 	i = 1;
 	if (!data->args[i])
 	{
-		if(data_s == 1)
+		if (data_s == 1)
 			printf("exit\n");
 		g_exit = 0;
 		ft_lstfree(env);
@@ -89,28 +117,10 @@ void	my_exit(t_env **env,t_data *data)
 	}
 	else
 		data->args[i] = skip_zero(data->args[i]);
-	if (((ft_check(data->args[i]) == 0 || ft_check(data->args[i]) == -1) || all_digit(data->args[i]) == 0))
-	{
-		if (data_s == 1)
-			printf("exit\n");
-		write(2, "minishell: exit: ", 17);
-		write(2, data->args[i], ft_strlen(data->args[i]));
-		write(2, ": numeric argument required\n", 28);
-		g_exit = 255;
-		ft_lstfree(env);
-		free_data(&data);
-		exit(255);
-	}
-	else if (data->args[2])
-    {
-        g_exit = 1;
-		if (data_s == 1)
-			printf("exit\n");
-		write(2, "minishell: exit: too many arguments\n", 36);
-		return;
-    }
+	if (my_exit_helper(data->args[i], data, env))
+		return ;
 	g_exit = ft_atoi(data->args[i]);
-	if(data_s == 1)
+	if (data_s == 1)
 		printf("exit\n");
 	e = ft_atoi(data->args[i]);
 	ft_lstfree(env);

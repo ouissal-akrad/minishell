@@ -6,7 +6,7 @@
 #    By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/23 03:03:58 by bel-idri          #+#    #+#              #
-#    Updated: 2023/08/06 05:08:59 by bel-idri         ###   ########.fr        #
+#    Updated: 2023/08/06 07:40:42 by bel-idri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,9 +14,11 @@ NAME = minishell
 
 SRCS = main.c \
 		execution/builtins/my_cd.c \
+		execution/builtins/my_cd_helper.c \
 		execution/builtins/my_echo.c \
 		execution/helper.c \
 		execution/builtins/my_env.c \
+		execution/builtins/my_env_helper.c \
 		execution/builtins/my_pwd.c \
 		execution/builtins/my_unset.c \
 		execution/builtins/my_exit.c \

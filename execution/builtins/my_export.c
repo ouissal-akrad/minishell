@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   my_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:46:00 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/05 23:13:29 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/08/06 08:30:56 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,28 @@ t_env	*find_env(t_env *env, char *name)
 	return (NULL);
 }
 
+void	print_env_ex_helper(t_data *data, t_env *tmp)
+{
+	int	i;
+
+	i = -1;
+	write(data->out, "declare -x ", 11);
+	while (tmp->var[++i])
+		write(data->out, &tmp->var[i], 1);
+	write(data->out, "=\"", 2);
+	i = -1;
+	while (tmp->val[++i])
+	{
+		if (tmp->val[i] == '\"')
+			write(data->out, "\\", 2);
+		write(data->out, &tmp->val[i], 1);
+	}
+	write(data->out, "\"\n", 2);
+}
+
 void	print_env_ex(t_env *env, t_data *data)
 {
 	t_env	*tmp;
-	int		i;
 
 	tmp = env;
 	while (tmp != NULL)
@@ -55,21 +73,7 @@ void	print_env_ex(t_env *env, t_data *data)
 			continue ;
 		}
 		if (tmp->var != NULL && tmp->val != NULL)
-		{
-			i = -1;
-			write(data->out, "declare -x ", 11);
-			while (tmp->var[++i])
-				write(data->out, &tmp->var[i], 1);
-			write(data->out, "=\"", 2);
-			i = -1;
-			while (tmp->val[++i])
-			{
-				if (tmp->val[i] == '\"')
-					write(data->out, "\\", 2);
-				write(data->out, &tmp->val[i], 1);
-			}
-			write(data->out, "\"\n", 2);
-		}
+			print_env_ex_helper(data, tmp);
 		else if (tmp->var != NULL)
 		{
 			write(data->out, "declare -x ", 11);
@@ -140,6 +144,7 @@ int	count_plus(char *str)
 	}
 	return (0);
 }
+
 void	swap_env(t_env *a, t_env *b)
 {
 	char	*var_temp;
@@ -223,7 +228,8 @@ t_env	*copy_env_list(const t_env *original_head)
 
 void	my_export(t_env **env, t_data *data)
 {
-	t_env *cpy;
+	t_env	*cpy;
+
 	if (!data->args[1])
 	{
 		cpy = copy_env_list(*env);
@@ -233,6 +239,14 @@ void	my_export(t_env **env, t_data *data)
 	}
 	else
 		ft_csp(*env, data, '=');
+}
+
+void	print_error_csp(char *data_cmd)
+{
+	write(2, "minishell: export: `", 20);
+	write(2, data_cmd, ft_strlen(data_cmd));
+	write(2, "': not a valid identifier\n", 26);
+	g_exit = 1;
 }
 
 void	ft_csp(t_env *env, t_data *data, int c)
@@ -254,37 +268,26 @@ void	ft_csp(t_env *env, t_data *data, int c)
 		tmp = data->args[cmd];
 		if (tmp[0] != '_' && !ft_isalpha(tmp[0]))
 		{
-			write(2, "minishell: export: `", 20);
-			write(2, data->args[cmd], ft_strlen(data->args[cmd]));
-			write(2, "': not a valid identifier\n", 26);
-			cmd++;
-			g_exit = 1;
+			print_error_csp(data->args[cmd++]);
 			continue ;
 		}
 		while (tmp[i] && tmp[i] != c)
 			i++;
-		// with equal
 		if (tmp[i] == c)
 		{
-			// with plus
 			if (ft_strchr(tmp, '+') != NULL)
 			{
 				if (count_plus(tmp) == 1)
 					plus = 1;
 				else if (count_plus(tmp) == -1)
 				{
-					write(2, "minishell: export: `", 20);
-					write(2, data->args[cmd], ft_strlen(data->args[cmd]));
-					write(2, "': not a valid identifier\n", 26);
-					g_exit = 1;
-					cmd++;
+					print_error_csp(data->args[cmd++]);
 					continue ;
 				}
 				prev = tmp;
 				prev[i - plus] = '\0';
 				rest = tmp + i + 1;
 			}
-			// without plus
 			else
 			{
 				prev = tmp;
@@ -292,42 +295,36 @@ void	ft_csp(t_env *env, t_data *data, int c)
 				rest = tmp + i + 1;
 			}
 		}
-		// without = ,rest == NULL
 		if (check_value(tmp))
 			prev = ft_strdup(tmp);
 		else
 		{
-			write(2, "minishell: export: `", 20);
-			write(2, data->args[cmd], ft_strlen(data->args[cmd]));
-			write(2, "': not a valid identifier\n", 26);
-			cmd++;
-			g_exit = 1;
+			print_error_csp(data->args[cmd++]);
 			continue ;
 		}
 		if (!check(prev))
 		{
-			write(2, "minishell: export: `", 20);
-			write(2, data->args[cmd], ft_strlen(data->args[cmd]));
-			write(2, "': not a valid identifier\n", 26);
-			cmd++;
-			g_exit = 1;
+			print_error_csp(data->args[cmd++]);
 			free(prev);
 			continue ;
 		}
-		// check
 		sequal(env, prev, rest, plus);
 		cmd++;
 		free(prev);
 	}
-	// resort env
-	// sort_env(&env);
 	if (g_exit == 1)
 		g_exit = 1;
 	else if (g_exit == 0)
 		g_exit = 0;
-	// print_env_ex(env);
-	// puts("-----------------------------");
-	// print_env(env);
+}
+
+void	sequal_helper(t_env *existing_var, char *rest)
+{
+	free(existing_var->val);
+	if (!rest)
+		existing_var->val = NULL;
+	else
+		existing_var->val = ft_strdup(rest);
 }
 
 void	sequal(t_env *env, char *prev, char *rest, int plus)
@@ -339,7 +336,6 @@ void	sequal(t_env *env, char *prev, char *rest, int plus)
 	existing_var = find_env(env, prev);
 	if (existing_var != NULL)
 	{
-		// Duplicate the new value and store it in the existing variable and + exists
 		if (plus && existing_var->val)
 		{
 			old_val = ft_strdup(existing_var->val);
@@ -347,19 +343,11 @@ void	sequal(t_env *env, char *prev, char *rest, int plus)
 			existing_var->val = ft_strjoin(old_val, rest);
 			free(old_val);
 		}
-		// assign new value to the old variable if it exists
 		else
-		{
-			free(existing_var->val);
-			if (!rest)
-				existing_var->val = NULL;
-			else
-				existing_var->val = ft_strdup(rest);
-		}
+			sequal_helper(existing_var, rest);
 	}
 	else
 	{
-		// Create a new env variable
 		new_var = ft_lstneww(prev, rest);
 		if (new_var == NULL)
 			return ;

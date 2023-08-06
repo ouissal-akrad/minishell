@@ -6,19 +6,11 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 09:48:12 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/06 03:27:50 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/06 08:44:59 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-// void    ft_wait(int pid)
-// {
-//     if (!lines)
-//         waitpid(pid, &g_exit, 0);
-//     // close(old);
-//     // close(fd);
-// }
 
 char	*join_path(char *path, char *cmd)
 {
@@ -98,12 +90,12 @@ char	**env_list_to_char_array(t_env *env_list)
 	return (env_array[i] = NULL, env_array);
 }
 
-void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
-		int *pipefd)
+void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list)
 {
 	pid_t	pid;
 	int		status;
 
+	(void)pipefd;
 	pid = fork();
 	if (pid == -1)
 	{
@@ -114,8 +106,6 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 	}
 	else if (pid == 0)
 	{
-		// signal(SIGINT, sigg);
-		// signal(SIGQUIT, sigg);
 		if (data->in < 0 || data->out < 0)
 		{
 			g_exit = 1;
@@ -130,27 +120,25 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 			dup2(data->in, STDIN_FILENO);
 		if (data->out > 2)
 			dup2(data->out, STDOUT_FILENO);
-		close(pipefd[0]);
-		close(pipefd[1]);
 		if (data->is_dir == 0)
 		{
 			if (!path)
-				{
-					write(2, "minishell: ", 11);
-					write(2, data->args[0], ft_strlen(data->args[0]));
-					write(2, ": command not found\n", 20);
-					g_exit = 127;
-					exit(g_exit);
-				}
-			 else if(path[ft_strlen(path) - 2] == '.' && path[ft_strlen(path) - 1] == '.')
-				{
-					write(2, "minishell: ", 11);
-					write(2, data->args[0], ft_strlen(data->args[0]));
-					write(2, ": command not found\n", 20);
-					g_exit = 127;
-					exit(g_exit);
-				}
-
+			{
+				write(2, "minishell: ", 11);
+				write(2, data->args[0], ft_strlen(data->args[0]));
+				write(2, ": command not found\n", 20);
+				g_exit = 127;
+				exit(g_exit);
+			}
+			else if (path[ft_strlen(path) - 2] == '.' && \
+				path[ft_strlen(path) - 1] == '.')
+			{
+				write(2, "minishell: ", 11);
+				write(2, data->args[0], ft_strlen(data->args[0]));
+				write(2, ": command not found\n", 20);
+				g_exit = 127;
+				exit(g_exit);
+			}
 			if (!is_builtins(path))
 				exec_builtin(data, env_list);
 			else if (execve(path, data->args, env) < 0)
@@ -162,14 +150,15 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 				g_exit = 127;
 				exit(g_exit);
 			}
-			else if(path[ft_strlen(path) - 2] == '.' && path[ft_strlen(path) - 3] == '.')
-				{
-					write(2, "minishell: ", 11);
-					write(2, data->args[0], ft_strlen(data->args[0]));
-					write(2, ": command not found\n", 20);
-					g_exit = 127;
-					exit(g_exit);
-				}
+			else if (path[ft_strlen(path) - 2] == '.' && \
+				path[ft_strlen(path) - 3] == '.')
+			{
+				write(2, "minishell: ", 11);
+				write(2, data->args[0], ft_strlen(data->args[0]));
+				write(2, ": command not found\n", 20);
+				g_exit = 127;
+				exit(g_exit);
+			}
 		}
 		else if (data->is_dir == 1)
 		{
@@ -199,11 +188,10 @@ void	exec_cmd(t_data *data, char *path, char **env, t_env **env_list,
 	else
 	{
 		waitpid(pid, &status, 0);
-			if (WIFEXITED(status))
-          		 g_exit = WEXITSTATUS(status);
-			else if (WIFSIGNALED(status))
-				g_exit = 128 + WTERMSIG(status);
-
+		if (WIFEXITED(status))
+			g_exit = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			g_exit = 128 + WTERMSIG(status);
 	}
 }
 
@@ -215,7 +203,6 @@ void	exec_pipe(t_data *data, t_env *env_list)
 	pid_t	pid;
 	int		status;
 	t_data	*tmp;
-			// int child_exit_status;
 
 	tmp = data;
 	path = NULL;
@@ -245,8 +232,6 @@ void	exec_pipe(t_data *data, t_env *env_list)
 		}
 		if (pid == 0)
 		{
-			// signal(SIGINT, sigg);
-			// signal(SIGQUIT, sigg);
 			if (tmp->in < 0 || tmp->out < 0)
 			{
 				g_exit = 1;
@@ -267,7 +252,7 @@ void	exec_pipe(t_data *data, t_env *env_list)
 			close(pipefd[1]);
 			if (tmp->is_dir == 0)
 			{
-				if (!path )
+				if (!path)
 				{
 					write(2, "minishell: ", 11);
 					write(2, tmp->args[0], ft_strlen(tmp->args[0]));
@@ -275,7 +260,8 @@ void	exec_pipe(t_data *data, t_env *env_list)
 					g_exit = 127;
 					exit(g_exit);
 				}
-			 	else if(path[ft_strlen(path) - 2] == '.' && path[ft_strlen(path) - 1] == '.')
+				else if (path[ft_strlen(path) - 2] == '.'
+					&& path[ft_strlen(path) - 1] == '.')
 				{
 					write(2, "minishell: ", 11);
 					write(2, data->args[0], ft_strlen(data->args[0]));
@@ -333,7 +319,7 @@ void	exec_pipe(t_data *data, t_env *env_list)
 	}
 	else
 	{
-		exec_cmd(tmp, path, env, &env_list, pipefd);
+		exec_cmd(tmp, path, env, &env_list);
 		if (path != NULL)
 			free(path);
 		if (env != NULL)

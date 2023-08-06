@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 00:16:06 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/06 05:08:42 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/06 08:44:55 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,14 @@ typedef struct s_expvar
 	char			*backup;
 }					t_expvar;
 
+typedef struct s_prvrest
+{
+	char *prev;
+	char *rest;
+	int plus;
+	int flag;
+}					t_prvrest;
+
 int					backup_stdin;
 int					exitt;
 int					g_exit;
@@ -138,6 +146,8 @@ char				*go_oldpwd(t_env **env);
 void				change_directory(t_env **env, char *path);
 void				print_working_directory(void);
 void				parent(char *path);
+void	error_msg_1(char *path);
+void	error_msg_2(char *path);
 /*----------------echo---------------------*/
 void				my_echo(t_data *data);
 int					newline_checker(char *str);
@@ -151,10 +161,11 @@ t_env				*create_list(char *str[]);
 void				ft_lstfree(t_env **head);
 void				shlvl(t_env **env);
 t_env				*no_env(void);
+int	array_size(char **str);
 /*----------------pwd---------------------*/
 void				my_pwd(t_data *data);
 /*----------------unset---------------------*/
-void				my_unset(t_env **env, t_data *data);
+void				my_unset(t_env **env, t_data *data, int i);
 /*----------------exit---------------------*/
 void				my_exit(t_env **env, t_data *data);
 int					all_digit(char *str);
@@ -174,7 +185,7 @@ void				free_leaks(char **paths);
 char				*join_path(char *path, char *cmd);
 char				*find_path(char *cmd, char *envp[]);
 void				exec_cmd(t_data *data, char *path, char **env,
-						t_env **env_list, int *pipefd);
+						t_env **env_list);
 void				exec_pipe(t_data *data, t_env *env_list);
 char				**env_list_to_char_array(t_env *env_list);
 void				exec_builtin(t_data *data, t_env **new_env);
