@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 09:48:12 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/06 08:44:59 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/06 08:45:46 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -328,3 +328,5 @@ void	exec_pipe(t_data *data, t_env *env_list)
 		close(pipefd[1]);
 	}
 }
+
+
