@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   my_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:55:55 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/05 23:18:27 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/08/06 03:50:55 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,23 +29,17 @@ char	*find(t_env *env, char *to_find)
 void	update_env(t_env **env, char *oldpwd, char *pwd)
 {
 	t_env	*e;
-	char 	*f_oldpwd;
-	char	*f_pwd;
+	t_env 	*f_oldpwd;
+	t_env	*f_pwd;
 
-	f_oldpwd = find(*env, "OLDPWD");
-	f_pwd = find(*env, "PWD");
+	f_oldpwd = find_env(*env, "OLDPWD");
+	f_pwd = find_env(*env, "PWD");
 
-	if (f_oldpwd == NULL || f_pwd == NULL)
-	{
-		if (f_oldpwd == NULL)
-			ft_lstadd_backk(env, ft_lstneww("OLDPWD", oldpwd));
-		if (f_pwd == NULL)
-			ft_lstadd_backk(env, ft_lstneww("PWD", pwd));
-	}
-	if (f_oldpwd != NULL)
-		free(f_oldpwd);
-	if (f_pwd != NULL)
-		free(f_pwd);
+	if (f_oldpwd == NULL)
+		ft_lstadd_backk(env, ft_lstneww("OLDPWD", oldpwd));
+	if (f_pwd == NULL)
+		ft_lstadd_backk(env, ft_lstneww("PWD", pwd));
+
 	e = *env;
 	while (e)
 	{
@@ -61,6 +55,7 @@ void	update_env(t_env **env, char *oldpwd, char *pwd)
 		}
 		e = e->next;
 	}
+
 }
 
 void	my_cd(t_env **env, t_data *data)
