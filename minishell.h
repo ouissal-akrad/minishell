@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 00:16:06 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/06 02:59:57 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/06 05:08:42 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,8 @@ void				sigg(int sig);
 void				sig(void);
 void				sig_handler(int sig);
 void				open_files_hdoc_tmp(t_data **data);
+void	expanding_wildcard(t_tokens **tokens);
+int	check_only_w(char *str);
 
 /*---------------EXECUTION-----------------*/
 /*-------------------------builtins-------------------------------*/

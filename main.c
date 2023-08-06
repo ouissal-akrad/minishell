@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 03:20:11 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/06 03:00:43 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/06 05:09:59 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,9 @@ int	main(int argc, char *argv[], char *env[])
 			continue ;
 		}
 		expanding(&tokens, new_env);
+
+		expanding_wildcard(&tokens);
+
 		split_var_no_quote(&tokens);
 		ambiguous_redirect(&tokens);
 		remove_quotes(tokens);
@@ -98,25 +101,25 @@ int	main(int argc, char *argv[], char *env[])
 
 
 		tmp = data;
-		// int i;
-		// while (tmp)
-		// {
-		// i = 0;
-		// 	printf("-----------------\n");
-		// 	while (tmp->args[i])
-		// 	{
-		// 		printf("args[%d] = %s\n",i,tmp->args[i]);
-		// 		i++;
-		// 	}
-		// 	printf("in = %d\n",tmp->in);
-		// 	printf("out = %d\n",tmp->out);
-		// 	printf("hdoc = %d\n",tmp->hdoc);
-		// 	printf("buff = %s\n",tmp->buff);
-		// 	printf("is_dir = %d\n",tmp->is_dir);
-		// 	printf("-----------------\n");
+		int i;
+		while (tmp)
+		{
+			i = 0;
+			printf("-----------------\n");
+			while (tmp->args[i])
+			{
+				printf("args[%d] = %s\n",i,tmp->args[i]);
+				i++;
+			}
+			printf("in = %d\n",tmp->in);
+			printf("out = %d\n",tmp->out);
+			printf("hdoc = %d\n",tmp->hdoc);
+			printf("buff = %s\n",tmp->buff);
+			printf("is_dir = %d\n",tmp->is_dir);
+			printf("-----------------\n");
 
-		// 	tmp = tmp->next;
-		// }
+			tmp = tmp->next;
+		}
 
 		data_s = data_size(data);
 		direction(data,&new_env);
