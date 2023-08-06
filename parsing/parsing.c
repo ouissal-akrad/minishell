@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/06 06:34:10 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/06 08:57:11 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ char	*my_ft_strjoin_1(char *s1, char *s2)
 
 int	is_whitespace(char c)
 {
-	return (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f'
-		|| c == '\r');
+	return (c == ' ' || c == '\t' || c == '\n' || c == '\v' || \
+		c == '\f' || c == '\r');
 }
 
 int	count_tok(char *str)
@@ -68,8 +68,8 @@ int	count_tok(char *str)
 		is_quote(str, i, &quote);
 		if ((str[i] == '|' || str[i] == '<' || str[i] == '>') && !quote)
 		{
-			if ((str[i] == '>' && str[i + 1] == '>') || \
-				(str[i] == '<' && str[i + 1] == '<'))
+			if ((str[i] == '>' && str[i + 1] == '>') || (str[i] == '<' \
+				&& str[i + 1] == '<'))
 				i++;
 			count++;
 		}
@@ -243,8 +243,8 @@ void	add_is_d(t_tokens **tokens)
 	tmp = *tokens;
 	while (tmp)
 	{
-		if (tmp->type == WORD && !check_quotes(tmp->str) \
-			&& check_char(tmp->str, '$'))
+		if (tmp->type == WORD && !check_quotes(tmp->str) && check_char(tmp->str,
+				'$'))
 			tmp->is_d = 1;
 		tmp->var = ft_strdup(tmp->str);
 		tmp = tmp->next;
@@ -302,7 +302,7 @@ int	syntax_error_hdoc(char *str, t_tokens *tokens, int i)
 	tmp = tokens;
 	while (i--)
 	{
-		if ((tmp->type == HDOC && tmp->next && tmp->next->type == WORD) \
+		if ((tmp->type == HDOC && tmp->next && tmp->next->type == WORD)
 			&& !exitt)
 			syntax_error_hdoc_helper(tmp->next->str);
 		tmp = tmp->next;
@@ -371,9 +371,9 @@ int	syntax_error(t_tokens *tokens)
 			return (syntax_error_hdoc("newline", tokens, i));
 		else if (tmp->type == PIPE && (tmp->next->type == PIPE || i == 1))
 			return (syntax_error_hdoc("|", tokens, i));
-		else if ((tmp->type == IN || tmp->type == OUT || tmp->type == HDOC \
-				|| tmp->type == APP) && (!tmp->next || tmp->next->type == PIPE \
-				|| tmp->next->type == IN || tmp->next->type == OUT \
+		else if ((tmp->type == IN || tmp->type == OUT || tmp->type == HDOC
+				|| tmp->type == APP) && (!tmp->next || tmp->next->type == PIPE
+				|| tmp->next->type == IN || tmp->next->type == OUT
 				|| tmp->next->type == HDOC || tmp->next->type == APP))
 			return (syntax_error_halper(tmp, tokens, i), 1);
 		tmp = tmp->next;
@@ -399,7 +399,7 @@ void	remove_quotes(t_tokens *tokens)
 			while (tmp->str[++i])
 			{
 				is_quote(tmp->str, i, &quote);
-				if ((tmp->str[i] == '\'' && (quote == SQ || quote == OQ)) \
+				if ((tmp->str[i] == '\'' && (quote == SQ || quote == OQ))
 					|| (tmp->str[i] == '\"' && (quote == DQ || quote == OQ)))
 					continue ;
 				tmp->str[j++] = tmp->str[i];
@@ -466,8 +466,8 @@ int	expand_env_halper_2(int *i, char *str, t_expvar *exp)
 {
 	char	*ex_s;
 
-	if ((str[*i + 1] == '\"' && exp->quote != DQ) \
-		|| str[*i + 1] == '\'' || str[*i + 1] == '?')
+	if ((str[*i + 1] == '\"' && exp->quote != DQ) || \
+		str[*i + 1] == '\'' || str[*i + 1] == '?')
 	{
 		if (str[*i + 1] == '?')
 		{
@@ -510,12 +510,13 @@ int	expand_env_halper(char *str, int *i, t_expvar *exp, t_env *env)
 
 int	the_big_check(char *str, int i, int state, t_expvar exp)
 {
-	if ((state && ((str[i] == '$' && exp.quote != SQ) && ((ft_isalpha \
-		(str[i + 1])) || str[i + 1] == '_' || str[i + 1] == '?' || \
-		str[i + 1] == '\'' || str[i + 1] == '\"'))) || \
-		((!state && (str[i] == '$' && ((ft_isalpha(str[i + 1])) \
-		|| str[i + 1] == '_' || str[i + 1] == '?' || str[i + 1] == '\'' \
-		|| str[i + 1] == '\"')))))
+	if ((state && ((str[i] == '$' && exp.quote != SQ) && \
+		((ft_isalpha(str[i + 1])) || str[i + 1] == '_' || \
+		str[i + 1] == '?' || str[i + 1] == '\'' || \
+		str[i + 1] == '\"'))) || ((!state && (str[i] == '$' && \
+		((ft_isalpha(str[i + 1])) || str[i + 1] == '_' || \
+		str[i + 1] == '?' || str[i + 1] == '\'' || \
+		str[i + 1] == '\"')))))
 		return (1);
 	return (0);
 }
@@ -624,7 +625,8 @@ void	remove_null_tokens(t_tokens **tokens)
 
 	tmp = *tokens;
 	prv = tmp;
-	while ((tmp && tmp->type == WORD) && ((tmp->is_d == 1 && !ft_strlen(tmp->str)) || check_only_w(tmp->str)))
+	while ((tmp && tmp->type == WORD) && ((tmp->is_d == 1
+				&& !ft_strlen(tmp->str)) || check_only_w(tmp->str)))
 	{
 		*tokens = tmp->next;
 		free_remove(tmp);
@@ -632,7 +634,8 @@ void	remove_null_tokens(t_tokens **tokens)
 	}
 	while (tmp)
 	{
-		if (tmp->type == WORD && ((tmp->is_d == 1 && !ft_strlen(tmp->str)) || check_only_w(tmp->str)))
+		if (tmp->type == WORD && ((tmp->is_d == 1 && !ft_strlen(tmp->str))
+				|| check_only_w(tmp->str)))
 		{
 			prv->next = tmp->next;
 			free_remove(tmp);
@@ -665,7 +668,7 @@ void	ambiguous_redirect(t_tokens **tokens)
 	tmp = *tokens;
 	while (tmp)
 	{
-		if ((tmp->type == IN || tmp->type == OUT || tmp->type == APP) \
+		if ((tmp->type == IN || tmp->type == OUT || tmp->type == APP)
 			&& tmp->next->is_d == 1 && !ft_strlen(tmp->next->str))
 			tmp->next->is_d = 2;
 		else if (tmp->type == HDOC && !check_quotes(tmp->next->str))
@@ -713,9 +716,8 @@ void	ft_lstnewnode(t_data *new, t_tokens **tokens)
 	{
 		if ((*tokens)->type == WORD)
 			new->args[j++] = ft_strdup((*tokens)->str);
-		else if ((*tokens)->type == IN || (*tokens)->type == OUT \
-			|| (*tokens)->type == APP \
-			|| (*tokens)->type == HDOC)
+		else if ((*tokens)->type == IN || (*tokens)->type == OUT
+			|| (*tokens)->type == APP || (*tokens)->type == HDOC)
 			(*tokens) = (*tokens)->next;
 		else if ((*tokens)->type == PIPE)
 			break ;
@@ -812,34 +814,31 @@ char	*my_ft_strjoin_2(char *s1, char *s2)
 	return (str);
 }
 
-int	open_files_helper(t_data *tmp_data, t_tokens *tmp)
+int	open_files_helper(t_data *tmpd, t_tokens *tmp)
 {
 	if (tmp->type == IN)
 	{
-		tmp_data->hdoc = 0;
-		tmp_data->in = open(tmp->next->str, O_RDONLY);
-		if (tmp_data->in == -1)
-			return(open_files_error(tmp));
+		tmpd->hdoc = 0;
+		tmpd->in = open(tmp->next->str, O_RDONLY);
+		if (tmpd->in == -1)
+			return (open_files_error(tmp));
 	}
 	else if (tmp->type == OUT)
 	{
-		tmp_data->hdoc = 0;
-		tmp_data->out = open(tmp->next->str, \
-			O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (tmp_data->out == -1)
-			return(open_files_error(tmp));
-
+		tmpd->hdoc = 0;
+		tmpd->out = open(tmp->next->str, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (tmpd->out == -1)
+			return (open_files_error(tmp));
 	}
 	else if (tmp->type == APP)
 	{
-		tmp_data->hdoc = 0;
-		tmp_data->out = open(tmp->next->str, \
-			O_WRONLY | O_CREAT | O_APPEND, 0644);
-		if (tmp_data->out == -1)
-			return(open_files_error(tmp));
+		tmpd->hdoc = 0;
+		tmpd->out = open(tmp->next->str, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		if (tmpd->out == -1)
+			return (open_files_error(tmp));
 	}
 	else if (tmp->type == HDOC)
-		tmp_data->hdoc = 1;
+		tmpd->hdoc = 1;
 	return (0);
 }
 
@@ -854,10 +853,11 @@ void	open_files(t_data **data, t_tokens **tokens)
 	{
 		if (tmp->type == PIPE)
 			tmp_data = tmp_data->next;
-		if ((tmp->type == IN || tmp->type == OUT || tmp->type == APP || \
-			tmp->type == HDOC) && !exitt)
+		if ((tmp->type == IN || tmp->type == OUT || tmp->type == APP
+				|| tmp->type == HDOC) && !exitt)
 		{
-			if ((tmp->next->is_d == 2 || tmp->next->is_d == 5) && tmp->type != HDOC)
+			if ((tmp->next->is_d == 2 || tmp->next->is_d == 5)
+				&& tmp->type != HDOC)
 			{
 				write(2, "minishell: ", 11);
 				write(2, tmp->next->var, ft_strlen(tmp->next->var));
@@ -949,7 +949,7 @@ void	free_data(t_data **data)
 	{
 		prev = tmp;
 		i = -1;
-		if (tmp->args != NULL )
+		if (tmp->args != NULL)
 		{
 			while (tmp->args[++i] != NULL)
 				free(tmp->args[i]);
@@ -1007,7 +1007,7 @@ void	open_files_hdoc_tmp(t_data **data)
 	}
 }
 
-void		is_a_directory(t_data **data)
+void	is_a_directory(t_data **data)
 {
 	t_data	*tmp;
 	DIR		*dir;
@@ -1028,33 +1028,15 @@ void		is_a_directory(t_data **data)
 						if (dir != NULL)
 						{
 							closedir(dir);
-							// printf("dir = %p\n", dir);
 							tmp->is_dir = 1;
-							// write(2, "minishell: ", 11);
-							// write(2, tmp->args[0], ft_strlen(tmp->args[0]));
-							// write(2, ": is a directory\n", 17);
 						}
-						// closedir(dir);
 					}
 					else
-					{
 						tmp->is_dir = 2;
-						// write(2, "minishell: ", 11);
-						// write(2, tmp->args[0], ft_strlen(tmp->args[0]));
-						// write(2, ": Permission denied\n", 20);
-					}
 				}
 				else
-				{
 					tmp->is_dir = 3;
-					// write(2, "minishell: ", 11);
-					// write(2, tmp->args[0], ft_strlen(tmp->args[0]));
-					// write(2, ": No such file or directory", 27);
-				}
-
 			}
-			// else if (tmp->args[0][0] == '.' && ft_strlen(tmp->args[0]) == 1)
-			// 	tmp->is_dir = 4;
 			else
 				tmp->is_dir = 0;
 		}
@@ -1072,15 +1054,10 @@ void	close_files(t_data *data)
 	while (tmp)
 	{
 		if (tmp->in != 0 && tmp->in != -1)
-		{
-			// printf("str = %s | in = %d\n", tmp->args[0], tmp->in);
 			close(tmp->in);
-		}
 		if (tmp->out != 1 && tmp->out != -1)
-		{
-			// printf("str = %s | out = %d\n", tmp->args[0], tmp->out);
 			close(tmp->out);
-		}				tmp = tmp->next;
+		tmp = tmp->next;
 	}
 }
 
@@ -1091,11 +1068,13 @@ int	check_only_w(char *str)
 	i = 0;
 	if (ft_strlen(str) == 0 || str == NULL)
 		return (0);
-	if (ft_strlen (str) == 2 &&  ((str[i] == '\'' && str[i + 1] == '\'') || (str[i] == '\"' && str[i + 1] == '\"')))
+	if (ft_strlen(str) == 2 && ((str[i] == '\'' && \
+		str[i + 1] == '\'') || (str[i] == '\"' && str[i + 1] == '\"')))
 		return (0);
 	while (str[i])
 	{
-		if ((str[i] == '\'' && str[i + 1] == '\'') || (str[i] == '\"' && str[i + 1] == '\"'))
+		if ((str[i] == '\'' && str[i + 1] == '\'') || \
+			(str[i] == '\"' && str[i + 1] == '\"'))
 		{
 			i += 2;
 			continue ;
@@ -1107,7 +1086,7 @@ int	check_only_w(char *str)
 	return (1);
 }
 
-t_tokens *ft_lstnew_token_w(char *str, char *var)
+t_tokens	*ft_lstnew_token_w(char *str, char *var)
 {
 	t_tokens	*new;
 
@@ -1140,13 +1119,10 @@ void	ft_lstadd_in_second_place(t_tokens **lst, t_tokens *new)
 	new->next = tmp2;
 }
 
-
-
-
 void	sort_p(char **tmp)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
 	char	*tmp2;
 
 	i = 0;
@@ -1167,16 +1143,13 @@ void	sort_p(char **tmp)
 	}
 }
 
-
-
 void	expanding_wildcard(t_tokens **tokens)
 {
-	t_tokens	*tmp;
-	DIR			*dir;
+	t_tokens		*tmp;
+	DIR				*dir;
 	struct dirent	*en;
-	char		**names;
-	int			count;
-
+	char			**names;
+	int				count;
 
 	tmp = *tokens;
 	while (tmp)
@@ -1192,19 +1165,16 @@ void	expanding_wildcard(t_tokens **tokens)
 				en = readdir(dir);
 				if (en == NULL)
 					break ;
-				if (ft_strncmp(en->d_name, ".") == 0 || ft_strncmp(en->d_name, "..") == 0 || en->d_name[0] == '.')
+				if (ft_strncmp(en->d_name, ".") == 0 || ft_strncmp(en->d_name,
+						"..") == 0 || en->d_name[0] == '.')
 					continue ;
 				count++;
 			}
 			closedir(dir);
-
 			names = ft_calloc(count + 3, sizeof(char *));
 			if (names == NULL)
 				return ;
 			count = 0;
-
-
-
 			dir = opendir(".");
 			if (dir == NULL)
 				return (perror("opendir"));
@@ -1213,22 +1183,20 @@ void	expanding_wildcard(t_tokens **tokens)
 				en = readdir(dir);
 				if (en == NULL)
 					break ;
-				if (ft_strncmp(en->d_name, ".") == 0 || ft_strncmp(en->d_name, "..") == 0 || en->d_name[0] == '.')
+				if (ft_strncmp(en->d_name, ".") == 0 || ft_strncmp(en->d_name,
+						"..") == 0 || en->d_name[0] == '.')
 					continue ;
 				names[count++] = ft_strdup(en->d_name);
 			}
 			closedir(dir);
-
 			sort_p(names);
-
 			count = -1;
-
 			while (names[++count])
 			{
-				ft_lstadd_in_second_place(&tmp, ft_lstnew_token_w(names[count], tmp->var));
+				ft_lstadd_in_second_place(&tmp, ft_lstnew_token_w(names[count],
+						tmp->var));
 				tmp = tmp->next;
 			}
-
 			free_leaks(names);
 		}
 		if (tmp)

@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 00:16:06 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/06 08:44:55 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/06 08:48:16 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,10 +94,10 @@ typedef struct s_expvar
 
 typedef struct s_prvrest
 {
-	char *prev;
-	char *rest;
-	int plus;
-	int flag;
+	char			*prev;
+	char			*rest;
+	int				plus;
+	int				flag;
 }					t_prvrest;
 
 int					backup_stdin;
@@ -130,8 +130,8 @@ void				sigg(int sig);
 void				sig(void);
 void				sig_handler(int sig);
 void				open_files_hdoc_tmp(t_data **data);
-void	expanding_wildcard(t_tokens **tokens);
-int	check_only_w(char *str);
+void				expanding_wildcard(t_tokens **tokens);
+int					check_only_w(char *str);
 
 /*---------------EXECUTION-----------------*/
 /*-------------------------builtins-------------------------------*/
@@ -146,14 +146,14 @@ char				*go_oldpwd(t_env **env);
 void				change_directory(t_env **env, char *path);
 void				print_working_directory(void);
 void				parent(char *path);
-void	error_msg_1(char *path);
-void	error_msg_2(char *path);
+void				error_msg_1(char *path);
+void				error_msg_2(char *path);
 /*----------------echo---------------------*/
 void				my_echo(t_data *data);
 int					newline_checker(char *str);
 /*----------------env---------------------*/
 void				my_env(t_env **env, t_data *data);
-void				print_env(t_env *env,t_data *data);
+void				print_env(t_env *env, t_data *data);
 void				delete_node(t_env *head);
 void				ft_lstadd_backk(t_env **lst, t_env *new);
 t_env				*ft_lstneww(char *env_name, char *env_content);
@@ -161,7 +161,7 @@ t_env				*create_list(char *str[]);
 void				ft_lstfree(t_env **head);
 void				shlvl(t_env **env);
 t_env				*no_env(void);
-int	array_size(char **str);
+int					array_size(char **str);
 /*----------------pwd---------------------*/
 void				my_pwd(t_data *data);
 /*----------------unset---------------------*/
@@ -170,12 +170,12 @@ void				my_unset(t_env **env, t_data *data, int i);
 void				my_exit(t_env **env, t_data *data);
 int					all_digit(char *str);
 /*----------------export---------------------*/
-int	check_value(char *str);
+int					check_value(char *str);
 void				my_export(t_env **env, t_data *data);
 void				ft_csp(t_env *env, t_data *data, int c);
-void	sort_env(t_env **env);
+void				sort_env(t_env **env);
 void				swap_env(t_env *a, t_env *b);
-void				print_env_ex(t_env *env,t_data *data);
+void				print_env_ex(t_env *env, t_data *data);
 int					all_str(char *str);
 void				my_export(t_env **env, t_data *data);
 t_env				*find_env(t_env *env, char *name);
