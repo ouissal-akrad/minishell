@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 00:16:06 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/06 11:17:23 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/07 02:06:04 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,9 +115,21 @@ typedef struct s_global
 	int				g_env;
 }					t_global;
 
+typedef struct s_csp
+{
+	char			*prev;
+	char			*rest;
+	int				plus;
+}					t_csp;
+
+typedef struct s_exec
+{
+	char			**env;
+	char			*path;
+}					t_exec;
+
 /*----------------------------GLOBAL------------------------------*/
 t_global			g_global;
-
 /*----------------------------MAIN------------------------------*/
 void				start(t_main *main, int argc, char *argv[], char *env[]);
 char				*read_line(void);
@@ -127,7 +139,6 @@ int					check_exit_hdoc(t_main *main);
 void				configs(t_main *main);
 void				fin_line(t_main *main);
 void				fin_program(t_main *main);
-
 /*----------------------------PARSING------------------------------*/
 /*----------------------------parsing------------------------------*/
 void				add_tok_split(char **split, t_tokens **tmp,
@@ -207,7 +218,6 @@ void				free_data(t_data **data);
 void				sigg(int sig);
 void				sig_handler(int sig);
 void				sig(void);
-
 /*----------------------------EXECUTION------------------------------*/
 /*----------------------------builtins------------------------------*/
 void				direction(t_data *data, t_env **new_env);
@@ -245,16 +255,27 @@ void				my_unset(t_env **env, t_data *data, int i);
 void				my_exit(t_env **env, t_data *data);
 int					all_digit(char *str);
 /*----------------------------export------------------------------*/
-int					check_value(char *str);
 void				my_export(t_env **env, t_data *data);
+void				print_error_csp(char *data_cmd);
 void				ft_csp(t_env *env, t_data *data, int c);
-void				sort_env(t_env **env);
-void				swap_env(t_env *a, t_env *b);
-void				print_env_ex(t_env *env, t_data *data);
-int					all_str(char *str);
-void				my_export(t_env **env, t_data *data);
-t_env				*find_env(t_env *env, char *name);
+void				sequal_helper(t_env *existing_var, char *rest);
 void				sequal(t_env *env, char *prev, char *rest, int plus);
+int					all_str(char *str);
+t_env				*find_env(t_env *env, char *name);
+void				print_env_ex_helper(t_data *data, t_env *tmp);
+void				print_env_ex(t_env *env, t_data *data);
+int					check_value(char *str);
+int					check(char *str);
+int					count_plus(char *str);
+void				swap_env(t_env *a, t_env *b);
+void				sort_env(t_env **env);
+t_env				*create_new_env(const t_env *original);
+int					check_valid_csp(t_data *data, char *tmp, size_t cmd);
+t_csp				initial_csp(void);
+int					csp_h(t_csp *csp, char *tmp, t_env *env, char *data_arg);
+int					csp_helper(char *data_arg, int i, t_csp *csp, char *tmp);
+t_env				*copy_env_list(const t_env *original_head);
+void				modify_g_exit(void);
 /*----------------------------execution------------------------------*/
 void				free_leaks(char **paths);
 char				*join_path(char *path, char *cmd);
@@ -262,13 +283,39 @@ char				*find_path(char *cmd, char *envp[]);
 void				exec_cmd(t_data *data, char *path, char **env,
 						t_env **env_list);
 void				exec_pipe(t_data *data, t_env *env_list);
-char				**env_list_to_char_array(t_env *env_list);
+char				**env_list_to_char_array(t_env *env_list, int i);
 void				exec_builtin(t_data *data, t_env **new_env);
+void				do_exec(t_data *data, char *path, char **env,
+						t_env **env_list);
+void				one_cmd(t_data *tmp, t_exec exec, t_env **env_list,
+						int pipefd[]);
+void				go_child_ocmd(t_data *data, char *path, char **env,
+						t_env **env_list);
+void				failed(int ex);
+int					do_fork(t_data *data, t_env **env_list, t_exec exec,
+						int pipefd[]);
+void				go_child_mp(t_data *data, t_env **env_list, t_exec exec,
+						int pipefd[]);
+void				re_call(t_data *tmp, t_exec exec, t_env *env_list,
+						int pipefd[]);
 /*----------------------------libft------------------------------*/
 char				*ft_strcat(char *dest, char *src);
 char				*ft_strcpy(char *dest, char *src);
 int					ft_lstsizee(t_env *lst);
 int					data_size(t_data *lst);
 int					ft_strncmp_2(const char *s1, const char *s2, size_t n);
-
+/*-----------------------------Errors--------------------------------*/
+void				err_cmd(t_data *data);
+void				err_isdir(t_data *data);
+void				err_permission(t_data *data);
+void				err_nodir(t_data *data);
+void				go_child_ocmd(t_data *data, char *path, char **env,
+						t_env **env_list);
+void				failed(int ex);
+void				one_cmd(t_data *tmp, t_exec exec, t_env **env_list,
+						int pipefd[]);
+void				re_call(t_data *tmp, t_exec exec, t_env *env_list,
+						int pipefd[]);
+void				go_child_mp(t_data *data, t_env **env_list, t_exec exec,
+						int pipefd[]);
 #endif

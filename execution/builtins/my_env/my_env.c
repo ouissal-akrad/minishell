@@ -3,45 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   my_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:54:09 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/06 10:38:00 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/07 02:00:26 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
-
-void	ft_lstfree(t_env **head)
-{
-	t_env	*current;
-	t_env	*next;
-
-	current = *head;
-	while (current != NULL)
-	{
-		next = current->next;
-		if (current->var)
-			free(current->var);
-		if (current->val)
-			free(current->val);
-		free(current);
-		current = next;
-	}
-}
-
-void	free_leaks(char **args)
-{
-	int	i;
-
-	i = 0;
-	while (args[i])
-	{
-		free(args[i]);
-		i++;
-	}
-	free(args);
-}
+#include "../../../minishell.h"
 
 void	print_env(t_env *env, t_data *data)
 {
