@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 00:16:06 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/07 02:06:04 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/08/07 20:07:13 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -287,8 +287,7 @@ char				**env_list_to_char_array(t_env *env_list, int i);
 void				exec_builtin(t_data *data, t_env **new_env);
 void				do_exec(t_data *data, char *path, char **env,
 						t_env **env_list);
-void				one_cmd(t_data *tmp, t_exec exec, t_env **env_list,
-						int pipefd[]);
+void				one_cmd(t_data *tmp, t_exec exec, t_env **env_list);
 void				go_child_ocmd(t_data *data, char *path, char **env,
 						t_env **env_list);
 void				failed(int ex);
@@ -312,10 +311,6 @@ void				err_nodir(t_data *data);
 void				go_child_ocmd(t_data *data, char *path, char **env,
 						t_env **env_list);
 void				failed(int ex);
-void				one_cmd(t_data *tmp, t_exec exec, t_env **env_list,
-						int pipefd[]);
-void				re_call(t_data *tmp, t_exec exec, t_env *env_list,
-						int pipefd[]);
 void				go_child_mp(t_data *data, t_env **env_list, t_exec exec,
 						int pipefd[]);
 #endif

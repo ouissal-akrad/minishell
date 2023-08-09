@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:21:57 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/07 02:01:32 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/08/09 13:35:43 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ t_env	*no_env(void)
 	ft_lstadd_backk(&env, ft_lstneww("_", "/usr/bin/env"));
 	ft_lstadd_backk(&env, ft_lstneww("OLDPWD", NULL));
 	ft_lstadd_backk(&env, ft_lstneww("PATH",
-			"/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:."));
-	ft_lstadd_backk(&env, ft_lstneww("SHELL", "/bin/zsh"));
+			"/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:."));\
 	return (env);
 }

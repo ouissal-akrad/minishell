@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 01:40:43 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/07 02:01:23 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/08/07 20:06:11 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,20 +52,20 @@ void	exec_pipe(t_data *data, t_env *env_list)
 		return ;
 	if (data->args[0])
 		exec.path = find_path(data->args[0], exec.env);
-	if (pipe(pipefd) == -1)
-	{
-		perror("pipe");
-		return (free(exec.path), free_leaks(exec.env));
-	}
 	if (data->next != NULL)
 	{
+		if (pipe(pipefd) == -1)
+		{
+			perror("pipe");
+			return (free(exec.path), free_leaks(exec.env));
+		}
 		pid = do_fork(data, &env_list, exec, pipefd);
 		if (pid == -1)
 			return ;
 		waitpid(pid, &status, 0);
 	}
 	else
-		one_cmd(data, exec, &env_list, pipefd);
+		one_cmd(data, exec, &env_list);
 }
 
 void	go_child_mp(t_data *data, t_env **env_list, t_exec exec, int pipefd[])

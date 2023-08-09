@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 01:39:02 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/07 02:01:25 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/08/07 20:05:21 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,13 +77,11 @@ void	do_exec(t_data *data, char *path, char **env, t_env **env_list)
 	}
 }
 
-void	one_cmd(t_data *tmp, t_exec exec, t_env **env_list, int pipefd[])
+void	one_cmd(t_data *tmp, t_exec exec, t_env **env_list)
 {
 	exec_cmd(tmp, exec.path, exec.env, env_list);
 	if (exec.path != NULL)
 		free(exec.path);
 	if (exec.env != NULL)
 		free_leaks(exec.env);
-	close(pipefd[0]);
-	close(pipefd[1]);
 }

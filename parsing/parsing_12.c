@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_12.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/06 10:23:26 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/09 13:26:37 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
 
 void	open_files_hdoc_tmp(t_data **data)
 {
@@ -30,10 +31,13 @@ void	open_files_hdoc_tmp(t_data **data)
 			name_file = my_ft_strjoin_1(name_file, tmp_name);
 			free(tmp_name);
 			unlink(name_file);
+			if (tmp->in != 0 && tmp->in != -1)
+				close(tmp->in);
 			tmp->in = open(name_file, O_WRONLY | O_CREAT, 0644);
 			write(tmp->in, tmp->buff, ft_strlen(tmp->buff));
 			close(tmp->in);
 			tmp->in = open(name_file, O_RDONLY);
+			printf("file : %d\n", tmp->in);
 			free(name_file);
 			i++;
 		}
