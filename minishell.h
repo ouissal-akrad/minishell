@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 00:16:06 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/09 17:11:44 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/08/09 17:52:32 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,6 +214,10 @@ void				open_hdoc(t_data **data, t_tokens **tokens, t_env *env);
 void				create_data(t_data **data, t_tokens **tokens, t_env *env);
 void				free_env(t_env **env);
 void				free_data(t_data **data);
+int	do_open_in(t_data *tmpd, t_tokens *tmp);
+int	do_open_out(t_data *tmpd, t_tokens *tmp);
+int	do_open_app(t_data *tmpd, t_tokens *tmp);
+
 /*----------------------------signals------------------------------*/
 void				sigg(int sig);
 void				sig_handler(int sig);

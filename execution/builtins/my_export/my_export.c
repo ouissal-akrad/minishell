@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   my_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:46:00 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/09 17:11:38 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/08/09 17:53:24 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -339,8 +339,6 @@ void	sequal(t_env **env, char *prev, char *rest, int plus)
 	t_env *new_var;
 	t_env *existing_var;
 	char *old_val;
-	printf("===============>prev:%s\n",prev);
-	printf("===============>rest:%s\n",rest);
 
 	existing_var = find_env(*env, prev);
 	if (existing_var != NULL)
@@ -358,7 +356,7 @@ void	sequal(t_env **env, char *prev, char *rest, int plus)
 		{
 			if (rest)
 			{
-				free(existing_var->val);				
+				free(existing_var->val);
 				existing_var->val = ft_strdup(rest);
 			}
 		}

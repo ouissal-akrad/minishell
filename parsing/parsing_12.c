@@ -3,21 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_12.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/09 14:56:10 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/08/09 15:27:09 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+char	*name_filee(int i)
+{
+	char	*tmp_name;
+	char	*name_file;
+
+	name_file = ft_strdup("/tmp/hdoc_");
+	tmp_name = ft_itoa(i);
+	name_file = my_ft_strjoin_1(name_file, tmp_name);
+	free(tmp_name);
+	return (name_file);
+}
 
 void	open_files_hdoc_tmp(t_data **data)
 {
 	t_data	*tmp;
 	char	*name_file;
-	char	*tmp_name;
 	int		i;
 
 	tmp = *data;
@@ -26,10 +36,7 @@ void	open_files_hdoc_tmp(t_data **data)
 	{
 		if (tmp->hdoc)
 		{
-			name_file = ft_strdup("/tmp/hdoc_");
-			tmp_name = ft_itoa(i);
-			name_file = my_ft_strjoin_1(name_file, tmp_name);
-			free(tmp_name);
+			name_file = name_filee(i);
 			unlink(name_file);
 			if (tmp->in != 0 && tmp->in != -1)
 				close(tmp->in);
@@ -86,21 +93,6 @@ void	is_a_directory(t_data **data)
 	}
 }
 
-void	close_files(t_data *data)
-{
-	t_data	*tmp;
-
-	tmp = data;
-	while (tmp)
-	{
-		if (tmp->in != 0 && tmp->in != -1)
-			close(tmp->in);
-		if (tmp->out != 1 && tmp->out != -1)
-			close(tmp->out);
-		tmp = tmp->next;
-	}
-}
-
 int	check_only_w(char *str)
 {
 	int	i;
@@ -108,13 +100,13 @@ int	check_only_w(char *str)
 	i = 0;
 	if (ft_strlen(str) == 0 || str == NULL)
 		return (0);
-	if (ft_strlen(str) == 2 && ((str[i] == '\'' && \
-		str[i + 1] == '\'') || (str[i] == '\"' && str[i + 1] == '\"')))
+	if (ft_strlen(str) == 2 && ((str[i] == '\'' && str[i + 1] == '\'')
+			|| (str[i] == '\"' && str[i + 1] == '\"')))
 		return (0);
 	while (str[i])
 	{
-		if ((str[i] == '\'' && str[i + 1] == '\'') || \
-			(str[i] == '\"' && str[i + 1] == '\"'))
+		if ((str[i] == '\'' && str[i + 1] == '\'') || (str[i] == '\"' && \
+			str[i + 1] == '\"'))
 		{
 			i += 2;
 			continue ;

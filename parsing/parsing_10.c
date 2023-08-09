@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_10.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/09 13:29:56 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/08/09 14:52:28 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,73 +47,53 @@ char	*my_ft_strjoin_2(char *s1, char *s2)
 	return (str);
 }
 
-int    open_files_helper(t_data *tmpd, t_tokens *tmp)
+int	open_files_helper(t_data *tmpd, t_tokens *tmp)
 {
-    if (tmp->type == IN)
-    {
-        tmpd->hdoc = 0;
-        if (tmpd->in != 0)
-            close(tmpd->in);
-        tmpd->in = open(tmp->next->str, O_RDONLY);
-        if (tmpd->in == -1)
-            return (open_files_error(tmp));
-    }
-    else if (tmp->type == OUT)
-    {
-        if (tmpd->out != 1)
-            close(tmpd->out);
-        tmpd->out = open(tmp->next->str, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-        if (tmpd->out == -1)
-            return (open_files_error(tmp));
-    }
-    else if (tmp->type == APP)
-    {
-        tmpd->hdoc = 0;
-        if (tmpd->out != 1)
-            close(tmpd->out);
-        tmpd->out = open(tmp->next->str, O_WRONLY | O_CREAT | O_APPEND, 0644);
-        if (tmpd->out == -1)
-            return (open_files_error(tmp));
-    }
-    else if (tmp->type == HDOC)
-        tmpd->hdoc = 1;
-    return (0);
+	if (tmp->type == IN)
+		return (do_open_in(tmpd, tmp));
+	else if (tmp->type == OUT)
+		do_open_out(tmpd, tmp);
+	else if (tmp->type == APP)
+		do_open_app(tmpd, tmp);
+	else if (tmp->type == HDOC)
+		tmpd->hdoc = 1;
+	return (0);
 }
 
-void    amgi_msg(t_data *tmp_data, t_tokens **tmp)
+void	amgi_msg(t_data *tmp_data, t_tokens **tmp)
 {
-    write(2, "minishell: ", 11);
-    write(2, (*tmp)->next->var, ft_strlen((*tmp)->next->var));
-    write(2, ": ambiguous redirect\n", 21);
-    go_to_pipe(tmp);
-    tmp_data->in = -1;
+	write(2, "minishell: ", 11);
+	write(2, (*tmp)->next->var, ft_strlen((*tmp)->next->var));
+	write(2, ": ambiguous redirect\n", 21);
+	go_to_pipe(tmp);
+	tmp_data->in = -1;
 }
 
-void    open_files(t_data **data, t_tokens **tokens)
+void	open_files(t_data **data, t_tokens **tokens)
 {
-    t_tokens    *t;
-    t_data        *t_data;
+	t_tokens	*t;
+	t_data		*t_data;
 
-    t = *tokens;
-    t_data = *data;
-    while (t)
-    {
-        if (t->type == PIPE)
-            t_data = t_data->next;
-        if ((t->type == IN || t->type == OUT || t->type == APP
-                || t->type == HDOC) && !g_global.exitt)
-        {
-            if ((t->next->is_d == 2 || t->next->is_d == 5) && t->type != HDOC)
-            {
-                amgi_msg(t_data, &t);
-                continue ;
-            }
-            if (open_files_helper(t_data, t))
-            {
-                go_to_pipe(&t);
-                continue ;
-            }
-        }
-        t = t->next;
-    }
+	t = *tokens;
+	t_data = *data;
+	while (t)
+	{
+		if (t->type == PIPE)
+			t_data = t_data->next;
+		if ((t->type == IN || t->type == OUT || t->type == APP
+				|| t->type == HDOC) && !g_global.exitt)
+		{
+			if ((t->next->is_d == 2 || t->next->is_d == 5) && t->type != HDOC)
+			{
+				amgi_msg(t_data, &t);
+				continue ;
+			}
+			if (open_files_helper(t_data, t))
+			{
+				go_to_pipe(&t);
+				continue ;
+			}
+		}
+		t = t->next;
+	}
 }

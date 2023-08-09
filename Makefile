@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+         #
+#    By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/23 03:03:58 by bel-idri          #+#    #+#              #
-#    Updated: 2023/08/09 16:02:28 by ouakrad          ###   ########.fr        #
+#    Updated: 2023/08/09 17:52:49 by bel-idri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,6 +45,7 @@ SRCS = main.c \
 		parsing/parsing_12.c \
 		parsing/parsing_13.c \
 		parsing/parsing_14.c \
+		parsing/parsing_15.c \
 		parsing/signals.c \
 
 SRCS_LIBFT = libft/ft_atoi.c \
