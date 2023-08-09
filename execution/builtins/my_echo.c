@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   my_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:55:18 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/06 10:38:00 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/09 15:55:36 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,21 +37,24 @@ void	my_echo(t_data *data)
 	i = 1;
 	flag = 0;
 	new_line = 1;
-	while (data->args[i])
-	{
-		while (data->args[i] && newline_checker(data->args[i]) == 1
-			&& flag == 0)
+
+		while (data->args[i])
 		{
-			i++;
-			new_line = 0;
+			while (data->args[i] && newline_checker(data->args[i]) == 1
+				&& flag == 0)
+			{
+				i++;
+				new_line = 0;
+			}
+			flag = 1;
+			if (data->args[i])
+				write(data->out, data->args[i], ft_strlen(data->args[i]));
+			else
+				break;
+			if (data->args[++i])
+				write(data->out, " ", 1);
 		}
-		flag = 1;
-		if (data->args[i])
-			write(data->out, data->args[i], ft_strlen(data->args[i]));
-		if (data->args[++i])
-			write(data->out, " ", 1);
-	}
-	if (new_line)
-		write(data->out, "\n", 1);
-	g_global.g_exit = 0;
+		if (new_line)
+			write(data->out, "\n", 1);
+		g_global.g_exit = 0;
 }

@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/09 13:26:37 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/08/09 14:56:10 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ void	open_files_hdoc_tmp(t_data **data)
 			write(tmp->in, tmp->buff, ft_strlen(tmp->buff));
 			close(tmp->in);
 			tmp->in = open(name_file, O_RDONLY);
-			printf("file : %d\n", tmp->in);
 			free(name_file);
 			i++;
 		}

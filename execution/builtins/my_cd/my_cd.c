@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:55:55 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/07 02:00:06 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/08/09 17:19:40 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void	update_env(t_env **env, char *oldpwd, char *pwd)
 {
+	printf("pwd = %s\n", pwd);
+	printf("oldpwd = %s\n", oldpwd);
 	t_env	*e;
 	t_env	*f_oldpwd;
 	t_env	*f_pwd;

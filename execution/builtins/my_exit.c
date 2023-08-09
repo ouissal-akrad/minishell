@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:20:28 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/09 13:01:58 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/08/09 17:33:18 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,6 @@ void	my_exit(t_env **env, t_data *data)
 	{
 		if (g_global.data_s == 1)
 			printf("exit\n");
-		// g_global.g_exit = 0;
 		ft_lstfree(env);
 		free_data(&data);
 		exit(g_global.g_exit);

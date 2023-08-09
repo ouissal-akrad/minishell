@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 00:16:06 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/07 20:07:13 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/08/09 17:11:44 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,9 +257,9 @@ int					all_digit(char *str);
 /*----------------------------export------------------------------*/
 void				my_export(t_env **env, t_data *data);
 void				print_error_csp(char *data_cmd);
-void				ft_csp(t_env *env, t_data *data, int c);
+void				ft_csp(t_env **env, t_data *data, int c);
 void				sequal_helper(t_env *existing_var, char *rest);
-void				sequal(t_env *env, char *prev, char *rest, int plus);
+void				sequal(t_env **env, char *prev, char *rest, int plus);
 int					all_str(char *str);
 t_env				*find_env(t_env *env, char *name);
 void				print_env_ex_helper(t_data *data, t_env *tmp);

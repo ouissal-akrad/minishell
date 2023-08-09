@@ -6,7 +6,7 @@
 #    By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/23 03:03:58 by bel-idri          #+#    #+#              #
-#    Updated: 2023/08/07 02:03:03 by ouakrad          ###   ########.fr        #
+#    Updated: 2023/08/09 16:02:28 by ouakrad          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,10 +24,6 @@ SRCS = main.c \
 		execution/builtins/my_unset.c \
 		execution/builtins/my_exit.c \
 		execution/builtins/my_export/my_export.c \
-		execution/builtins/my_export/export_utils.c \
-		execution/builtins/my_export/export_utils2.c \
-		execution/builtins/my_export/export_utils3.c \
-		execution/builtins/my_export/export_utils4.c \
 		execution/commands/execution_utils.c \
 		execution/commands/multiple_cmd.c \
 		execution/commands/one_cmd.c \
