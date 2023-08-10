@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 00:16:06 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/10 10:21:50 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/10 10:52:09 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # include "libft/libft.h"
 # include <curses.h>
 # include <dirent.h>
-# include <errno.h>
 # include <fcntl.h>
 # include <limits.h>
 # include <readline/history.h>
@@ -24,12 +23,6 @@
 # include <signal.h>
 # include <stdio.h>
 # include <stdlib.h>
-# include <string.h>
-# include <sys/ioctl.h>
-# include <sys/stat.h>
-# include <sys/wait.h>
-# include <term.h>
-# include <termios.h>
 # include <unistd.h>
 
 /*----------------------------STRUCTS------------------------------*/
