@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helper.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:21:57 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/09 17:29:53 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/08/10 10:27:23 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ t_env	*no_env(void)
 	ft_lstadd_backk(&env, ft_lstneww("SHLVL", "1"));
 	ft_lstadd_backk(&env, ft_lstneww("_", "/usr/bin/env"));
 	ft_lstadd_backk(&env, ft_lstneww("OLDPWD", NULL));
-	ft_lstadd_backk(&env, ft_lstneww("PATH",
-			"/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:."));\
+	ft_lstadd_backk(&env, ft_lstneww("PATH", \
+		"/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:."));
 	return (env);
 }
