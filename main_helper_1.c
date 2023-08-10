@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/06 11:14:11 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/06 11:20:01 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/10 08:13:55 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	start(t_main *main, int argc, char *argv[], char *env[])
 {
 	rl_catch_signals = 0;
 	g_global.g_exit = 0;
+	g_global.exitt = 0;
 	(void)argv;
 	if (argc > 1)
 	{
@@ -42,7 +43,6 @@ char	*read_line(void)
 		printf("exit\n");
 		exit(g_global.g_exit);
 	}
-	add_history(line);
 	return (line);
 }
 
@@ -53,6 +53,7 @@ int	read_line_empty(char *line)
 		free(line);
 		return (1);
 	}
+	add_history(line);
 	return (0);
 }
 
@@ -91,6 +92,7 @@ int	check_exit_hdoc(t_main *main)
 			free_data(&main->data);
 		main->data = NULL;
 		close_files(main->data);
+		g_global.exitt = 0;
 		return (1);
 	}
 	return (0);

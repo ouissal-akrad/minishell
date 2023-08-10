@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:46:00 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/09 17:53:24 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/10 08:59:57 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -368,6 +368,5 @@ void	sequal(t_env **env, char *prev, char *rest, int plus)
 		if (new_var == NULL)
 			return ;
 		ft_lstadd_backk(env, new_var);
-		printf("env %s\n",(*env)->var);
 	}
 }

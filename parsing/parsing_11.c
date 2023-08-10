@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/06 10:41:14 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/10 07:38:20 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	open_hdoc_helper(t_data **tmp_data, t_tokens *tmp, t_env *env)
 
 	while (1)
 	{
-		signal(SIGINT, sig_handler);
+		g_global.exitt = 1;
 		line = readline("> ");
 		if (!line)
 		{
@@ -62,6 +62,8 @@ void	open_hdoc(t_data **data, t_tokens **tokens, t_env *env)
 				close(g_global.backup_stdin);
 				write(1, "\n", 1);
 			}
+			else
+				g_global.exitt = 0;
 		}
 		tmp = tmp->next;
 	}

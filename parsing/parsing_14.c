@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/09 17:52:26 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/10 08:00:05 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ int	do_open_in(t_data *tmpd, t_tokens *tmp)
 
 int	do_open_out(t_data *tmpd, t_tokens *tmp)
 {
-	tmpd->hdoc = 0;
 	if (tmpd->out != 1)
 		close(tmpd->out);
 	tmpd->out = open(tmp->next->str, O_WRONLY | O_CREAT | O_TRUNC, 0644);
@@ -74,7 +73,6 @@ int	do_open_out(t_data *tmpd, t_tokens *tmp)
 
 int	do_open_app(t_data *tmpd, t_tokens *tmp)
 {
-	tmpd->hdoc = 0;
 	if (tmpd->out != 1)
 		close(tmpd->out);
 	tmpd->out = open(tmp->next->str, O_WRONLY | O_CREAT | O_APPEND, 0644);

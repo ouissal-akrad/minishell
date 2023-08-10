@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 06:54:00 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/09 17:48:58 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/10 10:22:27 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,13 @@
 void	sigg(int sig)
 {
 	if (sig == SIGINT && waitpid(0, NULL, WNOHANG) == 0)
-	{
 		printf("\n");
-		return ;
-	}
 	else if (sig == SIGQUIT && waitpid(0, NULL, WNOHANG) == 0)
-	{
 		printf("\n");
-		return ;
+	else if (sig == SIGINT && g_global.exitt)
+	{
+		g_global.backup_stdin = dup(0);
+		close(0);
 	}
 	else if (sig == SIGINT)
 	{
@@ -31,16 +30,6 @@ void	sigg(int sig)
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
-	}
-}
-
-void	sig_handler(int sig)
-{
-	if (sig == SIGINT)
-	{
-		g_global.backup_stdin = dup(0);
-		close(0);
-		g_global.exitt = 1;
 	}
 }
 
