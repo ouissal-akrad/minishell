@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+         #
+#    By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/23 03:03:58 by bel-idri          #+#    #+#              #
-#    Updated: 2023/08/10 10:48:21 by bel-idri         ###   ########.fr        #
+#    Updated: 2023/08/10 15:05:42 by ouakrad          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -106,7 +106,6 @@ RLFLAGES = -lreadline -lhistory -L/Users/${USER}/.brew/opt/readline/lib
 
 RM = rm -f
 
-bonus: all
 
 all: $(NAME)
 
@@ -119,6 +118,8 @@ $(NAME): $(OBJS_LIBFT) $(OBJS)
 
 %libft/.o: %libft/.o libft/libft.h
 	$(CC) $(CFLAGS) -c $< -o $@
+
+bonus: all
 
 clean:
 	$(RM) $(OBJS) $(OBJS_LIBFT)

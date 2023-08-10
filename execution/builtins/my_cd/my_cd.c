@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   my_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:55:55 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/10 14:13:34 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/10 15:23:31 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,15 +122,17 @@ void	my_cd(t_env **env, t_data *data)
 	{
 		parent(path);
 		update_env_error(env, origin_oldpwd, origin_pwd);
+		free(origin_oldpwd);
+		free(origin_pwd);
 		return (free(path));
 	}
 	if (my_cd_helper(data, path, pwd))
 		update_env(env, oldpwd, pwd);
 	else
 		update_env_error(env, origin_oldpwd, origin_pwd);
-	free(origin_pwd);
-	free(origin_oldpwd);
 	free(path);
+	free(origin_oldpwd);
+	free(origin_pwd);
 }
 
 void	parent(char *path)

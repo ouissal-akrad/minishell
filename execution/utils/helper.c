@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helper.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:21:57 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/10 10:27:23 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/10 15:18:18 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	exec_builtin(t_data *data, t_env **new_env)
 	{
 		cmd = data->args[0];
 		if (ft_strncmp(cmd, "pwd") == 0)
-			my_pwd(data);
+			my_pwd(data, *new_env);
 		else if (ft_strncmp(cmd, "unset") == 0)
 			my_unset(new_env, data, 0);
 		else if (ft_strncmp(cmd, "echo") == 0)
@@ -45,7 +45,7 @@ void	direction(t_data *data, t_env **new_env)
 		if (ft_strncmp(data->args[0], "exit") == 0)
 			my_exit(new_env, data);
 		else if (ft_strncmp(data->args[0], "pwd") == 0)
-			my_pwd(data);
+			my_pwd(data,*new_env);
 		else if (ft_strncmp(data->args[0], "unset") == 0)
 			my_unset(new_env, data, 0);
 		else if (ft_strncmp(data->args[0], "echo") == 0)

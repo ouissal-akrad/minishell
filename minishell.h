@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 00:16:06 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/10 10:55:14 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/10 15:18:41 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,7 +245,7 @@ void				shlvl(t_env **env);
 t_env				*no_env(void);
 int					array_size(char **str);
 /*----------------------------pwd------------------------------*/
-void				my_pwd(t_data *data);
+void				my_pwd(t_data *data, t_env *env);
 /*----------------------------unset------------------------------*/
 void				my_unset(t_env **env, t_data *data, int i);
 /*----------------------------exit------------------------------*/
