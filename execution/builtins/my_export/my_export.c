@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:46:00 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/10 10:26:29 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/10 10:46:05 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -343,8 +343,7 @@ void	sequal(t_env **env, char *prev, char *rest, int plus)
 	existing_var = find_env(*env, prev);
 	if (existing_var != NULL)
 	{
-		// Duplicate the new value and store it in the existing variable and
-			+ exists
+		// Duplicate the new value and store it in the existing variable and + exists
 		if (plus && existing_var->val)
 		{
 			old_val = ft_strdup(existing_var->val);
