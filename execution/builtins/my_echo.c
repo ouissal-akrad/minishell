@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   my_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 09:55:18 by ouakrad           #+#    #+#             */
-/*   Updated: 2023/08/10 10:26:18 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/10 17:04:13 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,11 @@ int	newline_checker(char *str)
 	return (0);
 }
 
-void	my_echo(t_data *data)
+void	my_echo(t_data *data, int i)
 {
-	int	i;
 	int	new_line;
 	int	flag;
 
-	i = 1;
 	flag = 0;
 	new_line = 1;
 	while (data->args[i])

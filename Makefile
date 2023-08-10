@@ -6,7 +6,7 @@
 #    By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/23 03:03:58 by bel-idri          #+#    #+#              #
-#    Updated: 2023/08/10 15:05:42 by ouakrad          ###   ########.fr        #
+#    Updated: 2023/08/10 18:10:13 by ouakrad          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,7 @@ SRCS = main.c \
 		main_helper_2.c \
 		execution/builtins/my_cd/my_cd.c \
 		execution/builtins/my_cd/cd_utils.c \
+		execution/builtins/my_cd/my_cd_helper.c \
 		execution/builtins/my_echo.c \
 		execution/builtins/my_env/my_env.c \
 		execution/builtins/my_env/env_utils.c \
@@ -24,6 +25,10 @@ SRCS = main.c \
 		execution/builtins/my_unset.c \
 		execution/builtins/my_exit.c \
 		execution/builtins/my_export/my_export.c \
+		execution/builtins/my_export/check.c \
+		execution/builtins/my_export/count.c \
+		execution/builtins/my_export/cpy_ex.c \
+		execution/builtins/my_export/helper_ex.c \
 		execution/commands/execution_utils.c \
 		execution/commands/multiple_cmd.c \
 		execution/commands/one_cmd.c \
@@ -45,7 +50,6 @@ SRCS = main.c \
 		parsing/syntax_error_helper.c \
 		parsing/lexar.c \
 		parsing/syntax_error.c \
-		parsing/wildcard.c \
 		parsing/signals.c \
 
 SRCS_LIBFT = libft/ft_atoi.c \

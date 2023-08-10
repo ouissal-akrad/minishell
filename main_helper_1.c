@@ -6,7 +6,7 @@
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/06 11:14:11 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/10 08:13:55 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/10 17:02:50 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ int	parsing(t_main *main)
 		return (1);
 	}
 	expanding(&main->tokens, main->new_env);
-	expanding_wildcard(&main->tokens);
 	split_var_no_quote(&main->tokens);
 	ambiguous_redirect(&main->tokens);
 	remove_quotes(main->tokens);

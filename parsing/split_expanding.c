@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing_7.c                                        :+:      :+:    :+:   */
+/*   split_expanding.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:44:04 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/09 15:27:25 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/10 17:01:13 by bel-idri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,16 +58,14 @@ void	split_var_no_quote(t_tokens **tokens)
 
 int	check_remove_null_1(t_tokens *tmp)
 {
-	if ((tmp && tmp->type == WORD) && ((tmp->is_d == 1 && !ft_strlen(tmp->str))
-			|| check_only_w(tmp->str)))
+	if (tmp && tmp->type == WORD && (tmp->is_d == 1 && !ft_strlen(tmp->str)))
 		return (1);
 	return (0);
 }
 
 int	check_remove_null_2(t_tokens *tmp)
 {
-	if (tmp->type == WORD && ((tmp->is_d == 1 && !ft_strlen(tmp->str))
-			|| check_only_w(tmp->str)))
+	if (tmp->type == WORD && (tmp->is_d == 1 && !ft_strlen(tmp->str)))
 		return (1);
 	return (0);
 }

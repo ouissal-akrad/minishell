@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bel-idri <bel-idri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/06 06:49:10 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/10 13:04:21 by bel-idri         ###   ########.fr       */
+/*   Updated: 2023/08/10 17:04:36 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	error_msg_1(char *path)
 	write(2, "minishell: cd: ", 16);
 	write(2, path, ft_strlen(path));
 	write(2, ": ", 2);
-	perror(""); //
+	perror("");
 	g_global.g_exit = 1;
 }
 
@@ -40,7 +40,7 @@ void	error_msg_2(char *path)
 	write(2, "minishell: cd: ", 16);
 	write(2, path, ft_strlen(path));
 	write(2, ": ", 2);
-	perror(""); //
+	perror("");
 	g_global.g_exit = 1;
 }
 

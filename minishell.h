@@ -6,7 +6,7 @@
 /*   By: ouakrad <ouakrad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 00:16:06 by bel-idri          #+#    #+#             */
-/*   Updated: 2023/08/10 15:18:41 by ouakrad          ###   ########.fr       */
+/*   Updated: 2023/08/10 18:05:59 by ouakrad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,14 @@ typedef struct s_exec
 	char			*path;
 }					t_exec;
 
+typedef struct s_my_cd
+{
+	char			oldpwd[PATH_MAX];
+	char			pwd[PATH_MAX];
+	char			*origin_pwd;
+	char			*origin_oldpwd;
+	char			*path;
+}					t_my_cd;
 /*----------------------------GLOBAL------------------------------*/
 t_global			g_global;
 /*----------------------------MAIN------------------------------*/
@@ -221,17 +229,20 @@ void				direction(t_data *data, t_env **new_env);
 int					is_builtins(char *cmd);
 /*----------------------------cd------------------------------*/
 void				my_cd(t_env **env, t_data *data);
-void				update_env(t_env **env, char *oldpwd, char *pwd);
+void				update_env(t_env **env, t_my_cd *my_cd);
 char				*find(t_env *env, char *to_find);
 char				*go_home(t_env **env);
 char				*go_oldpwd(t_env **env);
 void				change_directory(t_env **env, char *path);
 void				print_working_directory(void);
-void				parent(char *path);
+void				parent(t_my_cd *my_cd);
 void				error_msg_1(char *path);
 void				error_msg_2(char *path);
+void				free_cd(t_my_cd my_cd);
+void				update_env_helper(t_env *e, t_my_cd *my_cd);
+void				update_env_err_helper(t_env *e, t_my_cd *my_cd);
 /*----------------------------echo------------------------------*/
-void				my_echo(t_data *data);
+void				my_echo(t_data *data, int i);
 int					newline_checker(char *str);
 /*----------------------------env------------------------------*/
 void				my_env(t_env **env, t_data *data);
@@ -269,10 +280,10 @@ void				sort_env(t_env **env);
 t_env				*create_new_env(const t_env *original);
 int					check_valid_csp(t_data *data, char *tmp, size_t cmd);
 t_csp				initial_csp(void);
-int					csp_h(t_csp *csp, char *tmp, t_env *env, char *data_arg);
 int					csp_helper(char *data_arg, int i, t_csp *csp, char *tmp);
 t_env				*copy_env_list(const t_env *original_head);
 void				modify_g_exit(void);
+int					csp_h(t_csp *csp, char *tmp, t_env **env, char *data_arg);
 /*----------------------------execution------------------------------*/
 void				free_leaks(char **paths);
 char				*join_path(char *path, char *cmd);
